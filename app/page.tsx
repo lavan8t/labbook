@@ -24,6 +24,14 @@ import {
   resetVisualState,
 } from "@/lib/animations";
 
+if (typeof window !== "undefined") {
+  import("@m3e/web/select");
+  import("@m3e/web/option");
+  import("@m3e/web/form-field");
+  import("@m3e/web/button");
+  import("@m3e/web/theme");
+}
+
 const nodeTypes = { table: TableNode };
 
 const EDGE_STYLE = { stroke: "rgba(255, 255, 255, 0.45)", strokeWidth: 1.5 };
@@ -293,34 +301,40 @@ export default function Page() {
             <label className="font-var-label text-[11px] uppercase text-[#e8b09f] block mb-1">
               Select User
             </label>
-            <select
-              className={inputCls}
-              value={userId}
-              onChange={(e) => setUserId(Number(e.target.value))}
+            <m3e-select
+              className="w-full bg-[#f4ded4] text-[#3a0d05] rounded block"
+              value={String(userId)}
+              onChange={(e: any) => {
+                const val = e.target?.value;
+                if (val !== undefined) setUserId(Number(val));
+              }}
             >
               {db.users.map((u) => (
-                <option key={u.user_id} value={u.user_id}>
+                <m3e-option key={u.user_id} value={String(u.user_id)}>
                   {u.name} ({u.role})
-                </option>
+                </m3e-option>
               ))}
-            </select>
+            </m3e-select>
           </div>
 
           <div>
             <label className="font-var-label text-[11px] uppercase text-[#e8b09f] block mb-1">
               Select Resource
             </label>
-            <select
-              className={inputCls}
-              value={resourceId}
-              onChange={(e) => setResourceId(Number(e.target.value))}
+            <m3e-select
+              className="w-full bg-[#f4ded4] text-[#3a0d05] rounded block"
+              value={String(resourceId)}
+              onChange={(e: any) => {
+                const val = e.target?.value;
+                if (val !== undefined) setResourceId(Number(val));
+              }}
             >
               {db.equipment.map((e) => (
-                <option key={e.resource_id} value={e.resource_id}>
+                <m3e-option key={e.resource_id} value={String(e.resource_id)}>
                   {e.name} ({e.location})
-                </option>
+                </m3e-option>
               ))}
-            </select>
+            </m3e-select>
           </div>
 
           <div className="grid grid-cols-2 gap-2">
@@ -349,16 +363,16 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <button className={btnPrimary} onClick={handleDivision}>
+        <div className="flex flex-wrap gap-2 items-center">
+          <m3e-button variant="filled" onClick={handleDivision} class="bg-white text-[#75200c] font-bold">
             Verify Division
-          </button>
-          <button className={btnPrimary} onClick={handleInsert}>
+          </m3e-button>
+          <m3e-button variant="filled" onClick={handleInsert} class="bg-white text-[#75200c] font-bold">
             Attempt Insert
-          </button>
-          <button className={btnSecondary} onClick={handleReset}>
+          </m3e-button>
+          <m3e-button variant="outlined" onClick={handleReset} class="text-white border-white/40">
             Reset Seed
-          </button>
+          </m3e-button>
         </div>
 
         <div
