@@ -25,53 +25,78 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
   return (
     <div
       data-table={data.tableName}
-      className="w-[280px] rounded-lg border border-[rgba(255,255,255,0.18)] bg-[#e4beae] text-[13px] shadow-xl overflow-hidden transition-all duration-200"
+      className="min-w-[340px] max-w-[460px] rounded-lg border border-[rgba(255,255,255,0.22)] bg-[#e4beae] text-[13px] shadow-2xl overflow-hidden"
       style={{ borderWidth: 1 }}
     >
-      <div className="border-b border-[#75200c]/20 bg-[#75200c] px-3 py-2 text-[13px] font-var-table-title uppercase text-white flex items-center justify-between">
-        <span>{data.tableName}</span>
-        <span className="font-mono text-[10px] tracking-widest text-[#e8b09f] font-normal">TABLE</span>
+      {/* Table Header */}
+      <div className="border-b border-[#75200c]/25 bg-[#75200c] px-3.5 py-2 text-[13px] font-var-table-title uppercase text-white flex items-center justify-between">
+        <span className="tracking-wide">{data.tableName}</span>
+        <span className="font-mono text-[10px] tracking-widest text-[#e8b09f] font-normal">
+          {data.rows.length} {data.rows.length === 1 ? "ROW" : "ROWS"}
+        </span>
       </div>
 
-      <div className="divide-y divide-[#75200c]/10 bg-[#eccdc0]">
-        {data.columns.map((c) => (
-          <div key={c.name} className="flex items-center justify-between px-3 py-1.5 font-var-body">
-            <span className="font-mono text-[11px] font-semibold text-[#3a0d05]">{c.name}</span>
-            <span className="flex gap-1">
-              {c.pk && (
-                <span className="rounded bg-[#75200c] px-1.5 py-[1px] text-[9px] font-bold text-white tracking-wider">
-                  PK
-                </span>
-              )}
-              {c.fk && (
-                <span className="rounded border border-[#75200c]/40 bg-white/40 px-1.5 py-[1px] text-[9px] font-bold text-[#75200c] tracking-wider">
-                  FK
-                </span>
-              )}
-            </span>
-          </div>
-        ))}
-      </div>
+      {/* Structured Table */}
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-left">
+          {/* Column attributes header */}
+          <thead>
+            <tr className="border-b border-[#75200c]/20 bg-[#eccdc0]">
+              {data.columns.map((c) => (
+                <th
+                  key={c.name}
+                  className="px-2.5 py-2 font-mono text-[11px] font-bold text-[#3a0d05] whitespace-nowrap"
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>{c.name}</span>
+                    {c.pk && (
+                      <span className="rounded bg-[#75200c] px-1 py-[0.5px] text-[8px] font-bold text-white tracking-wider">
+                        PK
+                      </span>
+                    )}
+                    {c.fk && (
+                      <span className="rounded border border-[#75200c]/40 bg-white/50 px-1 py-[0.5px] text-[8px] font-bold text-[#75200c] tracking-wider">
+                        FK
+                      </span>
+                    )}
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
 
-      <div className="border-t border-[#75200c]/20 bg-[#f4ded4] divide-y divide-[#75200c]/10 max-h-[180px] overflow-y-auto">
-        {data.rows.length === 0 && (
-          <div className="px-3 py-2 text-[12px] italic text-[#6e2718]">0 rows</div>
-        )}
-        {data.rows.map((row, i) => (
-          <div
-            key={i}
-            {...(attrOf ? (attrOf(row) as object) : {})}
-            className="flex flex-wrap gap-x-1.5 px-3 py-1 font-mono text-[11px] text-[#3a0d05] transition-colors"
-            style={{ outline: "1px solid transparent", outlineOffset: -1 }}
-          >
-            {Object.values(row).map((val, idx) => (
-              <span key={idx}>
-                {idx > 0 && <span className="text-[#75200c]/40 mr-1.5">|</span>}
-                <span>{String(val)}</span>
-              </span>
-            ))}
-          </div>
-        ))}
+          {/* Table Data Rows */}
+          <tbody className="divide-y divide-[#75200c]/10 bg-[#f4ded4]">
+            {data.rows.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={data.columns.length}
+                  className="px-3 py-2 text-[12px] italic text-[#6e2718] text-center"
+                >
+                  0 rows
+                </td>
+              </tr>
+            ) : (
+              data.rows.map((row, i) => (
+                <tr
+                  key={i}
+                  {...(attrOf ? (attrOf(row) as object) : {})}
+                  className="transition-colors hover:bg-white/30"
+                  style={{ outline: "1px solid transparent", outlineOffset: -1 }}
+                >
+                  {data.columns.map((c) => (
+                    <td
+                      key={c.name}
+                      className="px-2.5 py-1.5 font-mono text-[11px] text-[#3a0d05] whitespace-nowrap"
+                    >
+                      {String(row[c.name] ?? "NULL")}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
 
       {/* Left */}
