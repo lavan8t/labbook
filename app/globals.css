@@ -6,62 +6,50 @@
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* Material 3 System Colors - Terracotta Dark Vibrant Palette */
-  --md-sys-color-background: #191210;
-  --md-sys-color-on-background: #ede0dc;
-  --md-sys-color-surface: #201a18;
-  --md-sys-color-on-surface: #ede0dc;
-  --md-sys-color-surface-dim: #130d0b;
-  --md-sys-color-surface-bright: #3a322f;
-  --md-sys-color-surface-container-lowest: #0e0807;
-  --md-sys-color-surface-container-low: #1c1513;
-  --md-sys-color-surface-container: #241e1b;
-  --md-sys-color-surface-container-high: #2f2825;
-  --md-sys-color-surface-container-highest: #3a322f;
-  --md-sys-color-surface-variant: #433935;
-  --md-sys-color-on-surface-variant: #d0c4bf;
-  --md-sys-color-outline: #9d8e87;
-  --md-sys-color-outline-variant: #51433e;
-  --md-sys-color-primary: #ffb59d;
-  --md-sys-color-on-primary: #5c1e0b;
-  --md-sys-color-primary-container: #7a2f19;
-  --md-sys-color-on-primary-container: #ffdbd1;
-  --md-sys-color-secondary: #e7bdb1;
-  --md-sys-color-on-secondary: #442a22;
-  --md-sys-color-secondary-container: #5d3f37;
-  --md-sys-color-on-secondary-container: #ffdcd2;
-  --md-sys-color-error: #ffb4ab;
-  --md-sys-color-on-error: #690005;
-  --md-sys-color-error-container: #93000a;
-  --md-sys-color-on-error-container: #ffdad6;
+  /* Material 3 System Colors - Red Light Vibrant Palette */
+  --md-sys-color-background: #fffbfa;
+  --md-sys-color-on-background: #201a19;
+  --md-sys-color-surface: #fffbfa;
+  --md-sys-color-on-surface: #201a19;
+  --md-sys-color-surface-dim: #e8dedb;
+  --md-sys-color-surface-bright: #fffbfa;
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #fdf1ee;
+  --md-sys-color-surface-container: #f7ebe8;
+  --md-sys-color-surface-container-high: #f1e5e2;
+  --md-sys-color-surface-container-highest: #ebdfdc;
+  --md-sys-color-surface-variant: #f5ded8;
+  --md-sys-color-on-surface-variant: #53433f;
+  --md-sys-color-outline: #85736e;
+  --md-sys-color-outline-variant: #d8c2bc;
+  --md-sys-color-primary: #ba1a1a;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #ffdad6;
+  --md-sys-color-on-primary-container: #410002;
+  --md-sys-color-secondary: #775652;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #ffdad6;
+  --md-sys-color-on-secondary-container: #2c1512;
+  --md-sys-color-error: #ba1a1a;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #ffdad6;
+  --md-sys-color-on-error-container: #410002;
 
-  /* M3E Component Overrides for Consistent Dark Theme Surfaces */
-  --m3e-card-container-color: #201a18;
-  --m3e-card-text-color: #ede0dc;
-  --m3e-card-outline-color: rgba(255, 219, 209, 0.15);
-  --m3e-card-shape: 10px;
-
-  --m3e-filled-card-container-color: #241e1b;
-  --m3e-filled-card-text-color: #ede0dc;
-
-  --m3e-outlined-card-container-color: #201a18;
-  --m3e-outlined-card-text-color: #ede0dc;
-  --m3e-outlined-card-outline-color: rgba(255, 219, 209, 0.15);
-
-  --m3e-form-field-outline-color: rgba(255, 219, 209, 0.25);
-  --m3e-form-field-focus-outline-color: #ffb59d;
-  --m3e-form-field-label-color: #d0c4bf;
-  --m3e-form-field-focus-label-color: #ffb59d;
-  --m3e-form-field-input-color: #ede0dc;
+  /* Form Field & Component Colors - Borderless Surfaces */
+  --m3e-form-field-outline-color: transparent;
+  --m3e-form-field-focus-outline-color: #ba1a1a;
+  --m3e-form-field-label-color: #53433f;
+  --m3e-form-field-focus-label-color: #ba1a1a;
+  --m3e-form-field-input-color: #201a19;
 
   --m3e-button-shape: 8px;
 }
 
 body {
-  background-color: var(--md-sys-color-background, #191210);
-  color: var(--md-sys-color-on-background, #ede0dc);
+  background-color: var(--md-sys-color-background, #fffbfa);
+  color: var(--md-sys-color-on-background, #201a19);
   font-family: var(--font-roboto-flex), ui-sans-serif, system-ui, sans-serif;
   font-feature-settings: "cv01", "ss01", "kern" 1;
   font-optical-sizing: auto;
@@ -95,39 +83,41 @@ body {
   font-variation-settings: "wght" 600, "wdth" 100, "opsz" 14;
 }
 
-/* M3E Form Field Input Styling inside dark theme */
+/* M3E Form Field Input Styling inside light theme */
 m3e-form-field input,
 m3e-form-field select,
-m3e-form-field m3e-select {
-  color: #ede0dc !important;
+m3e-form-field m3e-select,
+m3e-form-field m3e-date-input {
+  color: #201a19 !important;
   background-color: transparent !important;
 }
 
-m3e-form-field input[type="datetime-local"] {
-  color-scheme: dark;
+m3e-form-field input[type="datetime-local"],
+m3e-form-field input[type="date"],
+m3e-form-field input[type="time"] {
+  color-scheme: light;
 }
 
-/* ReactFlow Canvas styling for dark terracotta */
+/* ReactFlow Canvas styling for light red */
 .react-flow__background {
-  background-color: #150f0e !important;
+  background-color: #fcf6f5 !important;
 }
 
 .react-flow__controls {
-  border: 1px solid rgba(255, 219, 209, 0.15) !important;
   border-radius: 8px !important;
   overflow: hidden !important;
-  background-color: #241e1b !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 
 .react-flow__controls-button {
-  background: #241e1b !important;
-  border-bottom: 1px solid rgba(255, 219, 209, 0.12) !important;
-  fill: #ede0dc !important;
-  color: #ede0dc !important;
+  background: #ffffff !important;
+  fill: #201a19 !important;
+  color: #201a19 !important;
 }
 
 .react-flow__controls-button:hover {
-  background: #2f2825 !important;
+  background: #f7ebe8 !important;
 }
 
 .react-flow__controls-button svg {

@@ -15,6 +15,9 @@ declare module "@m3e/web/tabs";
 declare module "@m3e/web/icon";
 declare module "@m3e/web/divider";
 declare module "@m3e/web/tooltip";
+declare module "@m3e/web/button-group";
+declare module "@m3e/web/icon-button";
+declare module "@m3e/web/segmented-button";
 
 declare namespace React {
   namespace JSX {
@@ -24,6 +27,9 @@ declare namespace React {
       "m3e-option": any;
       "m3e-form-field": any;
       "m3e-button": any;
+      "m3e-button-group": any;
+      "m3e-icon-button": any;
+      "m3e-segmented-button": any;
       "m3e-card": any;
       "m3e-badge": any;
       "m3e-chip": any;
