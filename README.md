@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LabBook
 
-## Getting Started
+LabBook is a laboratory equipment reservation system built with Next.js and Bun. It demonstrates temporal range exclusion and relational division directly in the browser.
 
-First, run the development server:
+## What it does
+
+Research facilities must prevent overlapping bookings and verify safety credentials before staff operate equipment. LabBook demonstrates this workflow with an interactive booking console, an entity-relationship schema graph rendered with React Flow, and a live SQL audit console.
+
+1. **Staff selection.** The user selects a researcher profile, such as Alice Chen or Bob Kumar.
+2. **Equipment selection.** The user chooses an instrument, such as a confocal microscope or field emission SEM.
+3. **Prerequisite checking.** The client verifies whether the researcher holds every safety credential required for that instrument.
+4. **Temporal conflict checking.** The client checks whether the requested time interval overlaps with an existing reservation.
+5. **Execution log.** The app records each check, SQL query, and constraint failure into an audit console with millisecond timestamps.
+
+## Relational mechanics
+
+### 1. Relational division for credential verification
+
+Equipment often requires multiple independent certifications before a researcher can reserve it. For example, the Field Emission SEM requires both Laser Safety Level 2 and Biosafety Protocol BSL-2.
+
+Relational division determines whether a user holds all qualifications associated with an equipment item.
+
+In SQL, this is expressed using set difference:
+
+```sql
+-- Required qualifications for the selected resource
+SELECT qualification_id
+FROM equipment_requirements
+WHERE resource_id = :resource_id
+
+EXCEPT
+
+-- Qualifications held and verified for the selected user
+SELECT qualification_id
+FROM user_qualifications
+WHERE user_id = :user_id
+  AND status = 'VERIFIED';
+```
+
+When this query returns zero rows, the user is cleared to book. When any qualification ID returns, the system halts the reservation and displays the missing prerequisite.
+
+### 2. GiST temporal range exclusion
+
+Standard database constraints like `UNIQUE (resource_id, start_datetime)` only catch identical start times. They allow overlapping spans where one reservation starts before another finishes.
+
+PostgreSQL solves this problem using the `btree_gist` extension and an exclusion constraint over `tstzrange` intervals:
+
+```sql
+ALTER TABLE bookings
+ADD CONSTRAINT bookings_no_overlap
+EXCLUDE USING gist (
+  resource_id WITH =,
+  tstzrange(start_datetime, end_datetime) WITH &&
+);
+```
+
+LabBook simulates this constraint during booking submission. When an incoming interval intersects an existing booking for the same equipment, the engine rejects the write, returns an HTTP 409 status, and reports the conflicting booking ID.
+
+## Architecture
+
+- **Runtime and package manager.** Bun.
+- **Framework.** Next.js 16 with the App Router.
+- **Web components.** Material 3 custom elements from `@m3e/web`.
+- **Schema graph.** `@xyflow/react` with custom table nodes and GSAP edge traversal animations.
+- **Typography.** Google Sans Flex configured with `ROND` at 100, and Google Sans Code for transaction logs.
+
+## Getting started
+
+Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+bun install
+```
+
+Start the local development server:
+
+```bash
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000` in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To create a production build:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+bun run build
+```
 
-## Learn More
+To run the linter:
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+bun run lint
+```
