@@ -2,7 +2,7 @@
 
 @theme inline {
   --font-sans: var(--font-roboto-flex), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-mono: var(--font-google-sans-flex), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 :root {
@@ -97,6 +97,8 @@ body {
 }
 
 code, pre, .font-mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-google-sans-flex), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-feature-settings: "tnum" 1, "zero" 1;
+  font-variation-settings: "wdth" 96, "opsz" 12;
 }
 

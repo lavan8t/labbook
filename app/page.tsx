@@ -111,11 +111,11 @@ export default function Page() {
 
   const edges: Edge[] = useMemo(
     () => [
-      { id: "e1", source: "users", sourceHandle: "b", target: "user_qualifications", targetHandle: "t", type: "smoothstep", style: EDGE_STYLE, className: EDGE_CLASSES.usersToUq },
-      { id: "e2", source: "user_qualifications", sourceHandle: "r", target: "qualifications", targetHandle: "l", type: "smoothstep", style: EDGE_STYLE, className: EDGE_CLASSES.uqToQualifications },
-      { id: "e3", source: "equipment", sourceHandle: "l", target: "equipment_requirements", targetHandle: "r", type: "smoothstep", style: EDGE_STYLE, className: EDGE_CLASSES.equipmentToReqs },
-      { id: "e4", source: "equipment_requirements", sourceHandle: "l", target: "qualifications", targetHandle: "r", type: "smoothstep", style: EDGE_STYLE, className: EDGE_CLASSES.reqsToQualifications },
-      { id: "e5", source: "equipment", sourceHandle: "b", target: "bookings", targetHandle: "t", type: "smoothstep", style: EDGE_STYLE, className: EDGE_CLASSES.equipmentToBookings },
+      { id: "e1", source: "users", sourceHandle: "b-source", target: "user_qualifications", targetHandle: "t-target", type: "smoothstep", style: EDGE_STYLE, className: EDGE_CLASSES.usersToUq },
+      { id: "e2", source: "user_qualifications", sourceHandle: "r-source", target: "qualifications", targetHandle: "l-target", type: "smoothstep", style: EDGE_STYLE, className: EDGE_CLASSES.uqToQualifications },
+      { id: "e3", source: "equipment", sourceHandle: "l-source", target: "equipment_requirements", targetHandle: "r-target", type: "smoothstep", style: EDGE_STYLE, className: EDGE_CLASSES.equipmentToReqs },
+      { id: "e4", source: "equipment_requirements", sourceHandle: "l-source", target: "qualifications", targetHandle: "r-target", type: "smoothstep", style: EDGE_STYLE, className: EDGE_CLASSES.reqsToQualifications },
+      { id: "e5", source: "equipment", sourceHandle: "b-source", target: "bookings", targetHandle: "t-target", type: "smoothstep", style: EDGE_STYLE, className: EDGE_CLASSES.equipmentToBookings },
     ],
     []
   );

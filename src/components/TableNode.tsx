@@ -74,10 +74,25 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
         ))}
       </div>
 
-      <Handle id="l" type="target" position={Position.Left} className="!w-2 !h-2 !bg-[#75200c] !border-white" />
-      <Handle id="r" type="source" position={Position.Right} className="!w-2 !h-2 !bg-[#75200c] !border-white" />
-      <Handle id="t" type="target" position={Position.Top} className="!w-2 !h-2 !bg-[#75200c] !border-white" />
-      <Handle id="b" type="source" position={Position.Bottom} className="!w-2 !h-2 !bg-[#75200c] !border-white" />
+      {/* Left */}
+      <Handle id="l-target" type="target" position={Position.Left} className="!w-2 !h-2 !bg-[#75200c] !border-white" />
+      <Handle id="l-source" type="source" position={Position.Left} className="!w-2 !h-2 !bg-[#75200c] !border-white" />
+      <Handle id="l" type="source" position={Position.Left} className="!w-2 !h-2 !bg-[#75200c] !border-white opacity-0 pointer-events-none" />
+
+      {/* Right */}
+      <Handle id="r-target" type="target" position={Position.Right} className="!w-2 !h-2 !bg-[#75200c] !border-white" />
+      <Handle id="r-source" type="source" position={Position.Right} className="!w-2 !h-2 !bg-[#75200c] !border-white" />
+      <Handle id="r" type="target" position={Position.Right} className="!w-2 !h-2 !bg-[#75200c] !border-white opacity-0 pointer-events-none" />
+
+      {/* Top */}
+      <Handle id="t-target" type="target" position={Position.Top} className="!w-2 !h-2 !bg-[#75200c] !border-white" />
+      <Handle id="t-source" type="source" position={Position.Top} className="!w-2 !h-2 !bg-[#75200c] !border-white" />
+      <Handle id="t" type="target" position={Position.Top} className="!w-2 !h-2 !bg-[#75200c] !border-white opacity-0 pointer-events-none" />
+
+      {/* Bottom */}
+      <Handle id="b-target" type="target" position={Position.Bottom} className="!w-2 !h-2 !bg-[#75200c] !border-white" />
+      <Handle id="b-source" type="source" position={Position.Bottom} className="!w-2 !h-2 !bg-[#75200c] !border-white" />
+      <Handle id="b" type="source" position={Position.Bottom} className="!w-2 !h-2 !bg-[#75200c] !border-white opacity-0 pointer-events-none" />
     </div>
   );
 }
