@@ -19,37 +19,39 @@ declare module "@m3e/web/button-group";
 declare module "@m3e/web/icon-button";
 declare module "@m3e/web/segmented-button";
 
+type CustomElementProps = React.HTMLAttributes<HTMLElement> & Record<string, unknown>;
+
 declare namespace React {
   namespace JSX {
     interface IntrinsicElements {
-      "m3e-theme": any;
-      "m3e-select": any;
-      "m3e-option": any;
-      "m3e-form-field": any;
-      "m3e-button": any;
-      "m3e-button-group": any;
-      "m3e-icon-button": any;
-      "m3e-segmented-button": any;
-      "m3e-card": any;
-      "m3e-badge": any;
-      "m3e-chip": any;
-      "m3e-filter-chip": any;
-      "m3e-assist-chip": any;
-      "m3e-chip-set": any;
-      "m3e-filter-chip-set": any;
-      "m3e-switch": any;
-      "m3e-checkbox": any;
-      "m3e-date-input": any;
-      "m3e-datepicker": any;
-      "m3e-datepicker-toggle": any;
-      "m3e-timepicker": any;
-      "m3e-timepicker-toggle": any;
-      "m3e-tabs": any;
-      "m3e-tab": any;
-      "m3e-tab-panel": any;
-      "m3e-icon": any;
-      "m3e-divider": any;
-      "m3e-tooltip": any;
+      "m3e-theme": CustomElementProps;
+      "m3e-select": CustomElementProps;
+      "m3e-option": CustomElementProps;
+      "m3e-form-field": CustomElementProps;
+      "m3e-button": CustomElementProps;
+      "m3e-button-group": CustomElementProps;
+      "m3e-icon-button": CustomElementProps;
+      "m3e-segmented-button": CustomElementProps;
+      "m3e-card": CustomElementProps;
+      "m3e-badge": CustomElementProps;
+      "m3e-chip": CustomElementProps;
+      "m3e-filter-chip": CustomElementProps;
+      "m3e-assist-chip": CustomElementProps;
+      "m3e-chip-set": CustomElementProps;
+      "m3e-filter-chip-set": CustomElementProps;
+      "m3e-switch": CustomElementProps;
+      "m3e-checkbox": CustomElementProps;
+      "m3e-date-input": CustomElementProps;
+      "m3e-datepicker": CustomElementProps;
+      "m3e-datepicker-toggle": CustomElementProps;
+      "m3e-timepicker": CustomElementProps;
+      "m3e-timepicker-toggle": CustomElementProps;
+      "m3e-tabs": CustomElementProps;
+      "m3e-tab": CustomElementProps;
+      "m3e-tab-panel": CustomElementProps;
+      "m3e-icon": CustomElementProps;
+      "m3e-divider": CustomElementProps;
+      "m3e-tooltip": CustomElementProps;
     }
   }
 }

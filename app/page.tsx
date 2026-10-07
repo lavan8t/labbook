@@ -17,28 +17,25 @@ import {
   evaluateQualificationDivision,
 } from "@/lib/dbEngine";
 import {
-  EDGE_CLASSES,
   revealConsoleLines,
   runDivisionAnimation,
   runInsertAnimation,
   resetVisualState,
 } from "@/lib/animations";
 
-if (typeof window !== "undefined") {
-  import("@m3e/web/select");
-  import("@m3e/web/option");
-  import("@m3e/web/form-field");
-  import("@m3e/web/button");
-  import("@m3e/web/button-group");
-  import("@m3e/web/theme");
-  import("@m3e/web/chips");
-  import("@m3e/web/switch");
-  import("@m3e/web/divider");
-  import("@m3e/web/tabs");
-  import("@m3e/web/icon");
-  import("@m3e/web/datepicker");
-  import("@m3e/web/date-input");
-}
+import "@m3e/web/select";
+import "@m3e/web/option";
+import "@m3e/web/form-field";
+import "@m3e/web/button";
+import "@m3e/web/button-group";
+import "@m3e/web/theme";
+import "@m3e/web/chips";
+import "@m3e/web/switch";
+import "@m3e/web/divider";
+import "@m3e/web/tabs";
+import "@m3e/web/icon";
+import "@m3e/web/datepicker";
+import "@m3e/web/date-input";
 
 const nodeTypes = { table: TableNode };
 
@@ -58,10 +55,6 @@ function formatTime(d: Date): string {
   return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-function formatDateTimeLocal(d: Date): string {
-  return `${formatDate(d)}T${formatTime(d)}`;
-}
-
 export default function Page() {
   const [db, setDb] = useState<DbState>(() => structuredClone(initialDb));
   const [userId, setUserId] = useState<number>(1);
@@ -71,11 +64,18 @@ export default function Page() {
   const [startTime, setStartTime] = useState<string>("10:30");
   const [endTime, setEndTime] = useState<string>("11:30");
 
-  const [start, setStart] = useState<string>("2026-10-15T10:30");
-  const [end, setEnd] = useState<string>("2026-10-15T11:30");
   const [purpose, setPurpose] = useState<string>("");
   const [isStartNow, setIsStartNow] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<ActiveTab>("book");
+  const [activeTab, setActiveTab] = useState<ActiveTab>(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get("tab") as ActiveTab;
+      if (tab === "schema" || tab === "logs" || tab === "book") {
+        return tab;
+      }
+    }
+    return "book";
+  });
   const [filterUserOnly, setFilterUserOnly] = useState<boolean>(true);
   const [feedback, setFeedback] = useState<{
     type: "success" | "conflict" | "forbidden" | "info";
@@ -89,13 +89,14 @@ export default function Page() {
     "-- Ready for staff equipment reservations and credential verification",
   ]);
   const consoleRef = useRef<HTMLDivElement>(null);
+  const userSelectRef = useRef<HTMLElement>(null);
+  const equipmentSelectRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const tab = params.get("tab") as ActiveTab;
-      if (tab === "schema" || tab === "logs" || tab === "book") {
-        setActiveTab(tab);
+    // Clear any instance properties that might shadow Lit element accessors
+    for (const ref of [userSelectRef, equipmentSelectRef]) {
+      if (ref.current && Object.prototype.hasOwnProperty.call(ref.current, "value")) {
+        delete (ref.current as unknown as Record<string, unknown>).value;
       }
     }
   }, []);
@@ -103,11 +104,6 @@ export default function Page() {
   useEffect(() => {
     revealConsoleLines(consoleRef.current);
   }, [logs]);
-
-  useEffect(() => {
-    setStart(`${bookingDate}T${startTime}`);
-    setEnd(`${bookingDate}T${endTime}`);
-  }, [bookingDate, startTime, endTime]);
 
   const selectedUser = useMemo(
     () => db.users.find((u) => u.user_id === userId) ?? db.users[0],
@@ -480,6 +476,8 @@ export default function Page() {
 
   function handleReset() {
     setDb(structuredClone(initialDb));
+    setUserId(1);
+    setResourceId(201);
     resetVisualState();
     setFeedback({
       type: "info",
@@ -537,7 +535,7 @@ export default function Page() {
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 relative bg-background">
+        <main className="flex-1 relative bg-background min-h-0 flex flex-col">
           {/* TAB 1: Long Continuous Booking Form */}
           {activeTab === "book" && (
             <div className="max-w-2xl mx-auto py-8 px-6 space-y-8">
@@ -578,15 +576,22 @@ export default function Page() {
                 <m3e-form-field variant="filled" className="w-full block">
                   <label slot="label" htmlFor="user-select">Select Staff</label>
                   <m3e-select
+                    ref={userSelectRef as unknown as React.Ref<HTMLSelectElement>}
                     id="user-select"
-                    value={String(userId)}
-                    onChange={(e: any) => {
-                      const val = e.target?.value;
-                      if (val !== undefined) setUserId(Number(val));
+                    onChange={(e: React.FormEvent<HTMLElement>) => {
+                      const target = e.target as HTMLSelectElement | null;
+                      const val = target?.value;
+                      if (val !== undefined && val !== null && val !== "") {
+                        setUserId(Number(val));
+                      }
                     }}
                   >
                     {db.users.map((u) => (
-                      <m3e-option key={u.user_id} value={String(u.user_id)}>
+                      <m3e-option
+                        key={u.user_id}
+                        value={String(u.user_id)}
+                        selected={u.user_id === userId}
+                      >
                         {u.name} — {u.role}, {u.department}
                       </m3e-option>
                     ))}
@@ -620,15 +625,22 @@ export default function Page() {
                 <m3e-form-field variant="filled" className="w-full block">
                   <label slot="label" htmlFor="equipment-select">Select Equipment</label>
                   <m3e-select
+                    ref={equipmentSelectRef as unknown as React.Ref<HTMLSelectElement>}
                     id="equipment-select"
-                    value={String(resourceId)}
-                    onChange={(e: any) => {
-                      const val = e.target?.value;
-                      if (val !== undefined) setResourceId(Number(val));
+                    onChange={(e: React.FormEvent<HTMLElement>) => {
+                      const target = e.target as HTMLSelectElement | null;
+                      const val = target?.value;
+                      if (val !== undefined && val !== null && val !== "") {
+                        setResourceId(Number(val));
+                      }
                     }}
                   >
                     {db.equipment.map((e) => (
-                      <m3e-option key={e.resource_id} value={String(e.resource_id)}>
+                      <m3e-option
+                        key={e.resource_id}
+                        value={String(e.resource_id)}
+                        selected={e.resource_id === resourceId}
+                      >
                         {e.name} ({e.location}) — Status: {e.status}
                       </m3e-option>
                     ))}
@@ -692,7 +704,10 @@ export default function Page() {
                   </div>
                   <m3e-switch
                     checked={isStartNow ? "" : undefined}
-                    onChange={(e: any) => handleStartNowToggle(Boolean(e.target?.checked))}
+                    onChange={(e: React.FormEvent<HTMLElement>) => {
+                      const target = e.target as HTMLInputElement | null;
+                      handleStartNowToggle(Boolean(target?.checked));
+                    }}
                   ></m3e-switch>
                 </div>
 
@@ -717,7 +732,7 @@ export default function Page() {
                       variant="tonal"
                       type="button"
                       onClick={() => {
-                        const picker = document.getElementById("booking-datepicker") as any;
+                        const picker = document.getElementById("booking-datepicker") as (HTMLElement & { toggle?: (el: HTMLElement | null) => void }) | null;
                         const input = document.getElementById("booking-date-input");
                         if (picker && input) {
                           picker.toggle?.(input);
@@ -731,8 +746,9 @@ export default function Page() {
 
                   <m3e-datepicker
                     id="booking-datepicker"
-                    onChange={(e: any) => {
-                      const d = e.target?.date;
+                    onChange={(e: React.FormEvent<HTMLElement>) => {
+                      const target = e.target as (EventTarget & { date?: Date }) | null;
+                      const d = target?.date;
                       if (d instanceof Date) {
                         handleDateChange(formatDate(d));
                       }
@@ -941,7 +957,10 @@ export default function Page() {
 
           {/* TAB 2: ER Schema Graph Visualization */}
           {activeTab === "schema" && (
-            <div className="h-full w-full min-h-[calc(100vh-48px)] relative bg-background">
+            <div
+              style={{ width: "100%", height: "calc(100vh - 48px)", minHeight: "500px" }}
+              className="relative bg-background"
+            >
               {/* Floating Toolbar */}
               <div className="absolute top-4 left-4 z-10 bg-surface-container-lowest shadow-sm rounded-full px-4 py-2 flex items-center gap-3">
                 <span className="text-xs font-mono font-medium text-primary">
@@ -970,6 +989,7 @@ export default function Page() {
                 nodeTypes={nodeTypes}
                 fitView
                 proOptions={{ hideAttribution: true }}
+                style={{ width: "100%", height: "100%" }}
               >
                 <Background gap={24} size={1.5} color="var(--md-sys-color-primary)" style={{ opacity: 0.08 }} />
                 <Controls showInteractive={false} />
@@ -979,7 +999,10 @@ export default function Page() {
 
           {/* TAB 3: SQL Audit Logs & Relational Proofs */}
           {activeTab === "logs" && (
-            <div className="h-full min-h-[calc(100vh-48px)] flex flex-col p-6 bg-background overflow-hidden">
+            <div
+              style={{ width: "100%", height: "calc(100vh - 48px)" }}
+              className="flex flex-col p-6 bg-background overflow-hidden"
+            >
               <div className="max-w-4xl w-full mx-auto flex-1 flex flex-col space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
