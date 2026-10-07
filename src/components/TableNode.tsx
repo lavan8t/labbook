@@ -25,13 +25,13 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
   return (
     <div
       data-table={data.tableName}
-      className="min-w-[340px] max-w-[460px] rounded-lg border border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.2))] bg-[var(--md-sys-color-surface-container,#2a110a)] text-[13px] shadow-2xl overflow-hidden"
+      className="min-w-[340px] max-w-[460px] rounded-[2px] border border-[#e2e8f0] bg-white text-[#0f172a] text-[13px] overflow-hidden"
       style={{ borderWidth: 1 }}
     >
       {/* Table Header */}
-      <div className="border-b border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.15))] bg-[var(--md-sys-color-primary-container,#5f1505)] px-3.5 py-2 text-[13px] font-var-table-title uppercase text-[var(--md-sys-color-on-primary-container,#ffdad2)] flex items-center justify-between">
+      <div className="border-b border-[#b44f2b] bg-[#c85a32] px-3.5 py-2 text-[13px] font-var-table-title uppercase text-white flex items-center justify-between">
         <span className="tracking-wide font-bold">{data.tableName}</span>
-        <span className="font-mono text-[10px] tracking-widest text-[var(--md-sys-color-on-primary-container,#ffdad2)]/80 font-normal">
+        <span className="font-mono text-[10px] tracking-widest text-white/90 bg-black/10 px-1.5 py-0.5 rounded-[2px] font-normal">
           {data.rows.length} {data.rows.length === 1 ? "ROW" : "ROWS"}
         </span>
       </div>
@@ -41,21 +41,21 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
         <table className="w-full border-collapse text-left">
           {/* Column attributes header */}
           <thead>
-            <tr className="border-b border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.1))] bg-[var(--md-sys-color-surface-container-high,#36160e)]">
+            <tr className="border-b border-[#e2e8f0] bg-[#f8fafc]">
               {data.columns.map((c) => (
                 <th
                   key={c.name}
-                  className="px-2.5 py-2 font-mono text-[11px] font-bold text-[var(--md-sys-color-on-surface,#ffffff)] whitespace-nowrap"
+                  className="px-2.5 py-1.5 font-mono text-[11px] font-semibold text-[#475569] whitespace-nowrap"
                 >
                   <div className="flex items-center gap-1.5">
                     <span>{c.name}</span>
                     {c.pk && (
-                      <span className="rounded bg-[var(--md-sys-color-primary,#ffb4a2)] px-1 py-[0.5px] text-[8px] font-bold text-[var(--md-sys-color-on-primary,#561e11)] tracking-wider">
+                      <span className="rounded-[2px] bg-[#c85a32] px-1 py-[0.5px] text-[8px] font-bold text-white tracking-wider">
                         PK
                       </span>
                     )}
                     {c.fk && (
-                      <span className="rounded border border-[var(--md-sys-color-outline,#a08c87)] bg-[var(--md-sys-color-surface-container-highest,#421c12)] px-1 py-[0.5px] text-[8px] font-bold text-[var(--md-sys-color-on-surface-variant,#d8c2bc)] tracking-wider">
+                      <span className="rounded-[2px] border border-[#cbd5e1] bg-[#f1f5f9] px-1 py-[0.5px] text-[8px] font-bold text-[#475569] tracking-wider">
                         FK
                       </span>
                     )}
@@ -66,12 +66,12 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
           </thead>
 
           {/* Table Data Rows */}
-          <tbody className="divide-y divide-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.08))] bg-[var(--md-sys-color-surface-container-low,#240d07)]">
+          <tbody className="divide-y divide-[#e2e8f0] bg-white">
             {data.rows.length === 0 ? (
               <tr>
                 <td
                   colSpan={data.columns.length}
-                  className="px-3 py-2 text-[12px] italic text-[var(--md-sys-color-outline,#a08c87)] text-center"
+                  className="px-3 py-2 text-[12px] italic text-[#94a3b8] text-center"
                 >
                   0 rows
                 </td>
@@ -81,13 +81,13 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
                 <tr
                   key={i}
                   {...(attrOf ? (attrOf(row) as object) : {})}
-                  className="transition-colors hover:bg-[var(--md-sys-color-surface-container-highest,#421c12)]"
+                  className="transition-colors hover:bg-[#fdf8f6]"
                   style={{ outline: "1px solid transparent", outlineOffset: -1 }}
                 >
                   {data.columns.map((c) => (
                     <td
                       key={c.name}
-                      className="px-2.5 py-1.5 font-mono text-[11px] text-[var(--md-sys-color-on-surface,#ffffff)] whitespace-nowrap"
+                      className="px-2.5 py-1.5 font-mono text-[11px] text-[#0f172a] whitespace-nowrap"
                     >
                       {String(row[c.name] ?? "NULL")}
                     </td>
@@ -100,24 +100,24 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
       </div>
 
       {/* Left */}
-      <Handle id="l-target" type="target" position={Position.Left} className="!w-2 !h-2 !bg-[var(--md-sys-color-primary,#ffb4a2)] !border-[var(--md-sys-color-surface,#230d07)]" />
-      <Handle id="l-source" type="source" position={Position.Left} className="!w-2 !h-2 !bg-[var(--md-sys-color-primary,#ffb4a2)] !border-[var(--md-sys-color-surface,#230d07)]" />
-      <Handle id="l" type="source" position={Position.Left} className="!w-2 !h-2 !bg-[var(--md-sys-color-primary,#ffb4a2)] !border-[var(--md-sys-color-surface,#230d07)] opacity-0 pointer-events-none" />
+      <Handle id="l-target" type="target" position={Position.Left} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
+      <Handle id="l-source" type="source" position={Position.Left} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
+      <Handle id="l" type="source" position={Position.Left} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff] opacity-0 pointer-events-none" />
 
       {/* Right */}
-      <Handle id="r-target" type="target" position={Position.Right} className="!w-2 !h-2 !bg-[var(--md-sys-color-primary,#ffb4a2)] !border-[var(--md-sys-color-surface,#230d07)]" />
-      <Handle id="r-source" type="source" position={Position.Right} className="!w-2 !h-2 !bg-[var(--md-sys-color-primary,#ffb4a2)] !border-[var(--md-sys-color-surface,#230d07)]" />
-      <Handle id="r" type="target" position={Position.Right} className="!w-2 !h-2 !bg-[var(--md-sys-color-primary,#ffb4a2)] !border-[var(--md-sys-color-surface,#230d07)] opacity-0 pointer-events-none" />
+      <Handle id="r-target" type="target" position={Position.Right} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
+      <Handle id="r-source" type="source" position={Position.Right} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
+      <Handle id="r" type="target" position={Position.Right} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff] opacity-0 pointer-events-none" />
 
       {/* Top */}
-      <Handle id="t-target" type="target" position={Position.Top} className="!w-2 !h-2 !bg-[var(--md-sys-color-primary,#ffb4a2)] !border-[var(--md-sys-color-surface,#230d07)]" />
-      <Handle id="t-source" type="source" position={Position.Top} className="!w-2 !h-2 !bg-[var(--md-sys-color-primary,#ffb4a2)] !border-[var(--md-sys-color-surface,#230d07)]" />
-      <Handle id="t" type="target" position={Position.Top} className="!w-2 !h-2 !bg-[var(--md-sys-color-primary,#ffb4a2)] !border-[var(--md-sys-color-surface,#230d07)] opacity-0 pointer-events-none" />
+      <Handle id="t-target" type="target" position={Position.Top} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
+      <Handle id="t-source" type="source" position={Position.Top} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
+      <Handle id="t" type="target" position={Position.Top} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff] opacity-0 pointer-events-none" />
 
       {/* Bottom */}
-      <Handle id="b-target" type="target" position={Position.Bottom} className="!w-2 !h-2 !bg-[var(--md-sys-color-primary,#ffb4a2)] !border-[var(--md-sys-color-surface,#230d07)]" />
-      <Handle id="b-source" type="source" position={Position.Bottom} className="!w-2 !h-2 !bg-[var(--md-sys-color-primary,#ffb4a2)] !border-[var(--md-sys-color-surface,#230d07)]" />
-      <Handle id="b" type="source" position={Position.Bottom} className="!w-2 !h-2 !bg-[var(--md-sys-color-primary,#ffb4a2)] !border-[var(--md-sys-color-surface,#230d07)] opacity-0 pointer-events-none" />
+      <Handle id="b-target" type="target" position={Position.Bottom} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
+      <Handle id="b-source" type="source" position={Position.Bottom} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
+      <Handle id="b" type="source" position={Position.Bottom} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff] opacity-0 pointer-events-none" />
     </div>
   );
 }

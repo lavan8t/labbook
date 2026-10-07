@@ -1,7 +1,7 @@
 import gsap from "gsap";
 
-const EDGE_DEFAULT = "rgba(255, 255, 255, 0.4)";
-const NODE_BORDER_DEFAULT = "rgba(255, 255, 255, 0.2)";
+const EDGE_DEFAULT = "#cbd5e1";
+const NODE_BORDER_DEFAULT = "#e2e8f0";
 
 export const EDGE_CLASSES = {
   usersToUq: "edge-users-uq",
@@ -79,7 +79,7 @@ export function runDivisionAnimation(opts: DivisionAnimationOpts) {
   if (userRow) {
     tl.fromTo(
       userRow,
-      { outlineColor: "#ffffff", backgroundColor: "rgba(255,255,255,0.2)" },
+      { outlineColor: "#c85a32", backgroundColor: "rgba(200, 90, 50, 0.12)" },
       { outlineColor: "transparent", backgroundColor: "transparent", duration: 0.25, repeat: 1, yoyo: true }
     );
   }

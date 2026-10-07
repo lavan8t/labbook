@@ -6,12 +6,12 @@
 }
 
 :root {
-  /* Flat UI Core Tokens */
+  /* Flat UI Core Tokens - Terracotta Light Theme */
   --bg-primary: #ffffff;
-  --bg-surface: #f8fafc;
-  --bg-panel: #f8fafc;
+  --bg-surface: #fdf8f6;
+  --bg-panel: #ffffff;
   --bg-card: #ffffff;
-  --bg-card-alt: #f1f5f9;
+  --bg-card-alt: #fdf8f6;
   --bg-card-subtle: #f8fafc;
 
   --text-primary: #0f172a;
@@ -26,26 +26,32 @@
   --border-interactive: #cbd5e1;
 
   --radius-flat: 2px;
-  --accent-tint: #f1f5f9;
+  --accent-tint: #fbeee8;
 
-  /* Material 3 System Color Swatch Tokens (Vibrant Palette compatible) */
-  --md-sys-color-surface: var(--bg-primary);
-  --md-sys-color-surface-dim: #f1f5f9;
+  --terracotta-primary: #c85a32;
+  --terracotta-hover: #b44f2b;
+  --terracotta-light: #fbeee8;
+  --terracotta-border: #f0d5ca;
+  --terracotta-surface: #fdf8f6;
+
+  /* Material 3 System Color Swatch Tokens (Terracotta Light Vibrant) */
+  --md-sys-color-surface: #ffffff;
+  --md-sys-color-surface-dim: #fdf8f6;
   --md-sys-color-surface-container-lowest: #ffffff;
-  --md-sys-color-surface-container-low: #f8fafc;
+  --md-sys-color-surface-container-low: #fdf8f6;
   --md-sys-color-surface-container: #ffffff;
-  --md-sys-color-surface-container-high: #f8fafc;
-  --md-sys-color-surface-container-highest: #f1f5f9;
+  --md-sys-color-surface-container-high: #fdf8f6;
+  --md-sys-color-surface-container-highest: #fbeee8;
   --md-sys-color-on-surface: #0f172a;
   --md-sys-color-on-surface-variant: #475569;
   --md-sys-color-outline: #cbd5e1;
   --md-sys-color-outline-variant: #e2e8f0;
-  --md-sys-color-primary: #2563eb;
+  --md-sys-color-primary: #c85a32;
   --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: #eff6ff;
-  --md-sys-color-on-primary-container: #1d4ed8;
-  --md-sys-color-secondary-container: #f1f5f9;
-  --md-sys-color-on-secondary-container: #334155;
+  --md-sys-color-primary-container: #ffdbd1;
+  --md-sys-color-on-primary-container: #3b0900;
+  --md-sys-color-secondary-container: #fbeee8;
+  --md-sys-color-on-secondary-container: #3a150c;
 }
 
 /* Minimal Flat Reset: Zero Box Shadows, Zero Drop Shadows, Zero Gradients */
