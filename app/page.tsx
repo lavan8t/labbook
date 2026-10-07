@@ -276,9 +276,18 @@ export default function Page() {
     "rounded border border-white/30 bg-transparent px-3 py-2 font-var-label text-[12px] text-white hover:bg-white/10 transition-colors cursor-pointer active:scale-95";
 
   return (
-    <div className="flex h-screen w-screen bg-[#75200c] text-white overflow-hidden">
-      {/* Left sidebar / control desk */}
-      <div className="flex w-[34%] min-w-[340px] max-w-[460px] flex-col gap-4 overflow-y-auto border-r border-white/15 bg-[#86260f] p-5 shadow-2xl">
+    <m3e-theme
+      color="#75200c"
+      scheme="dark"
+      contrast="high"
+      variant="expressive"
+      motion="expressive"
+      density="0"
+      strong-focus
+    >
+      <div className="flex h-screen w-screen bg-[#75200c] text-white overflow-hidden">
+        {/* Left sidebar / control desk */}
+        <div className="flex w-[34%] min-w-[340px] max-w-[460px] flex-col gap-4 overflow-y-auto border-r border-white/15 bg-[#86260f] p-5 shadow-2xl">
         <div className="border-b border-white/15 pb-4">
           <div className="flex items-center gap-2 mb-1">
             <span className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-mono font-bold tracking-widest text-[#f3dfd6]">
@@ -406,5 +415,6 @@ export default function Page() {
         </ReactFlow>
       </div>
     </div>
+    </m3e-theme>
   );
 }
