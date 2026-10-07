@@ -6,43 +6,21 @@
 }
 
 :root {
-  /* Material 3 Dark Theme - Terracotta Vibrant Swatch */
-  --bg-primary: #191210;
-  --bg-surface: #201a18;
-  --bg-panel: #271f1c;
-  --bg-card: #201a18;
-  --bg-card-alt: #2b2320;
-  --bg-card-subtle: #191210;
+  color-scheme: dark;
 
-  --text-primary: #ede0dc;
-  --text-muted: #d0c4bf;
-  --text-dim: #9d8e87;
-  --text-dark: #ede0dc;
-  --text-dark-muted: #d0c4bf;
-
-  --border-subtle: rgba(255, 219, 209, 0.12);
-  --border-strong: rgba(255, 219, 209, 0.24);
-  --border-card: rgba(255, 219, 209, 0.15);
-  --border-interactive: rgba(255, 180, 155, 0.35);
-
-  --radius-flat: 4px;
-  --accent-tint: #38241d;
-
-  --terracotta-primary: #ffb59d;
-  --terracotta-hover: #ff9e80;
-  --terracotta-light: #38241d;
-  --terracotta-border: #5c3f35;
-  --terracotta-surface: #201a18;
-
-  /* Material 3 Dark System Tokens mapped to Terracotta */
-  --md-sys-color-surface: #191210;
+  /* Material 3 System Colors - Terracotta Dark Vibrant Palette */
+  --md-sys-color-background: #191210;
+  --md-sys-color-on-background: #ede0dc;
+  --md-sys-color-surface: #201a18;
+  --md-sys-color-on-surface: #ede0dc;
   --md-sys-color-surface-dim: #130d0b;
+  --md-sys-color-surface-bright: #3a322f;
   --md-sys-color-surface-container-lowest: #0e0807;
-  --md-sys-color-surface-container-low: #201a18;
+  --md-sys-color-surface-container-low: #1c1513;
   --md-sys-color-surface-container: #241e1b;
   --md-sys-color-surface-container-high: #2f2825;
   --md-sys-color-surface-container-highest: #3a322f;
-  --md-sys-color-on-surface: #ede0dc;
+  --md-sys-color-surface-variant: #433935;
   --md-sys-color-on-surface-variant: #d0c4bf;
   --md-sys-color-outline: #9d8e87;
   --md-sys-color-outline-variant: #51433e;
@@ -54,11 +32,36 @@
   --md-sys-color-on-secondary: #442a22;
   --md-sys-color-secondary-container: #5d3f37;
   --md-sys-color-on-secondary-container: #ffdcd2;
+  --md-sys-color-error: #ffb4ab;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000a;
+  --md-sys-color-on-error-container: #ffdad6;
+
+  /* M3E Component Overrides for Consistent Dark Theme Surfaces */
+  --m3e-card-container-color: #201a18;
+  --m3e-card-text-color: #ede0dc;
+  --m3e-card-outline-color: rgba(255, 219, 209, 0.15);
+  --m3e-card-shape: 10px;
+
+  --m3e-filled-card-container-color: #241e1b;
+  --m3e-filled-card-text-color: #ede0dc;
+
+  --m3e-outlined-card-container-color: #201a18;
+  --m3e-outlined-card-text-color: #ede0dc;
+  --m3e-outlined-card-outline-color: rgba(255, 219, 209, 0.15);
+
+  --m3e-form-field-outline-color: rgba(255, 219, 209, 0.25);
+  --m3e-form-field-focus-outline-color: #ffb59d;
+  --m3e-form-field-label-color: #d0c4bf;
+  --m3e-form-field-focus-label-color: #ffb59d;
+  --m3e-form-field-input-color: #ede0dc;
+
+  --m3e-button-shape: 8px;
 }
 
 body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--md-sys-color-background, #191210);
+  color: var(--md-sys-color-on-background, #ede0dc);
   font-family: var(--font-roboto-flex), ui-sans-serif, system-ui, sans-serif;
   font-feature-settings: "cv01", "ss01", "kern" 1;
   font-optical-sizing: auto;
@@ -67,13 +70,7 @@ body {
   padding: 0;
 }
 
-/* Material Typography Hierarchies - Strictly lowercase/title, never uppercase */
-.font-var-hero {
-  font-variation-settings: "wght" 700, "wdth" 100, "opsz" 36;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-}
-
+/* Material 3 Typography Scale */
 .font-var-heading {
   font-variation-settings: "wght" 600, "wdth" 100, "opsz" 24;
   letter-spacing: -0.015em;
@@ -87,7 +84,6 @@ body {
 
 .font-var-label {
   font-variation-settings: "wght" 500, "wdth" 100, "opsz" 13;
-  letter-spacing: 0.01em;
 }
 
 .font-var-body {
@@ -97,15 +93,21 @@ body {
 
 .font-var-table-title {
   font-variation-settings: "wght" 600, "wdth" 100, "opsz" 14;
-  letter-spacing: 0.01em;
 }
 
-.font-var-meta {
-  font-variation-settings: "wght" 450, "wdth" 100, "opsz" 12;
-  letter-spacing: 0.01em;
+/* M3E Form Field Input Styling inside dark theme */
+m3e-form-field input,
+m3e-form-field select,
+m3e-form-field m3e-select {
+  color: #ede0dc !important;
+  background-color: transparent !important;
 }
 
-/* ReactFlow canvas styling for dark terracotta */
+m3e-form-field input[type="datetime-local"] {
+  color-scheme: dark;
+}
+
+/* ReactFlow Canvas styling for dark terracotta */
 .react-flow__background {
   background-color: #150f0e !important;
 }
@@ -136,13 +138,4 @@ code, pre, .font-mono {
   font-family: var(--font-roboto-flex), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-feature-settings: "tnum" 1, "zero" 1;
   font-variation-settings: "wght" 450, "wdth" 98, "opsz" 12;
-}
-
-/* M3E component customizations */
-m3e-card {
-  --m3e-card-shape: 12px;
-}
-
-m3e-button {
-  --m3e-button-shape: 8px;
 }

@@ -29,8 +29,8 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
     >
       {/* Table Header */}
       <div className="border-b border-[rgba(255,219,209,0.12)] bg-[#33221c] px-3.5 py-2.5 text-[13px] font-var-table-title text-[#ffdbd1] flex items-center justify-between">
-        <span className="font-semibold tracking-wide lowercase">{data.tableName}</span>
-        <span className="font-mono text-[10px] text-[#ffb59d] bg-[#4a261b] px-2 py-0.5 rounded-[6px]">
+        <span className="font-semibold tracking-wide font-mono">{data.tableName}</span>
+        <span className="font-mono text-[11px] text-[#ffb59d] bg-[#4a261b] px-2 py-0.5 rounded-[6px]">
           {data.rows.length} {data.rows.length === 1 ? "row" : "rows"}
         </span>
       </div>
@@ -44,18 +44,18 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
               {data.columns.map((c) => (
                 <th
                   key={c.name}
-                  className="px-2.5 py-1.5 font-mono text-[11px] font-medium text-[#d0c4bf] whitespace-nowrap lowercase"
+                  className="px-2.5 py-1.5 font-mono text-[11px] font-medium text-[#d0c4bf] whitespace-nowrap"
                 >
                   <div className="flex items-center gap-1.5">
                     <span>{c.name}</span>
                     {c.pk && (
-                      <span className="rounded-[4px] bg-[#7a2f19] text-[#ffdbd1] px-1 py-[0.5px] text-[8px] font-medium lowercase">
-                        pk
+                      <span className="rounded-[4px] bg-[#7a2f19] text-[#ffdbd1] px-1 py-[0.5px] text-[9px] font-semibold">
+                        PK
                       </span>
                     )}
                     {c.fk && (
-                      <span className="rounded-[4px] border border-[rgba(255,219,209,0.2)] bg-[#2f2825] text-[#d0c4bf] px-1 py-[0.5px] text-[8px] font-medium lowercase">
-                        fk
+                      <span className="rounded-[4px] border border-[rgba(255,219,209,0.2)] bg-[#2f2825] text-[#d0c4bf] px-1 py-[0.5px] text-[9px] font-semibold">
+                        FK
                       </span>
                     )}
                   </div>
@@ -88,7 +88,7 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
                       key={c.name}
                       className="px-2.5 py-1.5 font-mono text-[11px] text-[#ede0dc] whitespace-nowrap"
                     >
-                      {String(row[c.name] ?? "null")}
+                      {String(row[c.name] ?? "NULL")}
                     </td>
                   ))}
                 </tr>

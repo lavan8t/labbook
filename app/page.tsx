@@ -72,8 +72,8 @@ export default function Page() {
   } | null>(null);
 
   const [logs, setLogs] = useState<string[]>([
-    "-- labbook relational division and gist exclusion engine initialized",
-    "-- ready for staff equipment reservations and credential verification",
+    "-- LabBook Relational Division and GiST Exclusion Engine initialized",
+    "-- Ready for staff equipment reservations and credential verification",
   ]);
   const consoleRef = useRef<HTMLDivElement>(null);
 
@@ -280,31 +280,31 @@ export default function Page() {
     const missingNames = missingQualifications.map((q) => q.name).join(", ");
 
     pushLogs([
-      `-- relational division: NOT EXISTS ( ... EXCEPT ... )`,
+      `-- Relational division: NOT EXISTS ( ... EXCEPT ... )`,
       `SELECT EXISTS (SELECT 1 FROM equipment e WHERE e.resource_id = ${resourceId}`,
       `  AND NOT EXISTS (SELECT qualification_id FROM equipment_requirements`,
       `    WHERE resource_id = ${resourceId} EXCEPT SELECT qualification_id`,
       `    FROM user_qualifications WHERE user_id = ${userId} AND status = 'VERIFIED'));`,
-      `required - user = missing: {${res.requiredQualificationIds.join(", ") || "∅"}} -`,
+      `Required - User = Missing: {${res.requiredQualificationIds.join(", ") || "∅"}} -`,
       `  {${res.userQualificationIds.join(", ") || "∅"}} = {${res.missingQualificationIds.join(", ") || "∅"}}`,
       divisionOk
-        ? `STATUS: 200 OK -- user ${userId} (${selectedUser.name}) satisfies all requirements`
-        : `STATUS: 403 Forbidden -- missing credentials: [${res.missingQualificationIds.join(", ")}] (${missingNames})`,
+        ? `STATUS: 200 OK -- User ${userId} (${selectedUser.name}) satisfies all requirements`
+        : `STATUS: 403 Forbidden -- Missing credentials: [${res.missingQualificationIds.join(", ")}] (${missingNames})`,
     ]);
 
     if (divisionOk) {
       setFeedback({
         type: "success",
-        title: "eligibility verified (200 ok)",
+        title: "Eligibility Verified (200 OK)",
         message: `${selectedUser.name} holds all verified qualifications required for ${selectedEquipment.name}.`,
         sqlSnippet: `NOT EXISTS (equipment_requirements EXCEPT user_qualifications) = TRUE`,
       });
     } else {
       setFeedback({
         type: "forbidden",
-        title: "eligibility check failed (403 forbidden)",
-        message: `${selectedUser.name} is missing: ${missingNames || "required qualification"}.`,
-        sqlSnippet: `missing qualification IDs: [${res.missingQualificationIds.join(", ")}]`,
+        title: "Eligibility Check Failed (403 Forbidden)",
+        message: `${selectedUser.name} is missing: ${missingNames || "Required qualification"}.`,
+        sqlSnippet: `Missing qualification IDs: [${res.missingQualificationIds.join(", ")}]`,
       });
     }
 
@@ -324,8 +324,8 @@ export default function Page() {
     if (new Date(end) <= new Date(start)) {
       setFeedback({
         type: "conflict",
-        title: "invalid interval",
-        message: "end time must be after start time.",
+        title: "Invalid Interval",
+        message: "End time must be after start time.",
       });
       return;
     }
@@ -342,8 +342,8 @@ export default function Page() {
       ]);
       setFeedback({
         type: "conflict",
-        title: "booking conflict (409 conflict)",
-        message: `${selectedEquipment.name} is already reserved by booking #${conflict.bookingId} in interval ${conflict.interval}.`,
+        title: "Booking Conflict (409 Conflict)",
+        message: `${selectedEquipment.name} is already reserved by Booking #${conflict.bookingId} in interval ${conflict.interval}.`,
         sqlSnippet: `SQLSTATE 23P01: EXCLUDE USING gist range overlap violation`,
       });
       requestAnimationFrame(() => runInsertAnimation({ conflict: true }));
@@ -355,13 +355,13 @@ export default function Page() {
       const missingNames = missingQualifications.map((q) => q.name).join(", ");
       pushLogs([
         `INSERT INTO bookings ... VALUES (${resourceId}, ${userId}, '${startIso}', '${endIso}', 'CONFIRMED');`,
-        `STATUS: 403 Forbidden -- user lacks required credentials [${division.missingQualificationIds.join(", ")}]`,
+        `STATUS: 403 Forbidden -- User lacks required credentials [${division.missingQualificationIds.join(", ")}]`,
       ]);
       setFeedback({
         type: "forbidden",
-        title: "cannot book (403 forbidden)",
+        title: "Cannot Book (403 Forbidden)",
         message: `${selectedUser.name} cannot book this equipment without: ${missingNames}.`,
-        sqlSnippet: `relational division check failed for user_id=${userId}`,
+        sqlSnippet: `Relational division check failed for user_id=${userId}`,
       });
       requestAnimationFrame(() =>
         runDivisionAnimation({
@@ -391,14 +391,14 @@ export default function Page() {
     pushLogs([
       `INSERT INTO bookings (resource_id, user_id, start_datetime, end_datetime, status)`,
       `VALUES (${resourceId}, ${userId}, '${startIso}', '${endIso}', 'CONFIRMED');`,
-      `gist range check on tstzrange(start_datetime, end_datetime): no overlap`,
-      `STATUS: 200 OK -- inserted booking #${newId} for ${selectedUser.name} on ${selectedEquipment.name}`,
+      `GiST range check on tstzrange(start_datetime, end_datetime): no overlap`,
+      `STATUS: 200 OK -- Inserted booking #${newId} for ${selectedUser.name} on ${selectedEquipment.name}`,
     ]);
 
     setFeedback({
       type: "success",
-      title: "booking confirmed",
-      message: `reservation #${newId} confirmed for ${selectedEquipment.name} (${selectedEquipment.location}).`,
+      title: "Booking Confirmed",
+      message: `Reservation #${newId} confirmed for ${selectedEquipment.name} (${selectedEquipment.location}).`,
       sqlSnippet: `INSERT INTO bookings VALUES (${newId}, ${resourceId}, ${userId}, '${startIso}', '${endIso}', 'CONFIRMED');`,
     });
 
@@ -419,12 +419,12 @@ export default function Page() {
     }));
     pushLogs([
       `UPDATE bookings SET status = 'CANCELLED' WHERE booking_id = ${bookingId};`,
-      `STATUS: 200 OK -- booking #${bookingId} cancelled; slot released in gist range tree`,
+      `STATUS: 200 OK -- Booking #${bookingId} cancelled; slot released in GiST range tree`,
     ]);
     setFeedback({
       type: "info",
-      title: "booking cancelled",
-      message: `reservation #${bookingId} was cancelled and the slot released.`,
+      title: "Booking Cancelled",
+      message: `Reservation #${bookingId} was cancelled and the slot released.`,
       sqlSnippet: `UPDATE bookings SET status = 'CANCELLED' WHERE booking_id = ${bookingId};`,
     });
   }
@@ -434,10 +434,10 @@ export default function Page() {
     resetVisualState();
     setFeedback({
       type: "info",
-      title: "seed reset",
-      message: "database state restored to initial fixtures.",
+      title: "Seed Reset",
+      message: "Database state restored to initial fixtures.",
     });
-    pushLogs([`RESET -- database seed data restored`, `STATUS: 200 OK`]);
+    pushLogs([`RESET -- Database seed data restored`, `STATUS: 200 OK`]);
   }
 
   const visibleBookings = useMemo(() => {
@@ -453,14 +453,14 @@ export default function Page() {
       variant="vibrant"
       contrast="standard"
       density="0"
+      strong-focus
     >
       <div className="flex flex-col h-screen w-screen bg-[#191210] text-[#ede0dc] overflow-hidden">
         {/* Navigation Bar */}
-        <nav className="flex items-center justify-between px-6 py-2.5 border-b border-[rgba(255,219,209,0.12)] bg-[#201a18] shrink-0">
+        <nav className="flex items-center justify-between px-6 py-3 border-b border-[rgba(255,219,209,0.12)] bg-[#201a18] shrink-0">
           <div className="flex items-center gap-6">
-            {/* Clean App Title */}
-            <span className="text-base font-semibold tracking-tight text-[#ffb59d] lowercase">
-              labbook
+            <span className="text-lg font-semibold tracking-tight text-[#ffb59d]">
+              LabBook
             </span>
 
             {/* Navigation Tabs */}
@@ -469,33 +469,32 @@ export default function Page() {
                 variant={activeTab === "book" ? "filled" : "text"}
                 onClick={() => setActiveTab("book")}
               >
-                book equipment
+                Book Equipment
               </m3e-button>
               <m3e-button
                 variant={activeTab === "schema" ? "filled" : "text"}
                 onClick={() => setActiveTab("schema")}
               >
-                er schema graph
+                ER Schema Graph
               </m3e-button>
               <m3e-button
                 variant={activeTab === "logs" ? "filled" : "text"}
                 onClick={() => setActiveTab("logs")}
               >
-                sql audit logs
+                SQL Audit Logs
               </m3e-button>
             </div>
           </div>
 
-          {/* Right Meta & Controls */}
+          {/* Right Meta & Controls without pulsing dot */}
           <div className="flex items-center gap-3">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-[8px] bg-[#271f1c] border border-[rgba(255,219,209,0.1)] text-xs text-[#d0c4bf]">
-              <span className="w-2 h-2 rounded-full bg-[#4ade80]" />
-              <span className="font-mono text-[11px] text-[#9d8e87]">staff:</span>
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-[8px] bg-[#271f1c] border border-[rgba(255,219,209,0.1)] text-xs text-[#d0c4bf]">
+              <span className="font-mono text-[11px] text-[#9d8e87]">Staff:</span>
               <span className="font-medium text-[#ffb59d]">{selectedUser.name}</span>
             </div>
 
             <m3e-button variant="outlined" onClick={handleReset}>
-              reset seed
+              Reset Seed
             </m3e-button>
           </div>
         </nav>
@@ -510,19 +509,29 @@ export default function Page() {
                 {feedback && (
                   <m3e-card
                     variant="outlined"
-                    className={`p-4 block ${
-                      feedback.type === "success"
-                        ? "border-[#4ade80]/40 bg-[#163820]"
-                        : feedback.type === "conflict"
-                        ? "border-[#f87171]/40 bg-[#3b1212]"
-                        : feedback.type === "forbidden"
-                        ? "border-[#fb923c]/40 bg-[#381f12]"
-                        : "border-[rgba(255,219,209,0.2)] bg-[#271f1c]"
-                    }`}
+                    className="block"
+                    style={{
+                      borderColor:
+                        feedback.type === "success"
+                          ? "rgba(74, 222, 128, 0.4)"
+                          : feedback.type === "conflict"
+                          ? "rgba(248, 113, 113, 0.4)"
+                          : feedback.type === "forbidden"
+                          ? "rgba(251, 146, 60, 0.4)"
+                          : "rgba(255, 219, 209, 0.2)",
+                      backgroundColor:
+                        feedback.type === "success"
+                          ? "#152e1b"
+                          : feedback.type === "conflict"
+                          ? "#331614"
+                          : feedback.type === "forbidden"
+                          ? "#331e13"
+                          : "#271f1c",
+                    }}
                   >
-                    <div className="flex items-start justify-between">
+                    <div slot="content" className="p-4 flex items-start justify-between">
                       <div className="space-y-1">
-                        <div className="text-xs font-semibold lowercase tracking-wide">
+                        <div className="text-xs font-semibold tracking-wide text-[#ede0dc]">
                           {feedback.title}
                         </div>
                         <p className="text-xs text-[#d0c4bf]">{feedback.message}</p>
@@ -536,7 +545,7 @@ export default function Page() {
                         variant="text"
                         onClick={() => setFeedback(null)}
                       >
-                        dismiss
+                        Dismiss
                       </m3e-button>
                     </div>
                   </m3e-card>
@@ -547,23 +556,21 @@ export default function Page() {
                   {/* Left Column: Staff & Equipment Selection */}
                   <div className="lg:col-span-7 space-y-5">
                     {/* Step 1: Staff Selection Card */}
-                    <m3e-card variant="filled" className="p-5 block bg-[#201a18] border border-[rgba(255,219,209,0.12)]">
-                      <div className="flex items-center justify-between pb-3 mb-4 border-b border-[rgba(255,219,209,0.08)]">
-                        <h2 className="text-xs font-medium text-[#ffb59d] lowercase">
-                          1. select staff member
-                        </h2>
-                        <span className="text-[11px] font-mono text-[#9d8e87] lowercase">
+                    <m3e-card variant="outlined" className="block">
+                      <div slot="header" className="flex items-center justify-between p-4 pb-2 border-b border-[rgba(255,219,209,0.1)]">
+                        <span className="text-sm font-semibold text-[#ffb59d]">
+                          1. Select Staff Member
+                        </span>
+                        <span className="text-xs font-mono text-[#9d8e87]">
                           users table
                         </span>
                       </div>
 
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-xs font-medium text-[#d0c4bf] mb-1.5 lowercase">
-                            staff member
-                          </label>
+                      <div slot="content" className="p-4 space-y-4">
+                        <m3e-form-field variant="outlined" className="w-full block">
+                          <label slot="label" htmlFor="user-select">Staff Member</label>
                           <m3e-select
-                            className="w-full block"
+                            id="user-select"
                             value={String(userId)}
                             onChange={(e: any) => {
                               const val = e.target?.value;
@@ -576,24 +583,24 @@ export default function Page() {
                               </m3e-option>
                             ))}
                           </m3e-select>
-                        </div>
+                        </m3e-form-field>
 
                         {/* Verified Credentials Chips */}
                         <div>
-                          <span className="text-[11px] font-mono text-[#9d8e87] block mb-2 lowercase">
-                            verified credentials:
+                          <span className="text-xs font-mono text-[#9d8e87] block mb-2">
+                            Verified Credentials:
                           </span>
                           <div className="flex flex-wrap gap-2">
                             {userQualifications.length > 0 ? (
                               userQualifications.map((q) => (
                                 <m3e-assist-chip key={q.qualification_id} value={String(q.qualification_id)}>
                                   <m3e-icon slot="icon" name="verified"></m3e-icon>
-                                  <span className="lowercase">{q.name}</span>
+                                  <span>{q.name}</span>
                                 </m3e-assist-chip>
                               ))
                             ) : (
-                              <span className="text-[11px] italic text-[#9d8e87] lowercase">
-                                no verified credentials on file
+                              <span className="text-xs italic text-[#9d8e87]">
+                                No verified credentials on file
                               </span>
                             )}
                           </div>
@@ -602,23 +609,21 @@ export default function Page() {
                     </m3e-card>
 
                     {/* Step 2: Equipment Selection Card */}
-                    <m3e-card variant="filled" className="p-5 block bg-[#201a18] border border-[rgba(255,219,209,0.12)]">
-                      <div className="flex items-center justify-between pb-3 mb-4 border-b border-[rgba(255,219,209,0.08)]">
-                        <h2 className="text-xs font-medium text-[#ffb59d] lowercase">
-                          2. select laboratory equipment
-                        </h2>
-                        <span className="text-[11px] font-mono text-[#9d8e87] lowercase">
+                    <m3e-card variant="outlined" className="block">
+                      <div slot="header" className="flex items-center justify-between p-4 pb-2 border-b border-[rgba(255,219,209,0.1)]">
+                        <span className="text-sm font-semibold text-[#ffb59d]">
+                          2. Select Laboratory Equipment
+                        </span>
+                        <span className="text-xs font-mono text-[#9d8e87]">
                           equipment table
                         </span>
                       </div>
 
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-xs font-medium text-[#d0c4bf] mb-1.5 lowercase">
-                            laboratory equipment
-                          </label>
+                      <div slot="content" className="p-4 space-y-4">
+                        <m3e-form-field variant="outlined" className="w-full block">
+                          <label slot="label" htmlFor="equipment-select">Laboratory Equipment</label>
                           <m3e-select
-                            className="w-full block"
+                            id="equipment-select"
                             value={String(resourceId)}
                             onChange={(e: any) => {
                               const val = e.target?.value;
@@ -627,37 +632,36 @@ export default function Page() {
                           >
                             {db.equipment.map((e) => (
                               <m3e-option key={e.resource_id} value={String(e.resource_id)}>
-                                {e.name} ({e.location}) — status: {e.status.toLowerCase()}
+                                {e.name} ({e.location}) — Status: {e.status}
                               </m3e-option>
                             ))}
                           </m3e-select>
-                        </div>
+                        </m3e-form-field>
 
                         {/* Equipment Meta Details */}
                         <div className="grid grid-cols-2 gap-3 pt-1">
-                          <div className="p-3 rounded-[8px] bg-[#271f1c] border border-[rgba(255,219,209,0.08)]">
-                            <span className="text-[10px] font-mono text-[#9d8e87] block lowercase">
-                              location
+                          <div className="p-3 rounded-[8px] bg-[#271f1c] border border-[rgba(255,219,209,0.1)]">
+                            <span className="text-[11px] font-mono text-[#9d8e87] block">
+                              Location
                             </span>
                             <span className="text-xs font-medium text-[#ede0dc]">
                               {selectedEquipment.location}
                             </span>
                           </div>
-                          <div className="p-3 rounded-[8px] bg-[#271f1c] border border-[rgba(255,219,209,0.08)]">
-                            <span className="text-[10px] font-mono text-[#9d8e87] block lowercase">
-                              status
+                          <div className="p-3 rounded-[8px] bg-[#271f1c] border border-[rgba(255,219,209,0.1)]">
+                            <span className="text-[11px] font-mono text-[#9d8e87] block">
+                              Status
                             </span>
-                            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-[#4ade80] lowercase">
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80]" />
-                              {selectedEquipment.status.toLowerCase()}
+                            <span className="text-xs font-medium text-[#4ade80]">
+                              {selectedEquipment.status}
                             </span>
                           </div>
                         </div>
 
                         {/* Required Qualifications */}
                         <div>
-                          <span className="text-[11px] font-mono text-[#9d8e87] block mb-2 lowercase">
-                            prerequisites for this equipment:
+                          <span className="text-xs font-mono text-[#9d8e87] block mb-2">
+                            Prerequisites for this Equipment:
                           </span>
                           <div className="flex flex-wrap gap-2">
                             {equipmentRequirements.map((q) => {
@@ -673,7 +677,7 @@ export default function Page() {
                                     slot="icon"
                                     name={userHasIt ? "check_circle" : "cancel"}
                                   ></m3e-icon>
-                                  <span className="lowercase">{q.name}</span>
+                                  <span>{q.name}</span>
                                 </m3e-chip>
                               );
                             })}
@@ -685,156 +689,160 @@ export default function Page() {
 
                   {/* Right Column: Reservation Schedule & Triggers */}
                   <div className="lg:col-span-5 space-y-5">
-                    {/* Eligibility Status Banner */}
+                    {/* Eligibility Status Banner Card */}
                     <m3e-card
                       variant="outlined"
-                      className={`p-4 block ${
-                        divisionResult.eligible
-                          ? "border-[#4ade80]/40 bg-[#17301e]"
-                          : "border-[#f87171]/40 bg-[#351914]"
-                      }`}
+                      className="block"
+                      style={{
+                        borderColor: divisionResult.eligible
+                          ? "rgba(74, 222, 128, 0.4)"
+                          : "rgba(248, 113, 113, 0.4)",
+                        backgroundColor: divisionResult.eligible ? "#14281a" : "#2d1612",
+                      }}
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-mono text-[#d0c4bf] lowercase">
-                          relational division status
-                        </span>
-                        <span
-                          className={`px-2 py-0.5 rounded-[4px] text-[11px] font-medium font-mono lowercase ${
-                            divisionResult.eligible
-                              ? "bg-[#166534] text-[#4ade80]"
-                              : "bg-[#7a2f19] text-[#ffdbd1]"
-                          }`}
-                        >
-                          {divisionResult.eligible
-                            ? "qualified"
-                            : "missing prerequisite"}
-                        </span>
+                      <div slot="content" className="p-4 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium text-[#d0c4bf]">
+                            Relational Division Status
+                          </span>
+                          <span
+                            className={`px-2 py-0.5 rounded-[4px] text-xs font-medium font-mono ${
+                              divisionResult.eligible
+                                ? "bg-[#163820] text-[#4ade80] border border-[#4ade80]/40"
+                                : "bg-[#5c2117] text-[#ffb4a8] border border-[#ffb4a8]/40"
+                            }`}
+                          >
+                            {divisionResult.eligible
+                              ? "Qualified"
+                              : "Missing Prerequisite"}
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#ede0dc]">
+                          {divisionResult.eligible ? (
+                            <>
+                              <span className="font-medium">{selectedUser.name}</span> satisfies all equipment requirements.
+                            </>
+                          ) : (
+                            <>
+                              Missing prerequisite:{" "}
+                              <span className="font-medium text-[#ffb4a8]">
+                                {missingQualifications.map((q) => q.name).join(", ") || "Safety Credential"}
+                              </span>
+                            </>
+                          )}
+                        </p>
                       </div>
-                      <p className="text-xs mt-2 text-[#ede0dc]">
-                        {divisionResult.eligible ? (
-                          <>
-                            <strong>{selectedUser.name}</strong> satisfies all equipment requirements.
-                          </>
-                        ) : (
-                          <>
-                            missing:{" "}
-                            <strong>
-                              {missingQualifications.map((q) => q.name).join(", ") || "credential"}
-                            </strong>
-                          </>
-                        )}
-                      </p>
                     </m3e-card>
 
                     {/* Step 3: Reservation Schedule Card */}
-                    <m3e-card variant="filled" className="p-5 block bg-[#201a18] border border-[rgba(255,219,209,0.12)] space-y-4">
-                      <div className="flex items-center justify-between pb-3 border-b border-[rgba(255,219,209,0.08)]">
-                        <h2 className="text-xs font-medium text-[#ffb59d] lowercase">
-                          3. reservation schedule
-                        </h2>
-                        <span className="text-[11px] font-mono text-[#9d8e87] lowercase">
+                    <m3e-card variant="outlined" className="block">
+                      <div slot="header" className="flex items-center justify-between p-4 pb-2 border-b border-[rgba(255,219,209,0.1)]">
+                        <span className="text-sm font-semibold text-[#ffb59d]">
+                          3. Reservation Schedule
+                        </span>
+                        <span className="text-xs font-mono text-[#9d8e87]">
                           tstzrange check
                         </span>
                       </div>
 
-                      {/* Start Now Toggle with m3e-switch */}
-                      <div className="flex items-center justify-between p-3 rounded-[8px] bg-[#271f1c] border border-[rgba(255,219,209,0.08)]">
+                      <div slot="content" className="p-4 space-y-4">
+                        {/* Start Now Toggle with m3e-switch */}
+                        <div className="flex items-center justify-between p-3 rounded-[8px] bg-[#271f1c] border border-[rgba(255,219,209,0.1)]">
+                          <div>
+                            <span className="text-xs font-medium text-[#ede0dc] block">
+                              Start Now
+                            </span>
+                            <span className="text-[11px] text-[#9d8e87]">
+                              Capture current timestamp immediately
+                            </span>
+                          </div>
+                          <m3e-switch
+                            checked={isStartNow ? "" : undefined}
+                            onChange={(e: any) => handleStartNowToggle(Boolean(e.target?.checked))}
+                          ></m3e-switch>
+                        </div>
+
+                        {/* Date Time Pickers wrapped in m3e-form-field */}
+                        <div className="grid grid-cols-2 gap-3">
+                          <m3e-form-field variant="outlined" className="w-full block">
+                            <label slot="label" htmlFor="start-dt">Start Datetime</label>
+                            <input
+                              id="start-dt"
+                              type="datetime-local"
+                              value={start}
+                              onChange={(e) => {
+                                setStart(e.target.value);
+                                setIsStartNow(false);
+                              }}
+                              className="w-full text-xs font-mono px-2 py-1.5 focus:outline-none"
+                            />
+                          </m3e-form-field>
+
+                          <m3e-form-field variant="outlined" className="w-full block">
+                            <label slot="label" htmlFor="end-dt">End Datetime</label>
+                            <input
+                              id="end-dt"
+                              type="datetime-local"
+                              value={end}
+                              onChange={(e) => setEnd(e.target.value)}
+                              className="w-full text-xs font-mono px-2 py-1.5 focus:outline-none"
+                            />
+                          </m3e-form-field>
+                        </div>
+
+                        {/* Quick Duration Chips */}
                         <div>
-                          <span className="text-xs font-medium text-[#ede0dc] block lowercase">
-                            start now
+                          <span className="text-xs font-mono text-[#9d8e87] block mb-1.5">
+                            Quick Duration:
                           </span>
-                          <span className="text-[10px] text-[#9d8e87] lowercase">
-                            capture current timestamp immediately
-                          </span>
+                          <div className="flex gap-1.5">
+                            {[
+                              { label: "+30m", min: 30 },
+                              { label: "+1h", min: 60 },
+                              { label: "+2h", min: 120 },
+                              { label: "+4h", min: 240 },
+                            ].map((d) => (
+                              <m3e-button
+                                key={d.label}
+                                variant="tonal"
+                                className="flex-1 text-xs"
+                                onClick={() => handleQuickDuration(d.min)}
+                              >
+                                {d.label}
+                              </m3e-button>
+                            ))}
+                          </div>
                         </div>
-                        <m3e-switch
-                          checked={isStartNow ? "" : undefined}
-                          onChange={(e: any) => handleStartNowToggle(Boolean(e.target?.checked))}
-                        ></m3e-switch>
-                      </div>
 
-                      {/* Time Pickers */}
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-[11px] font-mono text-[#9d8e87] mb-1 lowercase">
-                            start datetime
-                          </label>
+                        {/* Optional Research Purpose */}
+                        <m3e-form-field variant="outlined" className="w-full block">
+                          <label slot="label" htmlFor="purpose-input">Research Purpose (Optional)</label>
                           <input
-                            type="datetime-local"
-                            value={start}
-                            onChange={(e) => {
-                              setStart(e.target.value);
-                              setIsStartNow(false);
-                            }}
-                            className="w-full bg-[#271f1c] border border-[rgba(255,219,209,0.15)] rounded-[6px] px-2.5 py-1.5 text-xs font-mono text-[#ede0dc] focus:outline-none focus:border-[#ffb59d]"
+                            id="purpose-input"
+                            type="text"
+                            placeholder="e.g. Sample imaging protocol"
+                            value={purpose}
+                            onChange={(e) => setPurpose(e.target.value)}
+                            className="w-full text-xs px-2 py-1.5 focus:outline-none"
                           />
-                        </div>
-                        <div>
-                          <label className="block text-[11px] font-mono text-[#9d8e87] mb-1 lowercase">
-                            end datetime
-                          </label>
-                          <input
-                            type="datetime-local"
-                            value={end}
-                            onChange={(e) => setEnd(e.target.value)}
-                            className="w-full bg-[#271f1c] border border-[rgba(255,219,209,0.15)] rounded-[6px] px-2.5 py-1.5 text-xs font-mono text-[#ede0dc] focus:outline-none focus:border-[#ffb59d]"
-                          />
-                        </div>
+                        </m3e-form-field>
                       </div>
 
-                      {/* Quick Duration Chips */}
-                      <div>
-                        <span className="text-[10px] font-mono text-[#9d8e87] block mb-1.5 lowercase">
-                          quick duration:
-                        </span>
-                        <div className="flex gap-1.5">
-                          {[
-                            { label: "+30m", min: 30 },
-                            { label: "+1h", min: 60 },
-                            { label: "+2h", min: 120 },
-                            { label: "+4h", min: 240 },
-                          ].map((d) => (
-                            <m3e-button
-                              key={d.label}
-                              variant="tonal"
-                              className="flex-1 text-xs"
-                              onClick={() => handleQuickDuration(d.min)}
-                            >
-                              {d.label}
-                            </m3e-button>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Optional Purpose */}
-                      <div>
-                        <label className="block text-[11px] font-mono text-[#9d8e87] mb-1 lowercase">
-                          research purpose (optional)
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="e.g. sample imaging protocol"
-                          value={purpose}
-                          onChange={(e) => setPurpose(e.target.value)}
-                          className="w-full bg-[#271f1c] border border-[rgba(255,219,209,0.15)] rounded-[6px] px-3 py-1.5 text-xs text-[#ede0dc] placeholder-[#9d8e87]/60 focus:outline-none focus:border-[#ffb59d]"
-                        />
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="pt-2 flex flex-col gap-2.5">
+                      {/* Action Buttons in Card Actions Slot */}
+                      <div slot="actions" className="p-4 pt-0 flex flex-col gap-2.5 w-full">
                         <m3e-button
                           variant="filled"
                           className="w-full"
                           onClick={handleInsert}
                         >
-                          submit booking
+                          Submit Booking
                         </m3e-button>
                         <m3e-button
                           variant="outlined"
                           className="w-full"
                           onClick={handleDivision}
                         >
-                          verify eligibility (relational division)
+                          Verify Eligibility (Relational Division)
                         </m3e-button>
                       </div>
                     </m3e-card>
@@ -842,14 +850,14 @@ export default function Page() {
                 </div>
 
                 {/* Active Bookings Table Section */}
-                <m3e-card variant="filled" className="p-5 block bg-[#201a18] border border-[rgba(255,219,209,0.12)]">
-                  <div className="flex items-center justify-between pb-3 mb-3 border-b border-[rgba(255,219,209,0.08)]">
+                <m3e-card variant="outlined" className="block">
+                  <div slot="header" className="flex items-center justify-between p-4 pb-2 border-b border-[rgba(255,219,209,0.1)]">
                     <div>
-                      <h2 className="text-xs font-medium text-[#ffb59d] lowercase">
-                        active reservations
-                      </h2>
-                      <p className="text-[11px] text-[#9d8e87] lowercase">
-                        enforced by postgresql gist temporal exclusion constraint
+                      <span className="text-sm font-semibold text-[#ffb59d] block">
+                        Active Reservations
+                      </span>
+                      <p className="text-xs text-[#9d8e87]">
+                        Enforced by PostgreSQL GiST temporal exclusion constraint
                       </p>
                     </div>
 
@@ -857,21 +865,21 @@ export default function Page() {
                       variant="tonal"
                       onClick={() => setFilterUserOnly(!filterUserOnly)}
                     >
-                      {filterUserOnly ? `user: ${selectedUser.name}` : "all bookings"}
+                      {filterUserOnly ? `User: ${selectedUser.name}` : "All Bookings"}
                     </m3e-button>
                   </div>
 
-                  <div className="overflow-x-auto">
+                  <div slot="content" className="p-0 overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="border-b border-[rgba(255,219,209,0.08)] bg-[#271f1c] text-[11px] font-mono text-[#9d8e87] lowercase">
-                          <th className="py-2 px-3 font-medium">id</th>
-                          <th className="py-2 px-3 font-medium">equipment</th>
-                          <th className="py-2 px-3 font-medium">user</th>
-                          <th className="py-2 px-3 font-medium">start datetime</th>
-                          <th className="py-2 px-3 font-medium">end datetime</th>
-                          <th className="py-2 px-3 font-medium">status</th>
-                          <th className="py-2 px-3 font-medium text-right">action</th>
+                        <tr className="border-b border-[rgba(255,219,209,0.08)] bg-[#271f1c] text-xs font-mono text-[#9d8e87]">
+                          <th className="py-2.5 px-4 font-medium">ID</th>
+                          <th className="py-2.5 px-4 font-medium">Equipment</th>
+                          <th className="py-2.5 px-4 font-medium">Reserved By</th>
+                          <th className="py-2.5 px-4 font-medium">Start Datetime</th>
+                          <th className="py-2.5 px-4 font-medium">End Datetime</th>
+                          <th className="py-2.5 px-4 font-medium">Status</th>
+                          <th className="py-2.5 px-4 font-medium text-right">Action</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-[rgba(255,219,209,0.06)] text-xs font-mono">
@@ -889,21 +897,21 @@ export default function Page() {
                                 key={b.booking_id}
                                 className="hover:bg-[#271f1c] transition-colors"
                               >
-                                <td className="py-2.5 px-3 font-medium text-[#ffb59d]">
+                                <td className="py-3 px-4 font-medium text-[#ffb59d]">
                                   #{b.booking_id}
                                 </td>
-                                <td className="py-2.5 px-3">
+                                <td className="py-3 px-4">
                                   <span className="font-sans font-medium text-[#ede0dc]">
                                     {eq?.name ?? b.resource_id}
                                   </span>{" "}
-                                  <span className="text-[10px] text-[#9d8e87]">
+                                  <span className="text-[11px] text-[#9d8e87]">
                                     ({eq?.location})
                                   </span>
                                 </td>
-                                <td className="py-2.5 px-3 font-sans text-[#d0c4bf]">
+                                <td className="py-3 px-4 font-sans text-[#d0c4bf]">
                                   {usr?.name ?? b.user_id}
                                 </td>
-                                <td className="py-2.5 px-3 text-[#d0c4bf]">
+                                <td className="py-3 px-4 text-[#d0c4bf]">
                                   {new Date(b.start_datetime).toLocaleString([], {
                                     month: "short",
                                     day: "numeric",
@@ -911,7 +919,7 @@ export default function Page() {
                                     minute: "2-digit",
                                   })}
                                 </td>
-                                <td className="py-2.5 px-3 text-[#d0c4bf]">
+                                <td className="py-3 px-4 text-[#d0c4bf]">
                                   {new Date(b.end_datetime).toLocaleString([], {
                                     month: "short",
                                     day: "numeric",
@@ -919,29 +927,29 @@ export default function Page() {
                                     minute: "2-digit",
                                   })}
                                 </td>
-                                <td className="py-2.5 px-3">
+                                <td className="py-3 px-4">
                                   <span
-                                    className={`px-2 py-0.5 rounded-[4px] text-[10px] font-medium lowercase ${
+                                    className={`px-2 py-0.5 rounded-[4px] text-xs font-medium ${
                                       isConfirmed
                                         ? "bg-[#163820] text-[#4ade80] border border-[#4ade80]/30"
                                         : "bg-[#271f1c] text-[#9d8e87] border border-[rgba(255,219,209,0.1)]"
                                     }`}
                                   >
-                                    {b.status.toLowerCase()}
+                                    {b.status}
                                   </span>
                                 </td>
-                                <td className="py-2.5 px-3 text-right">
+                                <td className="py-3 px-4 text-right">
                                   {isConfirmed ? (
                                     <m3e-button
                                       variant="text"
                                       className="text-[#f87171]"
                                       onClick={() => handleCancelBooking(b.booking_id)}
                                     >
-                                      cancel
+                                      Cancel
                                     </m3e-button>
                                   ) : (
-                                    <span className="text-[11px] text-[#9d8e87] italic lowercase">
-                                      released
+                                    <span className="text-xs text-[#9d8e87] italic">
+                                      Released
                                     </span>
                                   )}
                                 </td>
@@ -952,9 +960,9 @@ export default function Page() {
                           <tr>
                             <td
                               colSpan={7}
-                              className="py-4 text-center text-xs text-[#9d8e87] italic lowercase"
+                              className="py-6 text-center text-xs text-[#9d8e87] italic"
                             >
-                              no active bookings found for this selection
+                              No active bookings found for this selection
                             </td>
                           </tr>
                         )}
@@ -971,23 +979,23 @@ export default function Page() {
             <div className="h-full w-full relative bg-[#150f0e]">
               {/* Floating Toolbar */}
               <div className="absolute top-4 left-4 z-10 bg-[#201a18] border border-[rgba(255,219,209,0.15)] rounded-[8px] p-3 flex items-center gap-3">
-                <span className="text-xs font-mono font-medium text-[#ffb59d] lowercase">
-                  er graph
+                <span className="text-xs font-mono font-medium text-[#ffb59d]">
+                  ER Graph
                 </span>
-                <span className="text-[11px] text-[#d0c4bf] lowercase">
-                  relational division & gist range paths
+                <span className="text-xs text-[#d0c4bf]">
+                  Relational division & GiST range paths
                 </span>
                 <m3e-button
                   variant="filled"
                   onClick={handleDivision}
                 >
-                  test division
+                  Test Division
                 </m3e-button>
                 <m3e-button
                   variant="outlined"
                   onClick={handleInsert}
                 >
-                  test insert
+                  Test Insert
                 </m3e-button>
               </div>
 
@@ -1010,16 +1018,16 @@ export default function Page() {
               <div className="max-w-5xl w-full mx-auto flex-1 flex flex-col space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-sm font-medium font-mono text-[#ede0dc] lowercase">
-                      sql execution and relational calculus stream
+                    <h2 className="text-sm font-semibold font-mono text-[#ede0dc]">
+                      SQL Execution and Relational Calculus Stream
                     </h2>
-                    <p className="text-xs text-[#9d8e87] lowercase">
-                      real-time queries generated by relational division evaluation and gist exclusion checks
+                    <p className="text-xs text-[#9d8e87]">
+                      Real-time queries generated by relational division evaluation and GiST exclusion checks
                     </p>
                   </div>
                   <div className="flex gap-2">
                     <m3e-button variant="outlined" onClick={() => setLogs([])}>
-                      clear log
+                      Clear Log
                     </m3e-button>
                     <m3e-button
                       variant="filled"
@@ -1027,7 +1035,7 @@ export default function Page() {
                         navigator.clipboard?.writeText(logs.join("\n"));
                       }}
                     >
-                      copy sql
+                      Copy SQL
                     </m3e-button>
                   </div>
                 </div>
@@ -1037,8 +1045,8 @@ export default function Page() {
                   className="flex-1 overflow-y-auto rounded-[8px] border border-[rgba(255,219,209,0.15)] bg-[#130d0b] p-4 font-mono text-[12px] leading-relaxed text-[#ede0dc]"
                 >
                   {logs.length === 0 ? (
-                    <div className="text-[#9d8e87] italic lowercase">
-                      -- console clear. trigger booking or eligibility check to generate audit queries.
+                    <div className="text-[#9d8e87] italic">
+                      -- Console clear. Trigger booking or eligibility check to generate audit queries.
                     </div>
                   ) : (
                     logs.map((line, i) => (
