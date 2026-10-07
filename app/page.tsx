@@ -506,18 +506,21 @@ export default function Page() {
           <div className="flex items-center gap-1">
             <m3e-button
               variant={activeTab === "book" ? "filled" : "text"}
+              className="rounded-full font-title"
               onClick={() => setActiveTab("book")}
             >
               Book Equipment
             </m3e-button>
             <m3e-button
               variant={activeTab === "schema" ? "filled" : "text"}
+              className="rounded-full font-title"
               onClick={() => setActiveTab("schema")}
             >
               ER Schema Graph
             </m3e-button>
             <m3e-button
               variant={activeTab === "logs" ? "filled" : "text"}
+              className="rounded-full font-title"
               onClick={() => setActiveTab("logs")}
             >
               SQL Audit Logs
@@ -528,7 +531,7 @@ export default function Page() {
             <span className="text-xs text-on-surface-variant hidden sm:inline">
               Staff: <strong className="text-primary">{selectedUser.name}</strong>
             </span>
-            <m3e-button variant="text" onClick={handleReset}>
+            <m3e-button variant="text" className="rounded-full" onClick={handleReset}>
               Reset Seed
             </m3e-button>
           </div>
@@ -542,7 +545,7 @@ export default function Page() {
               {/* Feedback Alert */}
               {feedback && (
                 <div
-                  className={`p-4 rounded-2xl flex items-start justify-between ${
+                  className={`p-4 rounded-3xl flex items-start justify-between ${
                     feedback.type === "success"
                       ? "bg-success-container text-on-success-container"
                       : feedback.type === "conflict" || feedback.type === "forbidden"
@@ -551,7 +554,7 @@ export default function Page() {
                   }`}
                 >
                   <div className="space-y-1">
-                    <div className="text-xs font-semibold">{feedback.title}</div>
+                    <div className="text-xs font-title">{feedback.title}</div>
                     <p className="text-xs">{feedback.message}</p>
                     {feedback.sqlSnippet && (
                       <p className="text-[11px] font-mono opacity-80 pt-1">
@@ -561,6 +564,7 @@ export default function Page() {
                   </div>
                   <m3e-button
                     variant="text"
+                    className="rounded-full"
                     onClick={() => setFeedback(null)}
                   >
                     Dismiss
@@ -570,14 +574,15 @@ export default function Page() {
 
               {/* Section: Staff Member */}
               <section className="space-y-3">
-                <h2 className="text-sm font-semibold tracking-wide text-on-surface">
+                <h2 className="text-sm tracking-wide text-on-surface font-title">
                   Staff Member
                 </h2>
-                <m3e-form-field variant="filled" className="w-full block">
+                <m3e-form-field variant="filled" className="w-full block rounded-full">
                   <label slot="label" htmlFor="user-select">Select Staff</label>
                   <m3e-select
                     ref={userSelectRef as unknown as React.Ref<HTMLSelectElement>}
                     id="user-select"
+                    className="rounded-full"
                     onChange={(e: React.FormEvent<HTMLElement>) => {
                       const target = e.target as HTMLSelectElement | null;
                       const val = target?.value;
@@ -619,14 +624,15 @@ export default function Page() {
 
               {/* Section: Laboratory Equipment */}
               <section className="space-y-3">
-                <h2 className="text-sm font-semibold tracking-wide text-on-surface">
+                <h2 className="text-sm tracking-wide text-on-surface font-title">
                   Laboratory Equipment
                 </h2>
-                <m3e-form-field variant="filled" className="w-full block">
+                <m3e-form-field variant="filled" className="w-full block rounded-full">
                   <label slot="label" htmlFor="equipment-select">Select Equipment</label>
                   <m3e-select
                     ref={equipmentSelectRef as unknown as React.Ref<HTMLSelectElement>}
                     id="equipment-select"
+                    className="rounded-full"
                     onChange={(e: React.FormEvent<HTMLElement>) => {
                       const target = e.target as HTMLSelectElement | null;
                       const val = target?.value;
@@ -688,7 +694,7 @@ export default function Page() {
 
               {/* Section: Reservation Schedule */}
               <section className="space-y-4">
-                <h2 className="text-sm font-semibold tracking-wide text-on-surface">
+                <h2 className="text-sm tracking-wide text-on-surface font-title">
                   Reservation Schedule
                 </h2>
 
@@ -717,20 +723,21 @@ export default function Page() {
                     Reservation Date
                   </span>
                   <div className="flex items-center gap-2">
-                    <m3e-form-field variant="filled" className="flex-1 block">
+                    <m3e-form-field variant="filled" className="flex-1 block rounded-full">
                       <label slot="label" htmlFor="booking-date-input">Date</label>
                       <input
                         id="booking-date-input"
                         type="date"
                         value={bookingDate}
                         onChange={(e) => handleDateChange(e.target.value)}
-                        className="w-full text-xs font-mono px-3 py-2 bg-transparent focus:outline-none"
+                        className="w-full text-xs font-mono px-4 py-2 bg-transparent focus:outline-none rounded-full"
                       />
                     </m3e-form-field>
 
                     <m3e-button
                       variant="tonal"
                       type="button"
+                      className="rounded-full"
                       onClick={() => {
                         const picker = document.getElementById("booking-datepicker") as (HTMLElement & { toggle?: (el: HTMLElement | null) => void }) | null;
                         const input = document.getElementById("booking-date-input");
@@ -758,7 +765,7 @@ export default function Page() {
 
                 {/* Time Selection */}
                 <div className="grid grid-cols-2 gap-3">
-                  <m3e-form-field variant="filled" className="w-full block">
+                  <m3e-form-field variant="filled" className="w-full block rounded-full">
                     <label slot="label" htmlFor="start-time-input">Start Time</label>
                     <input
                       id="start-time-input"
@@ -768,18 +775,18 @@ export default function Page() {
                         setStartTime(e.target.value);
                         setIsStartNow(false);
                       }}
-                      className="w-full text-xs font-mono px-3 py-2 bg-transparent focus:outline-none"
+                      className="w-full text-xs font-mono px-4 py-2 bg-transparent focus:outline-none rounded-full"
                     />
                   </m3e-form-field>
 
-                  <m3e-form-field variant="filled" className="w-full block">
+                  <m3e-form-field variant="filled" className="w-full block rounded-full">
                     <label slot="label" htmlFor="end-time-input">End Time</label>
                     <input
                       id="end-time-input"
                       type="time"
                       value={endTime}
                       onChange={(e) => setEndTime(e.target.value)}
-                      className="w-full text-xs font-mono px-3 py-2 bg-transparent focus:outline-none"
+                      className="w-full text-xs font-mono px-4 py-2 bg-transparent focus:outline-none rounded-full"
                     />
                   </m3e-form-field>
                 </div>
@@ -790,7 +797,7 @@ export default function Page() {
                     Adjust Duration
                   </span>
                   <div className="flex flex-wrap gap-1.5">
-                    <m3e-button-group variant="connected">
+                    <m3e-button-group variant="connected" className="rounded-full overflow-hidden">
                       {[
                         { label: "-1h", min: -60 },
                         { label: "-30m", min: -30 },
@@ -812,7 +819,7 @@ export default function Page() {
                 </div>
 
                 {/* Purpose input */}
-                <m3e-form-field variant="filled" className="w-full block">
+                <m3e-form-field variant="filled" className="w-full block rounded-full">
                   <label slot="label" htmlFor="purpose-input">Research Purpose (Optional)</label>
                   <input
                     id="purpose-input"
@@ -820,7 +827,7 @@ export default function Page() {
                     placeholder="e.g. Sample imaging protocol"
                     value={purpose}
                     onChange={(e) => setPurpose(e.target.value)}
-                    className="w-full text-xs px-3 py-2 bg-transparent focus:outline-none"
+                    className="w-full text-xs px-4 py-2 bg-transparent focus:outline-none rounded-full"
                   />
                 </m3e-form-field>
               </section>
@@ -829,14 +836,14 @@ export default function Page() {
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
                 <m3e-button
                   variant="filled"
-                  className="flex-1"
+                  className="flex-1 rounded-full font-title"
                   onClick={handleInsert}
                 >
                   Submit Booking
                 </m3e-button>
                 <m3e-button
                   variant="tonal"
-                  className="flex-1"
+                  className="flex-1 rounded-full font-title"
                   onClick={handleDivision}
                 >
                   Verify Eligibility
@@ -846,18 +853,19 @@ export default function Page() {
               {/* Section: Active Reservations */}
               <section className="space-y-4 pt-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-semibold tracking-wide text-on-surface">
+                  <h2 className="text-sm tracking-wide text-on-surface font-title">
                     Active Reservations
                   </h2>
                   <m3e-button
                     variant="text"
+                    className="rounded-full"
                     onClick={() => setFilterUserOnly(!filterUserOnly)}
                   >
                     {filterUserOnly ? `Filter: ${selectedUser.name}` : "Show All"}
                   </m3e-button>
                 </div>
 
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto rounded-3xl bg-surface-container-lowest">
                   <table className="w-full text-left text-xs font-mono">
                     <thead>
                       <tr className="bg-surface-container text-on-surface-variant">
@@ -963,7 +971,7 @@ export default function Page() {
             >
               {/* Floating Toolbar */}
               <div className="absolute top-4 left-4 z-10 bg-surface-container-lowest shadow-sm rounded-full px-4 py-2 flex items-center gap-3">
-                <span className="text-xs font-mono font-medium text-primary">
+                <span className="text-xs font-title text-primary">
                   ER Graph
                 </span>
                 <span className="text-xs text-on-surface-variant">
@@ -971,12 +979,14 @@ export default function Page() {
                 </span>
                 <m3e-button
                   variant="filled"
+                  className="rounded-full font-title"
                   onClick={handleDivision}
                 >
                   Test Division
                 </m3e-button>
                 <m3e-button
                   variant="tonal"
+                  className="rounded-full font-title"
                   onClick={handleInsert}
                 >
                   Test Insert
@@ -1006,7 +1016,7 @@ export default function Page() {
               <div className="max-w-4xl w-full mx-auto flex-1 flex flex-col space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-sm font-semibold font-mono text-on-surface">
+                    <h2 className="text-sm tracking-wide text-on-surface font-title">
                       SQL Execution Stream
                     </h2>
                     <p className="text-xs text-outline">
@@ -1014,11 +1024,12 @@ export default function Page() {
                     </p>
                   </div>
                   <div className="flex gap-2">
-                    <m3e-button variant="text" onClick={() => setLogs([])}>
+                    <m3e-button variant="text" className="rounded-full" onClick={() => setLogs([])}>
                       Clear Log
                     </m3e-button>
                     <m3e-button
                       variant="filled"
+                      className="rounded-full font-title"
                       onClick={() => {
                         navigator.clipboard?.writeText(logs.join("\n"));
                       }}
@@ -1030,7 +1041,7 @@ export default function Page() {
 
                 <div
                   ref={consoleRef}
-                  className="flex-1 overflow-y-auto rounded-2xl bg-on-surface p-4 font-mono text-[12px] leading-relaxed text-background"
+                  className="flex-1 overflow-y-auto rounded-3xl bg-on-surface p-5 font-mono text-[12px] leading-relaxed text-background"
                 >
                   {logs.length === 0 ? (
                     <div className="text-outline italic">
