@@ -25,14 +25,13 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
   return (
     <div
       data-table={data.tableName}
-      className="min-w-[340px] max-w-[460px] rounded-[2px] border border-[#e2e8f0] bg-white text-[#0f172a] text-[13px] overflow-hidden"
-      style={{ borderWidth: 1 }}
+      className="min-w-[340px] max-w-[460px] rounded-[10px] border border-[rgba(255,219,209,0.18)] bg-[#201a18] text-[#ede0dc] text-[13px] overflow-hidden"
     >
       {/* Table Header */}
-      <div className="border-b border-[#b44f2b] bg-[#c85a32] px-3.5 py-2 text-[13px] font-var-table-title uppercase text-white flex items-center justify-between">
-        <span className="tracking-wide font-bold">{data.tableName}</span>
-        <span className="font-mono text-[10px] tracking-widest text-white/90 bg-black/10 px-1.5 py-0.5 rounded-[2px] font-normal">
-          {data.rows.length} {data.rows.length === 1 ? "ROW" : "ROWS"}
+      <div className="border-b border-[rgba(255,219,209,0.12)] bg-[#33221c] px-3.5 py-2.5 text-[13px] font-var-table-title text-[#ffdbd1] flex items-center justify-between">
+        <span className="font-semibold tracking-wide lowercase">{data.tableName}</span>
+        <span className="font-mono text-[10px] text-[#ffb59d] bg-[#4a261b] px-2 py-0.5 rounded-[6px]">
+          {data.rows.length} {data.rows.length === 1 ? "row" : "rows"}
         </span>
       </div>
 
@@ -41,22 +40,22 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
         <table className="w-full border-collapse text-left">
           {/* Column attributes header */}
           <thead>
-            <tr className="border-b border-[#e2e8f0] bg-[#f8fafc]">
+            <tr className="border-b border-[rgba(255,219,209,0.08)] bg-[#271f1c]">
               {data.columns.map((c) => (
                 <th
                   key={c.name}
-                  className="px-2.5 py-1.5 font-mono text-[11px] font-semibold text-[#475569] whitespace-nowrap"
+                  className="px-2.5 py-1.5 font-mono text-[11px] font-medium text-[#d0c4bf] whitespace-nowrap lowercase"
                 >
                   <div className="flex items-center gap-1.5">
                     <span>{c.name}</span>
                     {c.pk && (
-                      <span className="rounded-[2px] bg-[#c85a32] px-1 py-[0.5px] text-[8px] font-bold text-white tracking-wider">
-                        PK
+                      <span className="rounded-[4px] bg-[#7a2f19] text-[#ffdbd1] px-1 py-[0.5px] text-[8px] font-medium lowercase">
+                        pk
                       </span>
                     )}
                     {c.fk && (
-                      <span className="rounded-[2px] border border-[#cbd5e1] bg-[#f1f5f9] px-1 py-[0.5px] text-[8px] font-bold text-[#475569] tracking-wider">
-                        FK
+                      <span className="rounded-[4px] border border-[rgba(255,219,209,0.2)] bg-[#2f2825] text-[#d0c4bf] px-1 py-[0.5px] text-[8px] font-medium lowercase">
+                        fk
                       </span>
                     )}
                   </div>
@@ -66,12 +65,12 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
           </thead>
 
           {/* Table Data Rows */}
-          <tbody className="divide-y divide-[#e2e8f0] bg-white">
+          <tbody className="divide-y divide-[rgba(255,219,209,0.06)] bg-[#201a18]">
             {data.rows.length === 0 ? (
               <tr>
                 <td
                   colSpan={data.columns.length}
-                  className="px-3 py-2 text-[12px] italic text-[#94a3b8] text-center"
+                  className="px-3 py-2 text-[12px] italic text-[#9d8e87] text-center"
                 >
                   0 rows
                 </td>
@@ -81,15 +80,15 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
                 <tr
                   key={i}
                   {...(attrOf ? (attrOf(row) as object) : {})}
-                  className="transition-colors hover:bg-[#fdf8f6]"
+                  className="transition-colors hover:bg-[#2b2320]"
                   style={{ outline: "1px solid transparent", outlineOffset: -1 }}
                 >
                   {data.columns.map((c) => (
                     <td
                       key={c.name}
-                      className="px-2.5 py-1.5 font-mono text-[11px] text-[#0f172a] whitespace-nowrap"
+                      className="px-2.5 py-1.5 font-mono text-[11px] text-[#ede0dc] whitespace-nowrap"
                     >
-                      {String(row[c.name] ?? "NULL")}
+                      {String(row[c.name] ?? "null")}
                     </td>
                   ))}
                 </tr>
@@ -99,25 +98,22 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
         </table>
       </div>
 
-      {/* Left */}
-      <Handle id="l-target" type="target" position={Position.Left} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
-      <Handle id="l-source" type="source" position={Position.Left} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
-      <Handle id="l" type="source" position={Position.Left} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff] opacity-0 pointer-events-none" />
+      {/* Handles */}
+      <Handle id="l-target" type="target" position={Position.Left} className="!w-2 !h-2 !bg-[#ffb59d] !border-[#201a18]" />
+      <Handle id="l-source" type="source" position={Position.Left} className="!w-2 !h-2 !bg-[#ffb59d] !border-[#201a18]" />
+      <Handle id="l" type="source" position={Position.Left} className="!w-2 !h-2 !bg-[#ffb59d] !border-[#201a18] opacity-0 pointer-events-none" />
 
-      {/* Right */}
-      <Handle id="r-target" type="target" position={Position.Right} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
-      <Handle id="r-source" type="source" position={Position.Right} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
-      <Handle id="r" type="target" position={Position.Right} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff] opacity-0 pointer-events-none" />
+      <Handle id="r-target" type="target" position={Position.Right} className="!w-2 !h-2 !bg-[#ffb59d] !border-[#201a18]" />
+      <Handle id="r-source" type="source" position={Position.Right} className="!w-2 !h-2 !bg-[#ffb59d] !border-[#201a18]" />
+      <Handle id="r" type="target" position={Position.Right} className="!w-2 !h-2 !bg-[#ffb59d] !border-[#201a18] opacity-0 pointer-events-none" />
 
-      {/* Top */}
-      <Handle id="t-target" type="target" position={Position.Top} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
-      <Handle id="t-source" type="source" position={Position.Top} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
-      <Handle id="t" type="target" position={Position.Top} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff] opacity-0 pointer-events-none" />
+      <Handle id="t-target" type="target" position={Position.Top} className="!w-2 !h-2 !bg-[#ffb59d] !border-[#201a18]" />
+      <Handle id="t-source" type="source" position={Position.Top} className="!w-2 !h-2 !bg-[#ffb59d] !border-[#201a18]" />
+      <Handle id="t" type="target" position={Position.Top} className="!w-2 !h-2 !bg-[#ffb59d] !border-[#201a18] opacity-0 pointer-events-none" />
 
-      {/* Bottom */}
-      <Handle id="b-target" type="target" position={Position.Bottom} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
-      <Handle id="b-source" type="source" position={Position.Bottom} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff]" />
-      <Handle id="b" type="source" position={Position.Bottom} className="!w-2 !h-2 !bg-[#c85a32] !border-[#ffffff] opacity-0 pointer-events-none" />
+      <Handle id="b-target" type="target" position={Position.Bottom} className="!w-2 !h-2 !bg-[#ffb59d] !border-[#201a18]" />
+      <Handle id="b-source" type="source" position={Position.Bottom} className="!w-2 !h-2 !bg-[#ffb59d] !border-[#201a18]" />
+      <Handle id="b" type="source" position={Position.Bottom} className="!w-2 !h-2 !bg-[#ffb59d] !border-[#201a18] opacity-0 pointer-events-none" />
     </div>
   );
 }

@@ -6,63 +6,54 @@
 }
 
 :root {
-  /* Flat UI Core Tokens - Terracotta Light Theme */
-  --bg-primary: #ffffff;
-  --bg-surface: #fdf8f6;
-  --bg-panel: #ffffff;
-  --bg-card: #ffffff;
-  --bg-card-alt: #fdf8f6;
-  --bg-card-subtle: #f8fafc;
+  /* Material 3 Dark Theme - Terracotta Vibrant Swatch */
+  --bg-primary: #191210;
+  --bg-surface: #201a18;
+  --bg-panel: #271f1c;
+  --bg-card: #201a18;
+  --bg-card-alt: #2b2320;
+  --bg-card-subtle: #191210;
 
-  --text-primary: #0f172a;
-  --text-muted: #64748b;
-  --text-dim: #94a3b8;
-  --text-dark: #0f172a;
-  --text-dark-muted: #475569;
+  --text-primary: #ede0dc;
+  --text-muted: #d0c4bf;
+  --text-dim: #9d8e87;
+  --text-dark: #ede0dc;
+  --text-dark-muted: #d0c4bf;
 
-  --border-subtle: #e2e8f0;
-  --border-strong: #cbd5e1;
-  --border-card: #e2e8f0;
-  --border-interactive: #cbd5e1;
+  --border-subtle: rgba(255, 219, 209, 0.12);
+  --border-strong: rgba(255, 219, 209, 0.24);
+  --border-card: rgba(255, 219, 209, 0.15);
+  --border-interactive: rgba(255, 180, 155, 0.35);
 
-  --radius-flat: 2px;
-  --accent-tint: #fbeee8;
+  --radius-flat: 4px;
+  --accent-tint: #38241d;
 
-  --terracotta-primary: #c85a32;
-  --terracotta-hover: #b44f2b;
-  --terracotta-light: #fbeee8;
-  --terracotta-border: #f0d5ca;
-  --terracotta-surface: #fdf8f6;
+  --terracotta-primary: #ffb59d;
+  --terracotta-hover: #ff9e80;
+  --terracotta-light: #38241d;
+  --terracotta-border: #5c3f35;
+  --terracotta-surface: #201a18;
 
-  /* Material 3 System Color Swatch Tokens (Terracotta Light Vibrant) */
-  --md-sys-color-surface: #ffffff;
-  --md-sys-color-surface-dim: #fdf8f6;
-  --md-sys-color-surface-container-lowest: #ffffff;
-  --md-sys-color-surface-container-low: #fdf8f6;
-  --md-sys-color-surface-container: #ffffff;
-  --md-sys-color-surface-container-high: #fdf8f6;
-  --md-sys-color-surface-container-highest: #fbeee8;
-  --md-sys-color-on-surface: #0f172a;
-  --md-sys-color-on-surface-variant: #475569;
-  --md-sys-color-outline: #cbd5e1;
-  --md-sys-color-outline-variant: #e2e8f0;
-  --md-sys-color-primary: #c85a32;
-  --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: #ffdbd1;
-  --md-sys-color-on-primary-container: #3b0900;
-  --md-sys-color-secondary-container: #fbeee8;
-  --md-sys-color-on-secondary-container: #3a150c;
-}
-
-/* Minimal Flat Reset: Zero Box Shadows, Zero Drop Shadows, Zero Gradients */
-*, *::before, *::after {
-  box-shadow: none !important;
-  text-shadow: none !important;
-}
-
-[class*="shadow-"], [class*="drop-shadow-"] {
-  box-shadow: none !important;
-  filter: none !important;
+  /* Material 3 Dark System Tokens mapped to Terracotta */
+  --md-sys-color-surface: #191210;
+  --md-sys-color-surface-dim: #130d0b;
+  --md-sys-color-surface-container-lowest: #0e0807;
+  --md-sys-color-surface-container-low: #201a18;
+  --md-sys-color-surface-container: #241e1b;
+  --md-sys-color-surface-container-high: #2f2825;
+  --md-sys-color-surface-container-highest: #3a322f;
+  --md-sys-color-on-surface: #ede0dc;
+  --md-sys-color-on-surface-variant: #d0c4bf;
+  --md-sys-color-outline: #9d8e87;
+  --md-sys-color-outline-variant: #51433e;
+  --md-sys-color-primary: #ffb59d;
+  --md-sys-color-on-primary: #5c1e0b;
+  --md-sys-color-primary-container: #7a2f19;
+  --md-sys-color-on-primary-container: #ffdbd1;
+  --md-sys-color-secondary: #e7bdb1;
+  --md-sys-color-on-secondary: #442a22;
+  --md-sys-color-secondary-container: #5d3f37;
+  --md-sys-color-on-secondary-container: #ffdcd2;
 }
 
 body {
@@ -72,69 +63,69 @@ body {
   font-feature-settings: "cv01", "ss01", "kern" 1;
   font-optical-sizing: auto;
   font-variation-settings: "GRAD" 0, "wdth" 100, "opsz" 14;
+  margin: 0;
+  padding: 0;
 }
 
-/* Mathematically tuned font-variation optical hierarchies */
+/* Material Typography Hierarchies - Strictly lowercase/title, never uppercase */
 .font-var-hero {
-  font-variation-settings: "wght" 850, "wdth" 108, "opsz" 48, "GRAD" 100, "XTRA" 500;
-  letter-spacing: -0.035em;
-  line-height: 1.08;
+  font-variation-settings: "wght" 700, "wdth" 100, "opsz" 36;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 .font-var-heading {
-  font-variation-settings: "wght" 700, "wdth" 102, "opsz" 28, "GRAD" 50;
-  letter-spacing: -0.025em;
-  line-height: 1.2;
+  font-variation-settings: "wght" 600, "wdth" 100, "opsz" 24;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
 }
 
 .font-var-subheading {
-  font-variation-settings: "wght" 550, "wdth" 98, "opsz" 18, "GRAD" 20;
-  letter-spacing: -0.015em;
+  font-variation-settings: "wght" 500, "wdth" 100, "opsz" 16;
+  letter-spacing: -0.01em;
 }
 
 .font-var-label {
-  font-variation-settings: "wght" 650, "wdth" 95, "opsz" 11, "GRAD" 80;
-  letter-spacing: 0.06em;
+  font-variation-settings: "wght" 500, "wdth" 100, "opsz" 13;
+  letter-spacing: 0.01em;
 }
 
 .font-var-body {
-  font-variation-settings: "wght" 420, "wdth" 100, "opsz" 13;
-  line-height: 1.45;
+  font-variation-settings: "wght" 400, "wdth" 100, "opsz" 14;
+  line-height: 1.5;
 }
 
 .font-var-table-title {
-  font-variation-settings: "wght" 750, "wdth" 104, "opsz" 13, "GRAD" 60;
-  letter-spacing: 0.04em;
+  font-variation-settings: "wght" 600, "wdth" 100, "opsz" 14;
+  letter-spacing: 0.01em;
 }
 
 .font-var-meta {
-  font-variation-settings: "wght" 500, "wdth" 96, "opsz" 10;
-  letter-spacing: 0.02em;
+  font-variation-settings: "wght" 450, "wdth" 100, "opsz" 12;
+  letter-spacing: 0.01em;
 }
 
-/* ReactFlow styling with flat borders and zero shadow */
+/* ReactFlow canvas styling for dark terracotta */
 .react-flow__background {
-  background-color: var(--bg-surface, #f8fafc) !important;
+  background-color: #150f0e !important;
 }
 
 .react-flow__controls {
-  box-shadow: none !important;
-  border: 1px solid var(--border-subtle, #e2e8f0) !important;
-  border-radius: 2px !important;
+  border: 1px solid rgba(255, 219, 209, 0.15) !important;
+  border-radius: 8px !important;
   overflow: hidden !important;
-  background-color: #ffffff !important;
+  background-color: #241e1b !important;
 }
 
 .react-flow__controls-button {
-  background: #ffffff !important;
-  border-bottom: 1px solid var(--border-subtle, #e2e8f0) !important;
-  fill: #0f172a !important;
-  color: #0f172a !important;
-  border-radius: 0 !important;
+  background: #241e1b !important;
+  border-bottom: 1px solid rgba(255, 219, 209, 0.12) !important;
+  fill: #ede0dc !important;
+  color: #ede0dc !important;
 }
 
 .react-flow__controls-button:hover {
-  background: #f8fafc !important;
+  background: #2f2825 !important;
 }
 
 .react-flow__controls-button svg {
@@ -142,7 +133,16 @@ body {
 }
 
 code, pre, .font-mono {
-  font-family: var(--font-roboto-flex), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-roboto-flex), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-feature-settings: "tnum" 1, "zero" 1;
-  font-variation-settings: "wght" 460, "wdth" 98, "opsz" 12, "GRAD" 40;
+  font-variation-settings: "wght" 450, "wdth" 98, "opsz" 12;
+}
+
+/* M3E component customizations */
+m3e-card {
+  --m3e-card-shape: 12px;
+}
+
+m3e-button {
+  --m3e-button-shape: 8px;
 }

@@ -10,8 +10,8 @@ const robotoFlex = Roboto_Flex({
 });
 
 export const metadata: Metadata = {
-  title: "LabBook Academic Engine",
-  description: "Relational division and GiST temporal exclusion visualizer",
+  title: "LabBook",
+  description: "Research equipment reservation system",
 };
 
 export default function RootLayout({
@@ -19,7 +19,15 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${robotoFlex.variable} h-full antialiased`}>
-      <body className="min-h-full font-sans antialiased bg-[#FFFFFF] text-[#0F172A]">{children}</body>
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0"
+        />
+      </head>
+      <body className="min-h-full font-sans antialiased bg-[#191210] text-[#ede0dc]">
+        {children}
+      </body>
     </html>
   );
 }

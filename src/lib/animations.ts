@@ -1,7 +1,7 @@
 import gsap from "gsap";
 
-const EDGE_DEFAULT = "#cbd5e1";
-const NODE_BORDER_DEFAULT = "#e2e8f0";
+const EDGE_DEFAULT = "rgba(255, 219, 209, 0.25)";
+const NODE_BORDER_DEFAULT = "rgba(255, 219, 209, 0.18)";
 
 export const EDGE_CLASSES = {
   usersToUq: "edge-users-uq",
@@ -79,7 +79,7 @@ export function runDivisionAnimation(opts: DivisionAnimationOpts) {
   if (userRow) {
     tl.fromTo(
       userRow,
-      { outlineColor: "#c85a32", backgroundColor: "rgba(200, 90, 50, 0.12)" },
+      { outlineColor: "#ffb59d", backgroundColor: "rgba(255, 181, 157, 0.16)" },
       { outlineColor: "transparent", backgroundColor: "transparent", duration: 0.25, repeat: 1, yoyo: true }
     );
   }
@@ -105,7 +105,7 @@ export function runDivisionAnimation(opts: DivisionAnimationOpts) {
         `[data-table="qualifications"] [data-qualification-id="${qid}"]`
       );
       if (row) {
-        tl.to(row, { outlineColor: "#dc2626", backgroundColor: "rgba(220,38,38,0.2)", duration: 0.15 }, "<");
+        tl.to(row, { outlineColor: "#ef4444", backgroundColor: "rgba(239, 68, 68, 0.25)", duration: 0.15 }, "<");
         tl.to(row, {
           keyframes: [{ x: -3 }, { x: 3 }, { x: -3 }, { x: 3 }, { x: 0 }],
           duration: 0.3,
@@ -139,37 +139,49 @@ export function runInsertAnimation(opts: InsertAnimationOpts) {
       tl.to(
         bookingsNode,
         {
-          keyframes: [{ x: -4 }, { x: 4 }, { x: -3 }, { x: 3 }, { x: 0 }],
+          keyframes: [{ x: -4 }, { x: 4 }, { x: -4 }, { x: 4 }, { x: 0 }],
           duration: 0.4,
         },
         "<"
       );
     }
-  } else {
-    const p = edgePath(EDGE_CLASSES.equipmentToBookings);
-    if (p) tl.to(p, { stroke: "#4ade80", duration: 0.4, ease: "power2.out" });
-    if (opts.newBookingId !== undefined) {
-      const row = document.querySelector<HTMLElement>(
-        `[data-table="bookings"] [data-booking-id="${opts.newBookingId}"]`
+  } else if (opts.newBookingId) {
+    if (bookingsNode) {
+      tl.to(bookingsNode, { borderColor: "#4ade80", duration: 0.35 });
+      tl.to(bookingsNode, { borderColor: NODE_BORDER_DEFAULT, duration: 0.6 });
+    }
+    const newRow = document.querySelector<HTMLElement>(
+      `[data-table="bookings"] [data-booking-id="${opts.newBookingId}"]`
+    );
+    if (newRow) {
+      tl.fromTo(
+        newRow,
+        { opacity: 0, backgroundColor: "rgba(74, 222, 128, 0.35)" },
+        { opacity: 1, backgroundColor: "transparent", duration: 0.6, ease: "power2.out" },
+        "<0.1"
       );
-      if (row) {
-        tl.fromTo(row, { opacity: 0 }, { opacity: 1, duration: 0.3 });
-        tl.fromTo(
-          row,
-          { backgroundColor: "#bbf7d0" },
-          { backgroundColor: "transparent", duration: 1.0, ease: "power2.out" },
-          "<"
-        );
-      }
     }
   }
 }
 
 export function revealConsoleLines(container: HTMLElement | null) {
   if (!container) return;
+  const items = container.querySelectorAll<HTMLElement>(".console-line:not([data-revealed])");
+  if (items.length === 0) return;
+
   gsap.fromTo(
-    Array.from(container.children),
+    items,
     { opacity: 0, y: 4 },
-    { opacity: 1, y: 0, duration: 0.25, stagger: 0.08, ease: "power2.out", overwrite: true }
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.25,
+      stagger: 0.04,
+      ease: "power1.out",
+      onComplete: () => {
+        items.forEach((it) => it.setAttribute("data-revealed", "true"));
+        container.scrollTop = container.scrollHeight;
+      },
+    }
   );
 }
