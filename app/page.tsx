@@ -285,137 +285,113 @@ export default function Page() {
         {/* Left sidebar / control desk */}
         <div className="flex w-[34%] min-w-[340px] max-w-[460px] flex-col gap-4 overflow-y-auto border-r border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.15))] bg-[var(--md-sys-color-surface-container-high,#31150e)] p-5 shadow-2xl">
           <div className="border-b border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.15))] pb-4">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="rounded bg-[var(--md-sys-color-primary-container,#5f1505)] px-1.5 py-0.5 text-[10px] font-mono font-bold tracking-widest text-[var(--md-sys-color-on-primary-container,#ffdad2)]">
-                BCSE307P
-              </span>
-              <span className="text-[11px] font-var-meta text-[var(--md-sys-color-on-surface-variant,#d8c2bc)]">
-                Academic Engine
-              </span>
-            </div>
+            <div className="flex items-center gap-2 mb-1"></div>
             <h1 className="text-[26px] font-var-heading tracking-tight text-[var(--md-sys-color-on-surface,#ffffff)] leading-tight">
-              LabBook Academic Engine
+              LabBook
             </h1>
-            <p className="mt-1 text-[13px] font-var-subheading text-[var(--md-sys-color-on-surface-variant,#d8c2bc)]">
-              Relational division and GiST temporal exclusion visualizer
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-3 rounded-lg border border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.15))] bg-[var(--md-sys-color-surface-container,#2a110a)] p-4 shadow-sm">
-          <div>
-            <label className="font-var-label text-[11px] uppercase text-[#e8b09f] block mb-1">
-              Select User
-            </label>
-            <m3e-select
-              className="w-full bg-[#f4ded4] text-[#3a0d05] rounded block"
-              value={String(userId)}
-              onChange={(e: any) => {
-                const val = e.target?.value;
-                if (val !== undefined) setUserId(Number(val));
-              }}
-            >
-              {db.users.map((u) => (
-                <m3e-option key={u.user_id} value={String(u.user_id)}>
-                  {u.name} ({u.role})
-                </m3e-option>
-              ))}
-            </m3e-select>
-          </div>
-
-          <div>
-            <label className="font-var-label text-[11px] uppercase text-[#e8b09f] block mb-1">
-              Select Resource
-            </label>
-            <m3e-select
-              className="w-full bg-[#f4ded4] text-[#3a0d05] rounded block"
-              value={String(resourceId)}
-              onChange={(e: any) => {
-                const val = e.target?.value;
-                if (val !== undefined) setResourceId(Number(val));
-              }}
-            >
-              {db.equipment.map((e) => (
-                <m3e-option key={e.resource_id} value={String(e.resource_id)}>
-                  {e.name} ({e.location})
-                </m3e-option>
-              ))}
-            </m3e-select>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="font-var-label text-[11px] uppercase text-[#e8b09f] block mb-1">
-                Start Time
-              </label>
-              <input
-                type="datetime-local"
-                className={inputCls}
-                value={start}
-                onChange={(e) => setStart(e.target.value)}
-              />
+              <m3e-select
+                className="w-full bg-[#f4ded4] text-[#3a0d05] rounded block"
+                value={String(userId)}
+                onChange={(e: any) => {
+                  const val = e.target?.value;
+                  if (val !== undefined) setUserId(Number(val));
+                }}
+              >
+                {db.users.map((u) => (
+                  <m3e-option key={u.user_id} value={String(u.user_id)}>
+                    {u.name} ({u.role})
+                  </m3e-option>
+                ))}
+              </m3e-select>
             </div>
+
             <div>
-              <label className="font-var-label text-[11px] uppercase text-[#e8b09f] block mb-1">
-                End Time
-              </label>
-              <input
-                type="datetime-local"
-                className={inputCls}
-                value={end}
-                onChange={(e) => setEnd(e.target.value)}
-              />
+              <m3e-select
+                className="w-full bg-[#f4ded4] text-[#3a0d05] rounded block"
+                value={String(resourceId)}
+                onChange={(e: any) => {
+                  const val = e.target?.value;
+                  if (val !== undefined) setResourceId(Number(val));
+                }}
+              >
+                {db.equipment.map((e) => (
+                  <m3e-option key={e.resource_id} value={String(e.resource_id)}>
+                    {e.name} ({e.location})
+                  </m3e-option>
+                ))}
+              </m3e-select>
             </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="font-var-label text-[11px] uppercase text-[#e8b09f] block mb-1">
+                  Start Time
+                </label>
+                <input
+                  type="datetime-local"
+                  className={inputCls}
+                  value={start}
+                  onChange={(e) => setStart(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="font-var-label text-[11px] uppercase text-[#e8b09f] block mb-1">
+                  End Time
+                </label>
+                <input
+                  type="datetime-local"
+                  className={inputCls}
+                  value={end}
+                  onChange={(e) => setEnd(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2 items-center">
+            <m3e-button variant="filled" onClick={handleDivision}>
+              Verify Division
+            </m3e-button>
+            <m3e-button variant="filled" onClick={handleInsert}>
+              Attempt Insert
+            </m3e-button>
+            <m3e-button variant="outlined" onClick={handleReset}>
+              Reset Seed
+            </m3e-button>
+          </div>
+
+          <div
+            ref={consoleRef}
+            className="min-h-[220px] flex-1 overflow-y-auto rounded-lg border border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.15))] bg-[var(--md-sys-color-surface-container-lowest,#180703)] p-3 font-mono text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface,#ffffff)] shadow-inner"
+          >
+            {logs.length === 0 && (
+              <div className="text-[var(--md-sys-color-outline,#a08c87)] italic">
+                -- execution console online
+              </div>
+            )}
+            {logs.map((line, i) => (
+              <div key={i} className="whitespace-pre-wrap">
+                {line}
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 items-center">
-          <m3e-button variant="filled" onClick={handleDivision}>
-            Verify Division
-          </m3e-button>
-          <m3e-button variant="filled" onClick={handleInsert}>
-            Attempt Insert
-          </m3e-button>
-          <m3e-button variant="outlined" onClick={handleReset}>
-            Reset Seed
-          </m3e-button>
-        </div>
-
-        <div
-          ref={consoleRef}
-          className="min-h-[220px] flex-1 overflow-y-auto rounded-lg border border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.15))] bg-[var(--md-sys-color-surface-container-lowest,#180703)] p-3 font-mono text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface,#ffffff)] shadow-inner"
-        >
-          {logs.length === 0 && (
-            <div className="text-[var(--md-sys-color-outline,#a08c87)] italic">
-              -- execution console online
-            </div>
-          )}
-          {logs.map((line, i) => (
-            <div key={i} className="whitespace-pre-wrap">
-              {line}
-            </div>
-          ))}
-        </div>
-
-        <div className="border-t border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.1))] pt-2 flex items-center justify-between text-[11px] font-var-meta text-[var(--md-sys-color-outline,#a08c87)]">
-          <span>Lavanbarath B · 24BDS0155</span>
-          <span>Hariprannav S · 24BCE0659</span>
+        {/* Main visual canvas */}
+        <div className="h-full flex-1 relative bg-[var(--md-sys-color-surface-dim,#1c0a05)]">
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            nodeTypes={nodeTypes}
+            fitView
+            proOptions={{ hideAttribution: true }}
+          >
+            <Background gap={24} size={1.5} color="rgba(255, 255, 255, 0.08)" />
+            <Controls showInteractive={false} />
+          </ReactFlow>
         </div>
       </div>
-
-      {/* Main visual canvas */}
-      <div className="h-full flex-1 relative bg-[var(--md-sys-color-surface-dim,#1c0a05)]">
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          nodeTypes={nodeTypes}
-          fitView
-          proOptions={{ hideAttribution: true }}
-        >
-          <Background gap={24} size={1.5} color="rgba(255, 255, 255, 0.08)" />
-          <Controls showInteractive={false} />
-        </ReactFlow>
-      </div>
-    </div>
     </m3e-theme>
   );
 }
