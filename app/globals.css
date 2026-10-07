@@ -1,14 +1,42 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-roboto-flex), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-roboto-flex), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Google Sans Flex', ui-monospace, SFMono-Regular, monospace;
+
+  --color-background: var(--md-sys-color-background);
+  --color-on-background: var(--md-sys-color-on-background);
+  --color-surface: var(--md-sys-color-surface);
+  --color-on-surface: var(--md-sys-color-on-surface);
+  --color-surface-container-lowest: var(--md-sys-color-surface-container-lowest);
+  --color-surface-container-low: var(--md-sys-color-surface-container-low);
+  --color-surface-container: var(--md-sys-color-surface-container);
+  --color-surface-container-high: var(--md-sys-color-surface-container-high);
+  --color-surface-container-highest: var(--md-sys-color-surface-container-highest);
+  --color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+  --color-outline: var(--md-sys-color-outline);
+  --color-outline-variant: var(--md-sys-color-outline-variant);
+
+  --color-primary: var(--md-sys-color-primary);
+  --color-on-primary: var(--md-sys-color-on-primary);
+  --color-primary-container: var(--md-sys-color-primary-container);
+  --color-on-primary-container: var(--md-sys-color-on-primary-container);
+
+  --color-error: var(--md-sys-color-error);
+  --color-on-error: var(--md-sys-color-on-error);
+  --color-error-container: var(--md-sys-color-error-container);
+  --color-on-error-container: var(--md-sys-color-on-error-container);
+
+  --color-success: var(--md-sys-color-success);
+  --color-on-success: var(--md-sys-color-on-success);
+  --color-success-container: var(--md-sys-color-success-container);
+  --color-on-success-container: var(--md-sys-color-on-success-container);
 }
 
 :root {
   color-scheme: light;
 
-  /* Material 3 System Colors - Red Light Vibrant Palette */
+  /* Material 3 System Colors - Red Vibrant Palette */
   --md-sys-color-background: #fffbfa;
   --md-sys-color-on-background: #201a19;
   --md-sys-color-surface: #fffbfa;
@@ -36,60 +64,78 @@
   --md-sys-color-on-error: #ffffff;
   --md-sys-color-error-container: #ffdad6;
   --md-sys-color-on-error-container: #410002;
+  --md-sys-color-success: #14532d;
+  --md-sys-color-on-success: #ffffff;
+  --md-sys-color-success-container: #dcfce7;
+  --md-sys-color-on-success-container: #14532d;
 
-  /* Form Field & Component Colors - Borderless Surfaces */
+  /* M3E Select and Option Tokens - Follow Theme and Fully Rounded */
+  --m3e-option-panel-container-color: var(--md-sys-color-surface-container-low);
+  --m3e-option-panel-container-shape: 16px;
+  --m3e-option-panel-container-min-width: 240px;
+  --m3e-option-color: var(--md-sys-color-on-surface);
+  --m3e-option-selected-container-color: var(--md-sys-color-primary-container);
+  --m3e-option-selected-color: var(--md-sys-color-on-primary-container);
+  --m3e-option-selected-container-hover-color: var(--md-sys-color-primary-container);
+  --m3e-option-container-hover-color: var(--md-sys-color-surface-container-high);
+  --m3e-option-shape: 9999px;
+  --m3e-option-selected-shape: 9999px;
+  --m3e-option-first-child-shape: 9999px;
+  --m3e-option-last-child-shape: 9999px;
+
+  /* Fully Rounded Shapes for All Controls */
+  --m3e-button-shape: 9999px;
+  --m3e-select-container-shape: 16px;
+  --m3e-form-field-container-shape: 16px;
+  --m3e-form-field-active-indicator-shape: 16px;
+  --m3e-chip-shape: 9999px;
+  --m3e-datepicker-container-shape: 20px;
+  --m3e-datepicker-docked-container-shape: 20px;
+  --m3e-datepicker-modal-container-shape: 20px;
+
+  /* Borderless Surfaces */
   --m3e-form-field-outline-color: transparent;
-  --m3e-form-field-focus-outline-color: #ba1a1a;
-  --m3e-form-field-label-color: #53433f;
-  --m3e-form-field-focus-label-color: #ba1a1a;
-  --m3e-form-field-input-color: #201a19;
-
-  --m3e-button-shape: 8px;
+  --m3e-form-field-focus-outline-color: var(--md-sys-color-primary);
+  --m3e-form-field-label-color: var(--md-sys-color-on-surface-variant);
+  --m3e-form-field-focus-label-color: var(--md-sys-color-primary);
+  --m3e-form-field-input-color: var(--md-sys-color-on-surface);
 }
 
 body {
-  background-color: var(--md-sys-color-background, #fffbfa);
-  color: var(--md-sys-color-on-background, #201a19);
-  font-family: var(--font-roboto-flex), ui-sans-serif, system-ui, sans-serif;
-  font-feature-settings: "cv01", "ss01", "kern" 1;
-  font-optical-sizing: auto;
-  font-variation-settings: "GRAD" 0, "wdth" 100, "opsz" 14;
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   margin: 0;
   padding: 0;
 }
 
-/* Material 3 Typography Scale */
-.font-var-heading {
-  font-variation-settings: "wght" 600, "wdth" 100, "opsz" 24;
-  letter-spacing: -0.015em;
-  line-height: 1.25;
+/* Select items fill and rounding styling */
+m3e-option {
+  --m3e-option-color: var(--md-sys-color-on-surface);
+  --m3e-option-selected-container-color: var(--md-sys-color-primary-container);
+  --m3e-option-selected-color: var(--md-sys-color-on-primary-container);
+  --m3e-option-selected-container-hover-color: var(--md-sys-color-primary-container);
+  --m3e-option-container-hover-color: var(--md-sys-color-surface-container-high);
+  --m3e-option-shape: 9999px;
+  --m3e-option-selected-shape: 9999px;
+  border-radius: 9999px !important;
+  margin-block: 2px;
 }
 
-.font-var-subheading {
-  font-variation-settings: "wght" 500, "wdth" 100, "opsz" 16;
-  letter-spacing: -0.01em;
+m3e-option-panel {
+  --m3e-option-panel-container-color: var(--md-sys-color-surface-container-low);
+  --m3e-option-panel-container-shape: 16px;
+  border-radius: 16px !important;
 }
 
-.font-var-label {
-  font-variation-settings: "wght" 500, "wdth" 100, "opsz" 13;
-}
-
-.font-var-body {
-  font-variation-settings: "wght" 400, "wdth" 100, "opsz" 14;
-  line-height: 1.5;
-}
-
-.font-var-table-title {
-  font-variation-settings: "wght" 600, "wdth" 100, "opsz" 14;
-}
-
-/* M3E Form Field Input Styling inside light theme */
+/* Form Field Input Styling inside light theme */
 m3e-form-field input,
 m3e-form-field select,
 m3e-form-field m3e-select,
 m3e-form-field m3e-date-input {
-  color: #201a19 !important;
+  color: var(--md-sys-color-on-surface) !important;
   background-color: transparent !important;
+  font-family: inherit !important;
 }
 
 m3e-form-field input[type="datetime-local"],
@@ -98,26 +144,26 @@ m3e-form-field input[type="time"] {
   color-scheme: light;
 }
 
-/* ReactFlow Canvas styling for light red */
+/* ReactFlow Canvas styling */
 .react-flow__background {
-  background-color: #fcf6f5 !important;
+  background-color: var(--md-sys-color-background) !important;
 }
 
 .react-flow__controls {
-  border-radius: 8px !important;
+  border-radius: 9999px !important;
   overflow: hidden !important;
-  background-color: #ffffff !important;
+  background-color: var(--md-sys-color-surface-container-lowest) !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 
 .react-flow__controls-button {
-  background: #ffffff !important;
-  fill: #201a19 !important;
-  color: #201a19 !important;
+  background: var(--md-sys-color-surface-container-lowest) !important;
+  fill: var(--md-sys-color-on-surface) !important;
+  color: var(--md-sys-color-on-surface) !important;
 }
 
 .react-flow__controls-button:hover {
-  background: #f7ebe8 !important;
+  background: var(--md-sys-color-surface-container) !important;
 }
 
 .react-flow__controls-button svg {
@@ -125,7 +171,6 @@ m3e-form-field input[type="time"] {
 }
 
 code, pre, .font-mono {
-  font-family: var(--font-roboto-flex), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: 'Google Sans Flex', ui-monospace, SFMono-Regular, monospace;
   font-feature-settings: "tnum" 1, "zero" 1;
-  font-variation-settings: "wght" 450, "wdth" 98, "opsz" 12;
 }

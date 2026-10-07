@@ -42,7 +42,7 @@ if (typeof window !== "undefined") {
 
 const nodeTypes = { table: TableNode };
 
-const EDGE_STYLE = { stroke: "rgba(186, 26, 26, 0.35)", strokeWidth: 1.5 };
+const EDGE_STYLE = { stroke: "var(--color-primary)", strokeWidth: 1.5, opacity: 0.35 };
 
 type ActiveTab = "book" | "schema" | "logs";
 
@@ -497,15 +497,14 @@ export default function Page() {
 
   return (
     <m3e-theme
-      color="#ba1a1a"
       scheme="light"
       variant="vibrant"
       contrast="standard"
       density="0"
     >
-      <div className="flex flex-col min-h-screen w-screen bg-[#fffbfa] text-[#201a19] overflow-x-hidden">
+      <div className="flex flex-col min-h-screen w-screen bg-background text-on-background overflow-x-hidden">
         {/* Compact Header without product name */}
-        <header className="flex items-center justify-between px-4 py-2 bg-[#f7ebe8] shrink-0">
+        <header className="flex items-center justify-between px-4 py-2 bg-surface-container shrink-0">
           <div className="flex items-center gap-1">
             <m3e-button
               variant={activeTab === "book" ? "filled" : "text"}
@@ -528,8 +527,8 @@ export default function Page() {
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-xs text-[#53433f] hidden sm:inline">
-              Staff: <strong className="text-[#ba1a1a]">{selectedUser.name}</strong>
+            <span className="text-xs text-on-surface-variant hidden sm:inline">
+              Staff: <strong className="text-primary">{selectedUser.name}</strong>
             </span>
             <m3e-button variant="text" onClick={handleReset}>
               Reset Seed
@@ -538,19 +537,19 @@ export default function Page() {
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 relative bg-[#fffbfa]">
+        <main className="flex-1 relative bg-background">
           {/* TAB 1: Long Continuous Booking Form */}
           {activeTab === "book" && (
             <div className="max-w-2xl mx-auto py-8 px-6 space-y-8">
               {/* Feedback Alert */}
               {feedback && (
                 <div
-                  className={`p-4 rounded-[12px] flex items-start justify-between ${
+                  className={`p-4 rounded-2xl flex items-start justify-between ${
                     feedback.type === "success"
-                      ? "bg-[#dcfce7] text-[#14532d]"
+                      ? "bg-success-container text-on-success-container"
                       : feedback.type === "conflict" || feedback.type === "forbidden"
-                      ? "bg-[#ffdad6] text-[#410002]"
-                      : "bg-[#f7ebe8] text-[#201a19]"
+                      ? "bg-error-container text-on-error-container"
+                      : "bg-surface-container text-on-surface"
                   }`}
                 >
                   <div className="space-y-1">
@@ -573,7 +572,7 @@ export default function Page() {
 
               {/* Section: Staff Member */}
               <section className="space-y-3">
-                <h2 className="text-sm font-semibold tracking-wide text-[#201a19]">
+                <h2 className="text-sm font-semibold tracking-wide text-on-surface">
                   Staff Member
                 </h2>
                 <m3e-form-field variant="filled" className="w-full block">
@@ -595,18 +594,18 @@ export default function Page() {
                 </m3e-form-field>
 
                 <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <span className="text-xs text-[#53433f]">Verified Credentials:</span>
+                  <span className="text-xs text-on-surface-variant">Verified Credentials:</span>
                   {userQualifications.length > 0 ? (
                     userQualifications.map((q) => (
                       <span
                         key={q.qualification_id}
-                        className="px-2.5 py-1 rounded-[6px] text-xs bg-[#fdf1ee] text-[#53433f]"
+                        className="px-3 py-1 rounded-full text-xs bg-surface-container-low text-on-surface-variant"
                       >
                         {q.name}
                       </span>
                     ))
                   ) : (
-                    <span className="text-xs italic text-[#85736e]">
+                    <span className="text-xs italic text-outline">
                       None on record
                     </span>
                   )}
@@ -615,7 +614,7 @@ export default function Page() {
 
               {/* Section: Laboratory Equipment */}
               <section className="space-y-3">
-                <h2 className="text-sm font-semibold tracking-wide text-[#201a19]">
+                <h2 className="text-sm font-semibold tracking-wide text-on-surface">
                   Laboratory Equipment
                 </h2>
                 <m3e-form-field variant="filled" className="w-full block">
@@ -636,16 +635,16 @@ export default function Page() {
                   </m3e-select>
                 </m3e-form-field>
 
-                <div className="flex flex-wrap items-center gap-4 text-xs text-[#53433f]">
-                  <span>Location: <strong className="text-[#201a19]">{selectedEquipment.location}</strong></span>
-                  <span>Status: <strong className="text-[#166534]">{selectedEquipment.status}</strong></span>
+                <div className="flex flex-wrap items-center gap-4 text-xs text-on-surface-variant">
+                  <span>Location: <strong className="text-on-surface">{selectedEquipment.location}</strong></span>
+                  <span>Status: <strong className="text-success">{selectedEquipment.status}</strong></span>
                   <span>
                     Eligibility:{" "}
                     <strong
-                      className={`px-2 py-0.5 rounded-[4px] text-xs font-mono ${
+                      className={`px-2.5 py-0.5 rounded-full text-xs font-mono ${
                         divisionResult.eligible
-                          ? "bg-[#dcfce7] text-[#14532d]"
-                          : "bg-[#ffdad6] text-[#ba1a1a]"
+                          ? "bg-success-container text-on-success-container"
+                          : "bg-error-container text-on-error-container"
                       }`}
                     >
                       {divisionResult.eligible ? "Qualified" : "Missing Prerequisite"}
@@ -654,7 +653,7 @@ export default function Page() {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <span className="text-xs text-[#53433f]">Prerequisites:</span>
+                  <span className="text-xs text-on-surface-variant">Prerequisites:</span>
                   {equipmentRequirements.map((q) => {
                     const userHasIt = userQualifications.some(
                       (uq) => uq.qualification_id === q.qualification_id,
@@ -662,10 +661,10 @@ export default function Page() {
                     return (
                       <span
                         key={q.qualification_id}
-                        className={`px-2.5 py-1 rounded-[6px] text-xs ${
+                        className={`px-3 py-1 rounded-full text-xs ${
                           userHasIt
-                            ? "bg-[#dcfce7] text-[#14532d]"
-                            : "bg-[#ffdad6] text-[#ba1a1a]"
+                            ? "bg-success-container text-on-success-container"
+                            : "bg-error-container text-on-error-container"
                         }`}
                       >
                         {q.name}
@@ -677,17 +676,17 @@ export default function Page() {
 
               {/* Section: Reservation Schedule */}
               <section className="space-y-4">
-                <h2 className="text-sm font-semibold tracking-wide text-[#201a19]">
+                <h2 className="text-sm font-semibold tracking-wide text-on-surface">
                   Reservation Schedule
                 </h2>
 
                 {/* Start Now Toggle */}
                 <div className="flex items-center justify-between py-1">
                   <div>
-                    <span className="text-xs font-medium text-[#201a19] block">
+                    <span className="text-xs font-medium text-on-surface block">
                       Start Now
                     </span>
-                    <span className="text-[11px] text-[#85736e]">
+                    <span className="text-[11px] text-outline">
                       Capture current timestamp immediately
                     </span>
                   </div>
@@ -699,7 +698,7 @@ export default function Page() {
 
                 {/* Date Selection with M3E DatePicker */}
                 <div className="space-y-1.5">
-                  <span className="text-xs font-medium text-[#53433f] block">
+                  <span className="text-xs font-medium text-on-surface-variant block">
                     Reservation Date
                   </span>
                   <div className="flex items-center gap-2">
@@ -771,7 +770,7 @@ export default function Page() {
 
                 {/* Grouped Duration Stepper Buttons allowing - also */}
                 <div className="space-y-1.5">
-                  <span className="text-xs font-medium text-[#53433f] block">
+                  <span className="text-xs font-medium text-on-surface-variant block">
                     Adjust Duration
                   </span>
                   <div className="flex flex-wrap gap-1.5">
@@ -831,7 +830,7 @@ export default function Page() {
               {/* Section: Active Reservations */}
               <section className="space-y-4 pt-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-semibold tracking-wide text-[#201a19]">
+                  <h2 className="text-sm font-semibold tracking-wide text-on-surface">
                     Active Reservations
                   </h2>
                   <m3e-button
@@ -845,7 +844,7 @@ export default function Page() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs font-mono">
                     <thead>
-                      <tr className="bg-[#f7ebe8] text-[#53433f]">
+                      <tr className="bg-surface-container text-on-surface-variant">
                         <th className="py-2.5 px-3 font-medium">ID</th>
                         <th className="py-2.5 px-3 font-medium">Equipment</th>
                         <th className="py-2.5 px-3 font-medium">Staff</th>
@@ -868,18 +867,18 @@ export default function Page() {
                           return (
                             <tr
                               key={b.booking_id}
-                              className="hover:bg-[#f7ebe8] transition-colors"
+                              className="hover:bg-surface-container transition-colors"
                             >
-                              <td className="py-2.5 px-3 font-medium text-[#ba1a1a]">
+                              <td className="py-2.5 px-3 font-medium text-primary">
                                 #{b.booking_id}
                               </td>
                               <td className="py-2.5 px-3 font-sans">
                                 {eq?.name ?? b.resource_id}
                               </td>
-                              <td className="py-2.5 px-3 font-sans text-[#53433f]">
+                              <td className="py-2.5 px-3 font-sans text-on-surface-variant">
                                 {usr?.name ?? b.user_id}
                               </td>
-                              <td className="py-2.5 px-3 text-[#53433f]">
+                              <td className="py-2.5 px-3 text-on-surface-variant">
                                 {new Date(b.start_datetime).toLocaleString([], {
                                   month: "short",
                                   day: "numeric",
@@ -887,7 +886,7 @@ export default function Page() {
                                   minute: "2-digit",
                                 })}
                               </td>
-                              <td className="py-2.5 px-3 text-[#53433f]">
+                              <td className="py-2.5 px-3 text-on-surface-variant">
                                 {new Date(b.end_datetime).toLocaleString([], {
                                   month: "short",
                                   day: "numeric",
@@ -897,10 +896,10 @@ export default function Page() {
                               </td>
                               <td className="py-2.5 px-3">
                                 <span
-                                  className={`px-2 py-0.5 rounded-[4px] text-[11px] font-medium ${
+                                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium ${
                                     isConfirmed
-                                      ? "bg-[#dcfce7] text-[#14532d]"
-                                      : "bg-[#f7ebe8] text-[#85736e]"
+                                      ? "bg-success-container text-on-success-container"
+                                      : "bg-surface-container text-outline"
                                   }`}
                                 >
                                   {b.status}
@@ -915,7 +914,7 @@ export default function Page() {
                                     Cancel
                                   </m3e-button>
                                 ) : (
-                                  <span className="text-xs text-[#85736e] italic">
+                                  <span className="text-xs text-outline italic">
                                     Released
                                   </span>
                                 )}
@@ -927,7 +926,7 @@ export default function Page() {
                         <tr>
                           <td
                             colSpan={7}
-                            className="py-6 text-center text-xs text-[#85736e] italic"
+                            className="py-6 text-center text-xs text-outline italic"
                           >
                             No reservations found for current view
                           </td>
@@ -942,13 +941,13 @@ export default function Page() {
 
           {/* TAB 2: ER Schema Graph Visualization */}
           {activeTab === "schema" && (
-            <div className="h-full w-full min-h-[calc(100vh-48px)] relative bg-[#fcf6f5]">
+            <div className="h-full w-full min-h-[calc(100vh-48px)] relative bg-background">
               {/* Floating Toolbar */}
-              <div className="absolute top-4 left-4 z-10 bg-[#ffffff] shadow-sm rounded-[8px] p-2.5 flex items-center gap-3">
-                <span className="text-xs font-mono font-medium text-[#ba1a1a]">
+              <div className="absolute top-4 left-4 z-10 bg-surface-container-lowest shadow-sm rounded-full px-4 py-2 flex items-center gap-3">
+                <span className="text-xs font-mono font-medium text-primary">
                   ER Graph
                 </span>
-                <span className="text-xs text-[#53433f]">
+                <span className="text-xs text-on-surface-variant">
                   Relational division & GiST paths
                 </span>
                 <m3e-button
@@ -972,7 +971,7 @@ export default function Page() {
                 fitView
                 proOptions={{ hideAttribution: true }}
               >
-                <Background gap={24} size={1.5} color="rgba(186, 26, 26, 0.08)" />
+                <Background gap={24} size={1.5} color="var(--md-sys-color-primary)" style={{ opacity: 0.08 }} />
                 <Controls showInteractive={false} />
               </ReactFlow>
             </div>
@@ -980,14 +979,14 @@ export default function Page() {
 
           {/* TAB 3: SQL Audit Logs & Relational Proofs */}
           {activeTab === "logs" && (
-            <div className="h-full min-h-[calc(100vh-48px)] flex flex-col p-6 bg-[#fffbfa] overflow-hidden">
+            <div className="h-full min-h-[calc(100vh-48px)] flex flex-col p-6 bg-background overflow-hidden">
               <div className="max-w-4xl w-full mx-auto flex-1 flex flex-col space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-sm font-semibold font-mono text-[#201a19]">
+                    <h2 className="text-sm font-semibold font-mono text-on-surface">
                       SQL Execution Stream
                     </h2>
-                    <p className="text-xs text-[#85736e]">
+                    <p className="text-xs text-outline">
                       Live queries from relational division and GiST temporal exclusion checks
                     </p>
                   </div>
@@ -1008,10 +1007,10 @@ export default function Page() {
 
                 <div
                   ref={consoleRef}
-                  className="flex-1 overflow-y-auto rounded-[8px] bg-[#201a19] p-4 font-mono text-[12px] leading-relaxed text-[#fffbfa]"
+                  className="flex-1 overflow-y-auto rounded-2xl bg-on-surface p-4 font-mono text-[12px] leading-relaxed text-background"
                 >
                   {logs.length === 0 ? (
-                    <div className="text-[#85736e] italic">
+                    <div className="text-outline italic">
                       -- Console clear. Trigger booking or eligibility check to generate audit queries.
                     </div>
                   ) : (
@@ -1020,14 +1019,14 @@ export default function Page() {
                         key={i}
                         className={`whitespace-pre-wrap py-0.5 ${
                           line.startsWith("--")
-                            ? "text-[#85736e]"
+                            ? "opacity-60"
                             : line.includes("STATUS: 200")
-                            ? "text-[#4ade80] font-semibold"
+                            ? "text-success font-semibold"
                             : line.includes("STATUS: 409") || line.includes("STATUS: 403")
-                            ? "text-[#f87171] font-semibold"
+                            ? "text-error font-semibold"
                             : line.startsWith("SELECT") || line.startsWith("INSERT")
-                            ? "text-[#ffb4ab]"
-                            : "text-[#fffbfa]"
+                            ? "text-primary-container font-semibold"
+                            : "text-background"
                         }`}
                       >
                         {line}
