@@ -269,11 +269,7 @@ export default function Page() {
   }
 
   const inputCls =
-    "w-full rounded bg-[#f4ded4] border border-[#e4beae] px-3 py-1.5 font-mono text-[13px] text-[#3a0d05] focus:outline-none focus:ring-2 focus:ring-white/40";
-  const btnPrimary =
-    "rounded bg-white px-3.5 py-2 font-var-label text-[12px] font-bold text-[#75200c] shadow hover:bg-[#f3dfd6] transition-colors cursor-pointer active:scale-95";
-  const btnSecondary =
-    "rounded border border-white/30 bg-transparent px-3 py-2 font-var-label text-[12px] text-white hover:bg-white/10 transition-colors cursor-pointer active:scale-95";
+    "w-full rounded bg-[var(--md-sys-color-surface-container,#2a110a)] border border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.15))] px-3 py-1.5 font-mono text-[13px] text-[var(--md-sys-color-on-surface,#ffffff)] focus:outline-none focus:ring-1 focus:ring-[var(--md-sys-color-primary,#ffb4a2)]";
 
   return (
     <m3e-theme
@@ -285,27 +281,27 @@ export default function Page() {
       density="0"
       strong-focus
     >
-      <div className="flex h-screen w-screen bg-[#75200c] text-white overflow-hidden">
+      <div className="flex h-screen w-screen bg-[var(--md-sys-color-surface,#230d07)] text-[var(--md-sys-color-on-surface,#ffffff)] overflow-hidden">
         {/* Left sidebar / control desk */}
-        <div className="flex w-[34%] min-w-[340px] max-w-[460px] flex-col gap-4 overflow-y-auto border-r border-white/15 bg-[#86260f] p-5 shadow-2xl">
-        <div className="border-b border-white/15 pb-4">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-mono font-bold tracking-widest text-[#f3dfd6]">
-              BCSE307P
-            </span>
-            <span className="text-[11px] font-var-meta text-[#e8b09f]">
-              Academic Engine
-            </span>
+        <div className="flex w-[34%] min-w-[340px] max-w-[460px] flex-col gap-4 overflow-y-auto border-r border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.15))] bg-[var(--md-sys-color-surface-container-high,#31150e)] p-5 shadow-2xl">
+          <div className="border-b border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.15))] pb-4">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="rounded bg-[var(--md-sys-color-primary-container,#5f1505)] px-1.5 py-0.5 text-[10px] font-mono font-bold tracking-widest text-[var(--md-sys-color-on-primary-container,#ffdad2)]">
+                BCSE307P
+              </span>
+              <span className="text-[11px] font-var-meta text-[var(--md-sys-color-on-surface-variant,#d8c2bc)]">
+                Academic Engine
+              </span>
+            </div>
+            <h1 className="text-[26px] font-var-heading tracking-tight text-[var(--md-sys-color-on-surface,#ffffff)] leading-tight">
+              LabBook Academic Engine
+            </h1>
+            <p className="mt-1 text-[13px] font-var-subheading text-[var(--md-sys-color-on-surface-variant,#d8c2bc)]">
+              Relational division and GiST temporal exclusion visualizer
+            </p>
           </div>
-          <h1 className="text-[26px] font-var-heading tracking-tight text-white leading-tight">
-            LabBook Academic Engine
-          </h1>
-          <p className="mt-1 text-[13px] font-var-subheading text-[#e8b09f]">
-            Relational division and GiST temporal exclusion visualizer
-          </p>
-        </div>
 
-        <div className="flex flex-col gap-3 rounded-lg border border-white/15 bg-[#75200c]/80 p-4 shadow-sm">
+          <div className="flex flex-col gap-3 rounded-lg border border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.15))] bg-[var(--md-sys-color-surface-container,#2a110a)] p-4 shadow-sm">
           <div>
             <label className="font-var-label text-[11px] uppercase text-[#e8b09f] block mb-1">
               Select User
@@ -373,23 +369,23 @@ export default function Page() {
         </div>
 
         <div className="flex flex-wrap gap-2 items-center">
-          <m3e-button variant="filled" onClick={handleDivision} class="bg-white text-[#75200c] font-bold">
+          <m3e-button variant="filled" onClick={handleDivision}>
             Verify Division
           </m3e-button>
-          <m3e-button variant="filled" onClick={handleInsert} class="bg-white text-[#75200c] font-bold">
+          <m3e-button variant="filled" onClick={handleInsert}>
             Attempt Insert
           </m3e-button>
-          <m3e-button variant="outlined" onClick={handleReset} class="text-white border-white/40">
+          <m3e-button variant="outlined" onClick={handleReset}>
             Reset Seed
           </m3e-button>
         </div>
 
         <div
           ref={consoleRef}
-          className="min-h-[220px] flex-1 overflow-y-auto rounded-lg border border-white/15 bg-[#3a0d05] p-3 font-mono text-[12px] leading-relaxed text-[#f4ded4] shadow-inner"
+          className="min-h-[220px] flex-1 overflow-y-auto rounded-lg border border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.15))] bg-[var(--md-sys-color-surface-container-lowest,#180703)] p-3 font-mono text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface,#ffffff)] shadow-inner"
         >
           {logs.length === 0 && (
-            <div className="text-[#c57d6b] italic">
+            <div className="text-[var(--md-sys-color-outline,#a08c87)] italic">
               -- execution console online
             </div>
           )}
@@ -399,10 +395,15 @@ export default function Page() {
             </div>
           ))}
         </div>
+
+        <div className="border-t border-[var(--md-sys-color-outline-variant,rgba(255,255,255,0.1))] pt-2 flex items-center justify-between text-[11px] font-var-meta text-[var(--md-sys-color-outline,#a08c87)]">
+          <span>Lavanbarath B · 24BDS0155</span>
+          <span>Hariprannav S · 24BCE0659</span>
+        </div>
       </div>
 
       {/* Main visual canvas */}
-      <div className="h-full flex-1 relative bg-[#681c09]">
+      <div className="h-full flex-1 relative bg-[var(--md-sys-color-surface-dim,#1c0a05)]">
         <ReactFlow
           nodes={nodes}
           edges={edges}
