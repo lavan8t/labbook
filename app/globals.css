@@ -69,41 +69,41 @@
   --md-sys-color-success-container: #dcfce7;
   --md-sys-color-on-success-container: #14532d;
 
-  /* Fully Rounded Shapes for All Controls & Fields */
-  --m3e-button-shape: 9999px;
-  --m3e-button-shape-pressed-morph: 9999px;
-  --m3e-button-extra-small-shape-round: 9999px;
-  --m3e-button-small-shape-round: 9999px;
-  --m3e-button-medium-shape-round: 9999px;
-  --m3e-button-large-shape-round: 9999px;
-  --m3e-button-extra-large-shape-round: 9999px;
-  --m3e-button-extra-small-shape-pressed-morph: 9999px;
-  --m3e-button-small-shape-pressed-morph: 9999px;
-  --m3e-button-medium-shape-pressed-morph: 9999px;
-  --m3e-button-large-shape-pressed-morph: 9999px;
-  --m3e-button-extra-large-shape-pressed-morph: 9999px;
-  --m3e-select-container-shape: 9999px;
-  --m3e-form-field-container-shape: 9999px;
-  --m3e-outlined-form-field-container-shape: 9999px;
-  --m3e-form-field-active-indicator-shape: 9999px;
-  --m3e-chip-shape: 9999px;
-  --m3e-datepicker-container-shape: 28px;
-  --m3e-datepicker-docked-container-shape: 28px;
-  --m3e-datepicker-modal-container-shape: 28px;
-  --m3e-timepicker-container-shape: 28px;
-  --m3e-timepicker-modal-container-shape: 28px;
+  /* Clean Standard Shapes for Controls & Fields */
+  --m3e-button-shape: 8px;
+  --m3e-button-shape-pressed-morph: 8px;
+  --m3e-button-extra-small-shape-round: 8px;
+  --m3e-button-small-shape-round: 8px;
+  --m3e-button-medium-shape-round: 8px;
+  --m3e-button-large-shape-round: 8px;
+  --m3e-button-extra-large-shape-round: 8px;
+  --m3e-button-extra-small-shape-pressed-morph: 8px;
+  --m3e-button-small-shape-pressed-morph: 8px;
+  --m3e-button-medium-shape-pressed-morph: 8px;
+  --m3e-button-large-shape-pressed-morph: 8px;
+  --m3e-button-extra-large-shape-pressed-morph: 8px;
+  --m3e-select-container-shape: 8px;
+  --m3e-form-field-container-shape: 8px;
+  --m3e-outlined-form-field-container-shape: 8px;
+  --m3e-form-field-active-indicator-shape: 8px;
+  --m3e-chip-shape: 8px;
+  --m3e-datepicker-container-shape: 16px;
+  --m3e-datepicker-docked-container-shape: 16px;
+  --m3e-datepicker-modal-container-shape: 16px;
+  --m3e-timepicker-container-shape: 16px;
+  --m3e-timepicker-modal-container-shape: 16px;
   --m3e-option-panel-container-color: var(--md-sys-color-surface-container-low);
-  --m3e-option-panel-container-shape: 28px;
+  --m3e-option-panel-container-shape: 12px;
   --m3e-option-panel-container-min-width: 240px;
   --m3e-option-color: var(--md-sys-color-on-surface);
   --m3e-option-selected-container-color: var(--md-sys-color-primary-container);
   --m3e-option-selected-color: var(--md-sys-color-on-primary-container);
   --m3e-option-selected-container-hover-color: var(--md-sys-color-primary-container);
   --m3e-option-container-hover-color: var(--md-sys-color-surface-container-high);
-  --m3e-option-shape: 9999px;
-  --m3e-option-selected-shape: 9999px;
-  --m3e-option-first-child-shape: 9999px;
-  --m3e-option-last-child-shape: 9999px;
+  --m3e-option-shape: 8px;
+  --m3e-option-selected-shape: 8px;
+  --m3e-option-first-child-shape: 8px;
+  --m3e-option-last-child-shape: 8px;
 
   /* Borderless Surfaces */
   --m3e-form-field-outline-color: transparent;
@@ -114,30 +114,22 @@
 }
 
 /* Base typography with Google Sans Flex and ROND 100 */
+:root,
 html,
+body,
+m3e-theme,
+*,
+*::before,
+*::after {
+  font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-variation-settings: "ROND" 100;
+}
+
 body {
   background-color: var(--md-sys-color-background);
   color: var(--md-sys-color-on-background);
-  font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-variation-settings: 'ROND' 100;
   margin: 0;
   padding: 0;
-}
-
-body,
-input,
-button,
-select,
-textarea,
-m3e-select,
-m3e-option,
-m3e-form-field,
-m3e-button,
-m3e-datepicker,
-m3e-switch,
-m3e-chip {
-  font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-variation-settings: 'ROND' 100;
 }
 
 /* Titles: wider width (wdth) and heavier weight (wght) with rond 100 */
@@ -149,105 +141,105 @@ h5,
 h6,
 .font-title,
 [data-title] {
-  font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-variation-settings: 'ROND' 100, 'wdth' 125, 'wght' 700 !important;
+  font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-variation-settings: "ROND" 100, "wdth" 125, "wght" 700 !important;
   font-weight: 700 !important;
   letter-spacing: 0.015em;
 }
 
-/* Fully Rounded Form Fields and Controls with clean ripple clipping */
+/* Clean Standard Form Fields and Controls */
 m3e-form-field {
-  --m3e-form-field-container-shape: 9999px;
-  --m3e-outlined-form-field-container-shape: 9999px;
-  --m3e-form-field-active-indicator-shape: 9999px;
-  border-radius: 9999px !important;
+  --m3e-form-field-container-shape: 8px;
+  --m3e-outlined-form-field-container-shape: 8px;
+  --m3e-form-field-active-indicator-shape: 8px;
+  border-radius: 8px !important;
   overflow: hidden !important;
   isolation: isolate;
-  clip-path: inset(0 round 9999px);
+  clip-path: inset(0 round 8px);
 }
 
 m3e-form-field::part(container),
 m3e-form-field::part(outline),
 m3e-form-field .base {
-  border-radius: 9999px !important;
+  border-radius: 8px !important;
   overflow: hidden !important;
 }
 
 m3e-select {
-  --m3e-select-container-shape: 9999px;
-  border-radius: 9999px !important;
+  --m3e-select-container-shape: 8px;
+  border-radius: 8px !important;
   overflow: hidden !important;
   isolation: isolate;
-  clip-path: inset(0 round 9999px);
+  clip-path: inset(0 round 8px);
 }
 
 m3e-button,
 m3e-icon-button,
 m3e-segmented-button,
 m3e-chip {
-  --m3e-button-shape: 9999px;
-  border-radius: 9999px !important;
+  --m3e-button-shape: 8px;
+  border-radius: 8px !important;
   overflow: hidden !important;
   isolation: isolate;
   -webkit-mask-image: -webkit-radial-gradient(white, black);
-  clip-path: inset(0 round 9999px);
+  clip-path: inset(0 round 8px);
 }
 
 m3e-button::part(base),
 m3e-button .base {
-  border-radius: 9999px !important;
+  border-radius: 8px !important;
   overflow: hidden !important;
-  clip-path: inset(0 round 9999px);
+  clip-path: inset(0 round 8px);
 }
 
 m3e-button-group {
-  border-radius: 9999px !important;
+  border-radius: 8px !important;
   overflow: hidden !important;
-  clip-path: inset(0 round 9999px);
+  clip-path: inset(0 round 8px);
 }
 
 m3e-switch {
   border-radius: 9999px !important;
 }
 
-/* Select items fill and rounding styling with clipped ripples */
+/* Select items fill and clean rounding styling */
 m3e-option {
   --m3e-option-color: var(--md-sys-color-on-surface);
   --m3e-option-selected-container-color: var(--md-sys-color-primary-container);
   --m3e-option-selected-color: var(--md-sys-color-on-primary-container);
   --m3e-option-selected-container-hover-color: var(--md-sys-color-primary-container);
   --m3e-option-container-hover-color: var(--md-sys-color-surface-container-high);
-  --m3e-option-shape: 9999px;
-  --m3e-option-selected-shape: 9999px;
-  border-radius: 9999px !important;
+  --m3e-option-shape: 8px;
+  --m3e-option-selected-shape: 8px;
+  border-radius: 8px !important;
   overflow: hidden !important;
   isolation: isolate;
-  clip-path: inset(0 round 9999px);
+  clip-path: inset(0 round 8px);
   margin-block: 2px;
 }
 
 m3e-option::part(base),
 m3e-option .base {
-  border-radius: 9999px !important;
+  border-radius: 8px !important;
   overflow: hidden !important;
-  clip-path: inset(0 round 9999px);
+  clip-path: inset(0 round 8px);
 }
 
 m3e-option-panel {
   --m3e-option-panel-container-color: var(--md-sys-color-surface-container-low);
-  --m3e-option-panel-container-shape: 28px;
-  border-radius: 28px !important;
+  --m3e-option-panel-container-shape: 12px;
+  border-radius: 12px !important;
   overflow: hidden;
 }
 
 /* Modal Dialog Datepicker and Timepicker tokens */
 m3e-datepicker,
 m3e-timepicker {
-  --m3e-datepicker-modal-container-shape: 28px;
+  --m3e-datepicker-modal-container-shape: 16px;
   --m3e-datepicker-modal-container-color: var(--md-sys-color-surface-container-low);
-  --m3e-timepicker-modal-container-shape: 28px;
+  --m3e-timepicker-modal-container-shape: 16px;
   --m3e-timepicker-modal-container-color: var(--md-sys-color-surface-container-low);
-  --m3e-timepicker-dial-container-shape: 28px;
+  --m3e-timepicker-dial-container-shape: 16px;
 }
 
 /* Form Field Input Styling inside light theme with clear font size */
@@ -261,7 +253,16 @@ m3e-form-field m3e-date-input {
   font-size: 14px !important;
   font-weight: 500 !important;
   line-height: 20px !important;
-  border-radius: 9999px !important;
+  border-radius: 8px !important;
+}
+
+/* Logs console strictly uses Google Sans Code alone */
+.logs-console,
+.logs-console *,
+.font-code,
+.font-code * {
+  font-family: 'Google Sans Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-variation-settings: normal !important;
 }
 
 m3e-ripple {

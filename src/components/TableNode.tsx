@@ -25,7 +25,7 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
   return (
     <div
       data-table={data.tableName}
-      className="min-w-[340px] max-w-[460px] rounded-3xl bg-surface-container-lowest text-on-surface text-[13px] overflow-hidden shadow-sm"
+      className="min-w-[340px] max-w-[460px] rounded-xl bg-surface-container-lowest text-on-surface text-[13px] overflow-hidden shadow-sm"
     >
       {/* Table Header */}
       <div className="bg-surface-container px-4 py-3 text-[13px] text-primary flex items-center justify-between">
@@ -33,7 +33,7 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
           <m3e-icon name="table_chart"></m3e-icon>
           {data.tableName}
         </span>
-        <span className="font-mono text-[11px] text-on-primary-container bg-primary-container px-3 py-1 rounded-full">
+        <span className="font-mono text-[11px] text-on-primary-container bg-primary-container px-2.5 py-0.5 rounded-md">
           {data.rows.length} {data.rows.length === 1 ? "row" : "rows"}
         </span>
       </div>
