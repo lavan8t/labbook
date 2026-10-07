@@ -295,9 +295,6 @@ export default function Page() {
       {/* Main visual canvas */}
       <div className="h-full flex-1 relative bg-[#681c09]">
         <div className="absolute top-4 right-5 z-10 pointer-events-none select-none text-right opacity-30">
-          <div className="font-var-hero text-[60px] text-white tracking-tighter leading-none">
-            Compiler Design
-          </div>
           <div className="font-var-label text-[12px] uppercase tracking-widest text-white mt-1">
             Schema & Constraint Visualizer
           </div>
