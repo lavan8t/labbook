@@ -35,6 +35,7 @@ import "@m3e/web/divider";
 import "@m3e/web/tabs";
 import "@m3e/web/icon";
 import "@m3e/web/datepicker";
+import "@m3e/web/timepicker";
 import "@m3e/web/date-input";
 
 const nodeTypes = { table: TableNode };
@@ -60,8 +61,9 @@ export default function Page() {
   const [userId, setUserId] = useState<number>(1);
   const [resourceId, setResourceId] = useState<number>(201);
 
-  const [bookingDate, setBookingDate] = useState<string>("2026-10-15");
+  const [startDate, setStartDate] = useState<string>("2026-10-15");
   const [startTime, setStartTime] = useState<string>("10:30");
+  const [endDate, setEndDate] = useState<string>("2026-10-15");
   const [endTime, setEndTime] = useState<string>("11:30");
 
   const [purpose, setPurpose] = useState<string>("");
@@ -289,29 +291,29 @@ export default function Page() {
       const now = new Date();
       const dStr = formatDate(now);
       const tStr = formatTime(now);
-      setBookingDate(dStr);
+      setStartDate(dStr);
       setStartTime(tStr);
+      setEndDate(dStr);
 
       const later = new Date(now.getTime() + 60 * 60 * 1000);
+      setEndDate(formatDate(later));
       setEndTime(formatTime(later));
     }
   }
 
   function handleAdjustDuration(deltaMinutes: number) {
-    const currentStart = new Date(`${bookingDate}T${startTime}`);
-    const currentEnd = new Date(`${bookingDate}T${endTime}`);
+    const currentStart = new Date(`${startDate}T${startTime}`);
+    const currentEnd = new Date(`${endDate}T${endTime}`);
     const updatedEnd = new Date(currentEnd.getTime() + deltaMinutes * 60 * 1000);
 
     if (updatedEnd.getTime() <= currentStart.getTime() + 15 * 60 * 1000) {
       const minEnd = new Date(currentStart.getTime() + 15 * 60 * 1000);
+      setEndDate(formatDate(minEnd));
       setEndTime(formatTime(minEnd));
     } else {
+      setEndDate(formatDate(updatedEnd));
       setEndTime(formatTime(updatedEnd));
     }
-  }
-
-  function handleDateChange(newDate: string) {
-    setBookingDate(newDate);
   }
 
   function handleDivision() {
@@ -362,8 +364,8 @@ export default function Page() {
   }
 
   function handleInsert() {
-    const startIso = new Date(`${bookingDate}T${startTime}`).toISOString();
-    const endIso = new Date(`${bookingDate}T${endTime}`).toISOString();
+    const startIso = new Date(`${startDate}T${startTime}`).toISOString();
+    const endIso = new Date(`${endDate}T${endTime}`).toISOString();
 
     if (new Date(endIso).getTime() <= new Date(startIso).getTime()) {
       setFeedback({
@@ -478,6 +480,11 @@ export default function Page() {
     setDb(structuredClone(initialDb));
     setUserId(1);
     setResourceId(201);
+    setStartDate("2026-10-15");
+    setStartTime("10:30");
+    setEndDate("2026-10-15");
+    setEndTime("11:30");
+    setIsStartNow(false);
     resetVisualState();
     setFeedback({
       type: "info",
@@ -694,105 +701,221 @@ export default function Page() {
 
               {/* Section: Reservation Schedule */}
               <section className="space-y-4">
-                <h2 className="text-sm tracking-wide text-on-surface font-title">
-                  Reservation Schedule
-                </h2>
-
-                {/* Start Now Toggle */}
-                <div className="flex items-center justify-between py-1">
-                  <div>
-                    <span className="text-xs font-medium text-on-surface block">
-                      Start Now
-                    </span>
-                    <span className="text-[11px] text-outline">
-                      Capture current timestamp immediately
-                    </span>
-                  </div>
-                  <m3e-switch
-                    checked={isStartNow ? "" : undefined}
-                    onChange={(e: React.FormEvent<HTMLElement>) => {
-                      const target = e.target as HTMLInputElement | null;
-                      handleStartNowToggle(Boolean(target?.checked));
-                    }}
-                  ></m3e-switch>
-                </div>
-
-                {/* Date Selection with M3E DatePicker */}
-                <div className="space-y-1.5">
-                  <span className="text-xs font-medium text-on-surface-variant block">
-                    Reservation Date
-                  </span>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-sm tracking-wide text-on-surface font-title">
+                    Reservation Schedule
+                  </h2>
                   <div className="flex items-center gap-2">
-                    <m3e-form-field variant="filled" className="flex-1 block rounded-full">
-                      <label slot="label" htmlFor="booking-date-input">Date</label>
-                      <input
-                        id="booking-date-input"
-                        type="date"
-                        value={bookingDate}
-                        onChange={(e) => handleDateChange(e.target.value)}
-                        className="w-full text-xs font-mono px-4 py-2 bg-transparent focus:outline-none rounded-full"
-                      />
-                    </m3e-form-field>
-
-                    <m3e-button
-                      variant="tonal"
-                      type="button"
-                      className="rounded-full"
-                      onClick={() => {
-                        const picker = document.getElementById("booking-datepicker") as (HTMLElement & { toggle?: (el: HTMLElement | null) => void }) | null;
-                        const input = document.getElementById("booking-date-input");
-                        if (picker && input) {
-                          picker.toggle?.(input);
-                        }
+                    <span className="text-xs font-medium text-on-surface">Start Now</span>
+                    <m3e-switch
+                      checked={isStartNow ? "" : undefined}
+                      onChange={(e: React.FormEvent<HTMLElement>) => {
+                        const target = e.target as HTMLInputElement | null;
+                        handleStartNowToggle(Boolean(target?.checked));
                       }}
-                    >
-                      <m3e-icon slot="icon" name="calendar_today"></m3e-icon>
-                      Calendar
-                    </m3e-button>
+                    ></m3e-switch>
+                  </div>
+                </div>
+
+                {/* Merged Start and End Schedule Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Start Schedule: Date & Time */}
+                  <div className="p-4 rounded-3xl bg-surface-container-low space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-title tracking-wide text-primary flex items-center gap-1.5">
+                        <m3e-icon name="play_arrow"></m3e-icon>
+                        Start Schedule
+                      </span>
+                      <span className="text-[11px] font-mono text-outline">
+                        {startDate} {startTime}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <m3e-form-field variant="filled" className="flex-1 block rounded-full">
+                        <label slot="label" htmlFor="start-date-input">Start Date</label>
+                        <input
+                          id="start-date-input"
+                          type="date"
+                          value={startDate}
+                          onChange={(e) => {
+                            setStartDate(e.target.value);
+                            if (e.target.value > endDate) setEndDate(e.target.value);
+                          }}
+                          className="w-full text-sm font-mono px-4 py-2.5 bg-transparent focus:outline-none rounded-full font-medium"
+                        />
+                      </m3e-form-field>
+
+                      <m3e-button
+                        variant="tonal"
+                        type="button"
+                        className="rounded-full shrink-0"
+                        onClick={() => {
+                          const picker = document.getElementById("start-datepicker") as (HTMLElement & { toggle?: (el: HTMLElement | null) => void }) | null;
+                          const input = document.getElementById("start-date-input");
+                          if (picker && input) picker.toggle?.(input);
+                        }}
+                      >
+                        <m3e-icon slot="icon" name="calendar_today"></m3e-icon>
+                        Date
+                      </m3e-button>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <m3e-form-field variant="filled" className="flex-1 block rounded-full">
+                        <label slot="label" htmlFor="start-time-input">Start Time</label>
+                        <input
+                          id="start-time-input"
+                          type="time"
+                          value={startTime}
+                          onChange={(e) => {
+                            setStartTime(e.target.value);
+                            setIsStartNow(false);
+                          }}
+                          className="w-full text-sm font-mono px-4 py-2.5 bg-transparent focus:outline-none rounded-full font-medium"
+                        />
+                      </m3e-form-field>
+
+                      <m3e-button
+                        variant="tonal"
+                        type="button"
+                        className="rounded-full shrink-0"
+                        onClick={() => {
+                          const picker = document.getElementById("start-timepicker") as (HTMLElement & { toggle?: (el: HTMLElement | null) => void }) | null;
+                          const input = document.getElementById("start-time-input");
+                          if (picker && input) picker.toggle?.(input);
+                        }}
+                      >
+                        <m3e-icon slot="icon" name="schedule"></m3e-icon>
+                        Time
+                      </m3e-button>
+                    </div>
                   </div>
 
-                  <m3e-datepicker
-                    id="booking-datepicker"
-                    onChange={(e: React.FormEvent<HTMLElement>) => {
-                      const target = e.target as (EventTarget & { date?: Date }) | null;
-                      const d = target?.date;
-                      if (d instanceof Date) {
-                        handleDateChange(formatDate(d));
-                      }
-                    }}
-                  ></m3e-datepicker>
+                  {/* End Schedule: Date & Time */}
+                  <div className="p-4 rounded-3xl bg-surface-container-low space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-title tracking-wide text-primary flex items-center gap-1.5">
+                        <m3e-icon name="stop"></m3e-icon>
+                        End Schedule
+                      </span>
+                      <span className="text-[11px] font-mono text-outline">
+                        {endDate} {endTime}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <m3e-form-field variant="filled" className="flex-1 block rounded-full">
+                        <label slot="label" htmlFor="end-date-input">End Date</label>
+                        <input
+                          id="end-date-input"
+                          type="date"
+                          value={endDate}
+                          onChange={(e) => setEndDate(e.target.value)}
+                          className="w-full text-sm font-mono px-4 py-2.5 bg-transparent focus:outline-none rounded-full font-medium"
+                        />
+                      </m3e-form-field>
+
+                      <m3e-button
+                        variant="tonal"
+                        type="button"
+                        className="rounded-full shrink-0"
+                        onClick={() => {
+                          const picker = document.getElementById("end-datepicker") as (HTMLElement & { toggle?: (el: HTMLElement | null) => void }) | null;
+                          const input = document.getElementById("end-date-input");
+                          if (picker && input) picker.toggle?.(input);
+                        }}
+                      >
+                        <m3e-icon slot="icon" name="calendar_today"></m3e-icon>
+                        Date
+                      </m3e-button>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <m3e-form-field variant="filled" className="flex-1 block rounded-full">
+                        <label slot="label" htmlFor="end-time-input">End Time</label>
+                        <input
+                          id="end-time-input"
+                          type="time"
+                          value={endTime}
+                          onChange={(e) => setEndTime(e.target.value)}
+                          className="w-full text-sm font-mono px-4 py-2.5 bg-transparent focus:outline-none rounded-full font-medium"
+                        />
+                      </m3e-form-field>
+
+                      <m3e-button
+                        variant="tonal"
+                        type="button"
+                        className="rounded-full shrink-0"
+                        onClick={() => {
+                          const picker = document.getElementById("end-timepicker") as (HTMLElement & { toggle?: (el: HTMLElement | null) => void }) | null;
+                          const input = document.getElementById("end-time-input");
+                          if (picker && input) picker.toggle?.(input);
+                        }}
+                      >
+                        <m3e-icon slot="icon" name="schedule"></m3e-icon>
+                        Time
+                      </m3e-button>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Time Selection */}
-                <div className="grid grid-cols-2 gap-3">
-                  <m3e-form-field variant="filled" className="w-full block rounded-full">
-                    <label slot="label" htmlFor="start-time-input">Start Time</label>
-                    <input
-                      id="start-time-input"
-                      type="time"
-                      value={startTime}
-                      onChange={(e) => {
-                        setStartTime(e.target.value);
-                        setIsStartNow(false);
-                      }}
-                      className="w-full text-xs font-mono px-4 py-2 bg-transparent focus:outline-none rounded-full"
-                    />
-                  </m3e-form-field>
+                {/* Modal Dialog Pickers */}
+                <m3e-datepicker
+                  id="start-datepicker"
+                  variant="modal"
+                  onChange={(e: React.FormEvent<HTMLElement>) => {
+                    const target = e.target as (EventTarget & { date?: Date }) | null;
+                    const d = target?.date;
+                    if (d instanceof Date) {
+                      const str = formatDate(d);
+                      setStartDate(str);
+                      if (str > endDate) setEndDate(str);
+                    }
+                  }}
+                ></m3e-datepicker>
 
-                  <m3e-form-field variant="filled" className="w-full block rounded-full">
-                    <label slot="label" htmlFor="end-time-input">End Time</label>
-                    <input
-                      id="end-time-input"
-                      type="time"
-                      value={endTime}
-                      onChange={(e) => setEndTime(e.target.value)}
-                      className="w-full text-xs font-mono px-4 py-2 bg-transparent focus:outline-none rounded-full"
-                    />
-                  </m3e-form-field>
-                </div>
+                <m3e-datepicker
+                  id="end-datepicker"
+                  variant="modal"
+                  onChange={(e: React.FormEvent<HTMLElement>) => {
+                    const target = e.target as (EventTarget & { date?: Date }) | null;
+                    const d = target?.date;
+                    if (d instanceof Date) {
+                      setEndDate(formatDate(d));
+                    }
+                  }}
+                ></m3e-datepicker>
 
-                {/* Grouped Duration Stepper Buttons allowing - also */}
-                <div className="space-y-1.5">
+                <m3e-timepicker
+                  id="start-timepicker"
+                  variant="modal"
+                  format="24"
+                  onChange={(e: React.FormEvent<HTMLElement>) => {
+                    const target = e.target as (EventTarget & { date?: Date }) | null;
+                    const d = target?.date;
+                    if (d instanceof Date) {
+                      setStartTime(formatTime(d));
+                      setIsStartNow(false);
+                    }
+                  }}
+                ></m3e-timepicker>
+
+                <m3e-timepicker
+                  id="end-timepicker"
+                  variant="modal"
+                  format="24"
+                  onChange={(e: React.FormEvent<HTMLElement>) => {
+                    const target = e.target as (EventTarget & { date?: Date }) | null;
+                    const d = target?.date;
+                    if (d instanceof Date) {
+                      setEndTime(formatTime(d));
+                    }
+                  }}
+                ></m3e-timepicker>
+
+                {/* Grouped Duration Stepper Buttons */}
+                <div className="space-y-1.5 pt-1">
                   <span className="text-xs font-medium text-on-surface-variant block">
                     Adjust Duration
                   </span>
@@ -827,7 +950,7 @@ export default function Page() {
                     placeholder="e.g. Sample imaging protocol"
                     value={purpose}
                     onChange={(e) => setPurpose(e.target.value)}
-                    className="w-full text-xs px-4 py-2 bg-transparent focus:outline-none rounded-full"
+                    className="w-full text-sm px-4 py-2.5 bg-transparent focus:outline-none rounded-full"
                   />
                 </m3e-form-field>
               </section>
@@ -1041,10 +1164,10 @@ export default function Page() {
 
                 <div
                   ref={consoleRef}
-                  className="flex-1 overflow-y-auto rounded-3xl bg-on-surface p-5 font-mono text-[12px] leading-relaxed text-background"
+                  className="flex-1 overflow-y-auto rounded-3xl bg-surface-container-low p-5 font-mono text-[13px] leading-relaxed text-on-surface shadow-sm"
                 >
                   {logs.length === 0 ? (
-                    <div className="text-outline italic">
+                    <div className="text-on-surface-variant opacity-70 italic">
                       -- Console clear. Trigger booking or eligibility check to generate audit queries.
                     </div>
                   ) : (
@@ -1053,14 +1176,14 @@ export default function Page() {
                         key={i}
                         className={`whitespace-pre-wrap py-0.5 ${
                           line.startsWith("--")
-                            ? "opacity-60"
+                            ? "text-on-surface-variant opacity-70"
                             : line.includes("STATUS: 200")
                             ? "text-success font-semibold"
                             : line.includes("STATUS: 409") || line.includes("STATUS: 403")
                             ? "text-error font-semibold"
                             : line.startsWith("SELECT") || line.startsWith("INSERT")
-                            ? "text-primary-container font-semibold"
-                            : "text-background"
+                            ? "text-primary font-semibold"
+                            : "text-on-surface"
                         }`}
                       >
                         {line}

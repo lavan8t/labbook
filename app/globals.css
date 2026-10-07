@@ -71,6 +71,17 @@
 
   /* Fully Rounded Shapes for All Controls & Fields */
   --m3e-button-shape: 9999px;
+  --m3e-button-shape-pressed-morph: 9999px;
+  --m3e-button-extra-small-shape-round: 9999px;
+  --m3e-button-small-shape-round: 9999px;
+  --m3e-button-medium-shape-round: 9999px;
+  --m3e-button-large-shape-round: 9999px;
+  --m3e-button-extra-large-shape-round: 9999px;
+  --m3e-button-extra-small-shape-pressed-morph: 9999px;
+  --m3e-button-small-shape-pressed-morph: 9999px;
+  --m3e-button-medium-shape-pressed-morph: 9999px;
+  --m3e-button-large-shape-pressed-morph: 9999px;
+  --m3e-button-extra-large-shape-pressed-morph: 9999px;
   --m3e-select-container-shape: 9999px;
   --m3e-form-field-container-shape: 9999px;
   --m3e-outlined-form-field-container-shape: 9999px;
@@ -79,6 +90,8 @@
   --m3e-datepicker-container-shape: 28px;
   --m3e-datepicker-docked-container-shape: 28px;
   --m3e-datepicker-modal-container-shape: 28px;
+  --m3e-timepicker-container-shape: 28px;
+  --m3e-timepicker-modal-container-shape: 28px;
   --m3e-option-panel-container-color: var(--md-sys-color-surface-container-low);
   --m3e-option-panel-container-shape: 28px;
   --m3e-option-panel-container-min-width: 240px;
@@ -142,41 +155,62 @@ h6,
   letter-spacing: 0.015em;
 }
 
-/* Fully Rounded Form Fields and Selects */
+/* Fully Rounded Form Fields and Controls with clean ripple clipping */
 m3e-form-field {
   --m3e-form-field-container-shape: 9999px;
   --m3e-outlined-form-field-container-shape: 9999px;
   --m3e-form-field-active-indicator-shape: 9999px;
   border-radius: 9999px !important;
-  overflow: hidden;
+  overflow: hidden !important;
+  isolation: isolate;
+  clip-path: inset(0 round 9999px);
 }
 
 m3e-form-field::part(container),
 m3e-form-field::part(outline),
 m3e-form-field .base {
   border-radius: 9999px !important;
+  overflow: hidden !important;
 }
 
 m3e-select {
   --m3e-select-container-shape: 9999px;
   border-radius: 9999px !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  clip-path: inset(0 round 9999px);
 }
 
-m3e-button {
+m3e-button,
+m3e-icon-button,
+m3e-segmented-button,
+m3e-chip {
   --m3e-button-shape: 9999px;
   border-radius: 9999px !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  clip-path: inset(0 round 9999px);
+}
+
+m3e-button::part(base),
+m3e-button .base {
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+  clip-path: inset(0 round 9999px);
 }
 
 m3e-button-group {
   border-radius: 9999px !important;
-  overflow: hidden;
+  overflow: hidden !important;
+  clip-path: inset(0 round 9999px);
 }
 
 m3e-switch {
   border-radius: 9999px !important;
 }
 
-/* Select items fill and rounding styling */
+/* Select items fill and rounding styling with clipped ripples */
 m3e-option {
   --m3e-option-color: var(--md-sys-color-on-surface);
   --m3e-option-selected-container-color: var(--md-sys-color-primary-container);
@@ -186,16 +220,37 @@ m3e-option {
   --m3e-option-shape: 9999px;
   --m3e-option-selected-shape: 9999px;
   border-radius: 9999px !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  clip-path: inset(0 round 9999px);
   margin-block: 2px;
+}
+
+m3e-option::part(base),
+m3e-option .base {
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+  clip-path: inset(0 round 9999px);
 }
 
 m3e-option-panel {
   --m3e-option-panel-container-color: var(--md-sys-color-surface-container-low);
   --m3e-option-panel-container-shape: 28px;
   border-radius: 28px !important;
+  overflow: hidden;
 }
 
-/* Form Field Input Styling inside light theme */
+/* Modal Dialog Datepicker and Timepicker tokens */
+m3e-datepicker,
+m3e-timepicker {
+  --m3e-datepicker-modal-container-shape: 28px;
+  --m3e-datepicker-modal-container-color: var(--md-sys-color-surface-container-low);
+  --m3e-timepicker-modal-container-shape: 28px;
+  --m3e-timepicker-modal-container-color: var(--md-sys-color-surface-container-low);
+  --m3e-timepicker-dial-container-shape: 28px;
+}
+
+/* Form Field Input Styling inside light theme with clear font size */
 m3e-form-field input,
 m3e-form-field select,
 m3e-form-field m3e-select,
@@ -203,13 +258,39 @@ m3e-form-field m3e-date-input {
   color: var(--md-sys-color-on-surface) !important;
   background-color: transparent !important;
   font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 20px !important;
   border-radius: 9999px !important;
+}
+
+m3e-ripple {
+  border-radius: inherit !important;
+  overflow: hidden !important;
+  clip-path: inherit !important;
 }
 
 m3e-form-field input[type="datetime-local"],
 m3e-form-field input[type="date"],
-m3e-form-field input[type="time"] {
+m3e-form-field input[type="time"],
+input[type="date"],
+input[type="time"],
+input[type="date"]::-webkit-datetime-edit,
+input[type="time"]::-webkit-datetime-edit,
+input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+input[type="time"]::-webkit-datetime-edit-fields-wrapper,
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field,
+input[type="time"]::-webkit-datetime-edit-hour-field,
+input[type="time"]::-webkit-datetime-edit-minute-field,
+input[type="time"]::-webkit-datetime-edit-ampm-field {
   color-scheme: light;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 20px !important;
+  font-family: inherit !important;
 }
 
 /* ReactFlow Canvas styling */
