@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-roboto-flex), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+:root {
+  --bg-primary: #75200c;
+  --bg-panel: #86260f;
+  --bg-card: #e4beae;
+  --bg-card-alt: #eccdc0;
+  --bg-card-subtle: #f4ded4;
+  --text-primary: #ffffff;
+  --text-muted: #e8b09f;
+  --text-dim: #c57d6b;
+  --text-dark: #3a0d05;
+  --text-dark-muted: #6e2718;
+  --border-subtle: rgba(255, 255, 255, 0.14);
+  --border-strong: rgba(255, 255, 255, 0.28);
+  --border-card: rgba(117, 32, 12, 0.2);
+  --accent-tint: #f3dfd6;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-roboto-flex), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "cv01", "ss01", "kern" 1;
+  font-optical-sizing: auto;
+  font-variation-settings: "GRAD" 0, "wdth" 100, "opsz" 14;
+}
+
+/* Mathematically tuned font-variation optical hierarchies */
+.font-var-hero {
+  font-variation-settings: "wght" 850, "wdth" 108, "opsz" 48, "GRAD" 100, "XTRA" 500;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+.font-var-heading {
+  font-variation-settings: "wght" 700, "wdth" 102, "opsz" 28, "GRAD" 50;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.font-var-subheading {
+  font-variation-settings: "wght" 550, "wdth" 98, "opsz" 18, "GRAD" 20;
+  letter-spacing: -0.015em;
+}
+
+.font-var-label {
+  font-variation-settings: "wght" 650, "wdth" 95, "opsz" 11, "GRAD" 80;
+  letter-spacing: 0.06em;
+}
+
+.font-var-body {
+  font-variation-settings: "wght" 420, "wdth" 100, "opsz" 13;
+  line-height: 1.45;
+}
+
+.font-var-table-title {
+  font-variation-settings: "wght" 750, "wdth" 104, "opsz" 13, "GRAD" 60;
+  letter-spacing: 0.04em;
+}
+
+.font-var-meta {
+  font-variation-settings: "wght" 500, "wdth" 96, "opsz" 10;
+  letter-spacing: 0.02em;
+}
+
+/* Custom ReactFlow styling for terracotta canvas */
+.react-flow__background {
+  background-color: #681c09 !important;
+}
+
+.react-flow__controls {
+  box-shadow: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+}
+
+.react-flow__controls-button {
+  background: #86260f !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+  fill: #ffffff !important;
+  color: #ffffff !important;
+}
+
+.react-flow__controls-button:hover {
+  background: #9d2e13 !important;
+}
+
+.react-flow__controls-button svg {
+  fill: #ffffff !important;
+}
+
+code, pre, .font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
