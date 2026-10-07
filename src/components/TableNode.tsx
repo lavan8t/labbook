@@ -29,7 +29,10 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
     >
       {/* Table Header */}
       <div className="border-b border-[rgba(255,219,209,0.12)] bg-[#33221c] px-3.5 py-2.5 text-[13px] font-var-table-title text-[#ffdbd1] flex items-center justify-between">
-        <span className="font-semibold tracking-wide font-mono">{data.tableName}</span>
+        <span className="font-semibold tracking-wide font-mono flex items-center gap-1.5">
+          <m3e-icon name="table_chart"></m3e-icon>
+          {data.tableName}
+        </span>
         <span className="font-mono text-[11px] text-[#ffb59d] bg-[#4a261b] px-2 py-0.5 rounded-[6px]">
           {data.rows.length} {data.rows.length === 1 ? "row" : "rows"}
         </span>

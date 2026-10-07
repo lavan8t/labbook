@@ -469,18 +469,21 @@ export default function Page() {
                 variant={activeTab === "book" ? "filled" : "text"}
                 onClick={() => setActiveTab("book")}
               >
+                <m3e-icon slot="icon" name="calendar_today"></m3e-icon>
                 Book Equipment
               </m3e-button>
               <m3e-button
                 variant={activeTab === "schema" ? "filled" : "text"}
                 onClick={() => setActiveTab("schema")}
               >
+                <m3e-icon slot="icon" name="schema"></m3e-icon>
                 ER Schema Graph
               </m3e-button>
               <m3e-button
                 variant={activeTab === "logs" ? "filled" : "text"}
                 onClick={() => setActiveTab("logs")}
               >
+                <m3e-icon slot="icon" name="terminal"></m3e-icon>
                 SQL Audit Logs
               </m3e-button>
             </div>
@@ -489,11 +492,13 @@ export default function Page() {
           {/* Right Meta & Controls without pulsing dot */}
           <div className="flex items-center gap-3">
             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-[8px] bg-[#271f1c] border border-[rgba(255,219,209,0.1)] text-xs text-[#d0c4bf]">
+              <m3e-icon name="person" class="text-[#ffb59d]"></m3e-icon>
               <span className="font-mono text-[11px] text-[#9d8e87]">Staff:</span>
               <span className="font-medium text-[#ffb59d]">{selectedUser.name}</span>
             </div>
 
             <m3e-button variant="outlined" onClick={handleReset}>
+              <m3e-icon slot="icon" name="restart_alt"></m3e-icon>
               Reset Seed
             </m3e-button>
           </div>
@@ -530,21 +535,36 @@ export default function Page() {
                     }}
                   >
                     <div slot="content" className="p-4 flex items-start justify-between">
-                      <div className="space-y-1">
-                        <div className="text-xs font-semibold tracking-wide text-[#ede0dc]">
-                          {feedback.title}
+                      <div className="flex items-start gap-3">
+                        <m3e-icon
+                          name={
+                            feedback.type === "success"
+                              ? "check_circle"
+                              : feedback.type === "conflict"
+                              ? "error"
+                              : feedback.type === "forbidden"
+                              ? "warning"
+                              : "info"
+                          }
+                          class="text-base mt-0.5"
+                        ></m3e-icon>
+                        <div className="space-y-1">
+                          <div className="text-xs font-semibold tracking-wide text-[#ede0dc]">
+                            {feedback.title}
+                          </div>
+                          <p className="text-xs text-[#d0c4bf]">{feedback.message}</p>
+                          {feedback.sqlSnippet && (
+                            <p className="text-[11px] font-mono text-[#9d8e87] pt-1">
+                              {feedback.sqlSnippet}
+                            </p>
+                          )}
                         </div>
-                        <p className="text-xs text-[#d0c4bf]">{feedback.message}</p>
-                        {feedback.sqlSnippet && (
-                          <p className="text-[11px] font-mono text-[#9d8e87] pt-1">
-                            {feedback.sqlSnippet}
-                          </p>
-                        )}
                       </div>
                       <m3e-button
                         variant="text"
                         onClick={() => setFeedback(null)}
                       >
+                        <m3e-icon slot="icon" name="close"></m3e-icon>
                         Dismiss
                       </m3e-button>
                     </div>
@@ -558,9 +578,12 @@ export default function Page() {
                     {/* Step 1: Staff Selection Card */}
                     <m3e-card variant="outlined" className="block">
                       <div slot="header" className="flex items-center justify-between p-4 pb-2 border-b border-[rgba(255,219,209,0.1)]">
-                        <span className="text-sm font-semibold text-[#ffb59d]">
-                          1. Select Staff Member
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <m3e-icon name="badge" class="text-sm text-[#ffb59d]"></m3e-icon>
+                          <span className="text-sm font-semibold text-[#ffb59d]">
+                            1. Select Staff Member
+                          </span>
+                        </div>
                         <span className="text-xs font-mono text-[#9d8e87]">
                           users table
                         </span>
@@ -611,9 +634,12 @@ export default function Page() {
                     {/* Step 2: Equipment Selection Card */}
                     <m3e-card variant="outlined" className="block">
                       <div slot="header" className="flex items-center justify-between p-4 pb-2 border-b border-[rgba(255,219,209,0.1)]">
-                        <span className="text-sm font-semibold text-[#ffb59d]">
-                          2. Select Laboratory Equipment
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <m3e-icon name="science" class="text-sm text-[#ffb59d]"></m3e-icon>
+                          <span className="text-sm font-semibold text-[#ffb59d]">
+                            2. Select Laboratory Equipment
+                          </span>
+                        </div>
                         <span className="text-xs font-mono text-[#9d8e87]">
                           equipment table
                         </span>
@@ -641,17 +667,19 @@ export default function Page() {
                         {/* Equipment Meta Details */}
                         <div className="grid grid-cols-2 gap-3 pt-1">
                           <div className="p-3 rounded-[8px] bg-[#271f1c] border border-[rgba(255,219,209,0.1)]">
-                            <span className="text-[11px] font-mono text-[#9d8e87] block">
-                              Location
-                            </span>
+                            <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#9d8e87] mb-0.5">
+                              <m3e-icon name="location_on" class="text-xs text-[#ffb59d]"></m3e-icon>
+                              <span>Location</span>
+                            </div>
                             <span className="text-xs font-medium text-[#ede0dc]">
                               {selectedEquipment.location}
                             </span>
                           </div>
                           <div className="p-3 rounded-[8px] bg-[#271f1c] border border-[rgba(255,219,209,0.1)]">
-                            <span className="text-[11px] font-mono text-[#9d8e87] block">
-                              Status
-                            </span>
+                            <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#9d8e87] mb-0.5">
+                              <m3e-icon name="check_circle" class="text-xs text-[#4ade80]"></m3e-icon>
+                              <span>Status</span>
+                            </div>
                             <span className="text-xs font-medium text-[#4ade80]">
                               {selectedEquipment.status}
                             </span>
@@ -702,9 +730,13 @@ export default function Page() {
                     >
                       <div slot="content" className="p-4 space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium text-[#d0c4bf]">
-                            Relational Division Status
-                          </span>
+                          <div className="flex items-center gap-1.5 text-xs font-medium text-[#d0c4bf]">
+                            <m3e-icon
+                              name={divisionResult.eligible ? "verified_user" : "gpp_bad"}
+                              class={`text-sm ${divisionResult.eligible ? "text-[#4ade80]" : "text-[#ffb4a8]"}`}
+                            ></m3e-icon>
+                            <span>Relational Division Status</span>
+                          </div>
                           <span
                             className={`px-2 py-0.5 rounded-[4px] text-xs font-medium font-mono ${
                               divisionResult.eligible
@@ -737,9 +769,12 @@ export default function Page() {
                     {/* Step 3: Reservation Schedule Card */}
                     <m3e-card variant="outlined" className="block">
                       <div slot="header" className="flex items-center justify-between p-4 pb-2 border-b border-[rgba(255,219,209,0.1)]">
-                        <span className="text-sm font-semibold text-[#ffb59d]">
-                          3. Reservation Schedule
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <m3e-icon name="schedule" class="text-sm text-[#ffb59d]"></m3e-icon>
+                          <span className="text-sm font-semibold text-[#ffb59d]">
+                            3. Reservation Schedule
+                          </span>
+                        </div>
                         <span className="text-xs font-mono text-[#9d8e87]">
                           tstzrange check
                         </span>
@@ -835,6 +870,7 @@ export default function Page() {
                           className="w-full"
                           onClick={handleInsert}
                         >
+                          <m3e-icon slot="icon" name="bookmark_added"></m3e-icon>
                           Submit Booking
                         </m3e-button>
                         <m3e-button
@@ -842,6 +878,7 @@ export default function Page() {
                           className="w-full"
                           onClick={handleDivision}
                         >
+                          <m3e-icon slot="icon" name="verified_user"></m3e-icon>
                           Verify Eligibility (Relational Division)
                         </m3e-button>
                       </div>
@@ -852,19 +889,23 @@ export default function Page() {
                 {/* Active Bookings Table Section */}
                 <m3e-card variant="outlined" className="block">
                   <div slot="header" className="flex items-center justify-between p-4 pb-2 border-b border-[rgba(255,219,209,0.1)]">
-                    <div>
-                      <span className="text-sm font-semibold text-[#ffb59d] block">
-                        Active Reservations
-                      </span>
-                      <p className="text-xs text-[#9d8e87]">
-                        Enforced by PostgreSQL GiST temporal exclusion constraint
-                      </p>
+                    <div className="flex items-center gap-2">
+                      <m3e-icon name="event_available" class="text-base text-[#ffb59d]"></m3e-icon>
+                      <div>
+                        <span className="text-sm font-semibold text-[#ffb59d] block">
+                          Active Reservations
+                        </span>
+                        <p className="text-xs text-[#9d8e87]">
+                          Enforced by PostgreSQL GiST temporal exclusion constraint
+                        </p>
+                      </div>
                     </div>
 
                     <m3e-button
                       variant="tonal"
                       onClick={() => setFilterUserOnly(!filterUserOnly)}
                     >
+                      <m3e-icon slot="icon" name="filter_list"></m3e-icon>
                       {filterUserOnly ? `User: ${selectedUser.name}` : "All Bookings"}
                     </m3e-button>
                   </div>
@@ -945,6 +986,7 @@ export default function Page() {
                                       className="text-[#f87171]"
                                       onClick={() => handleCancelBooking(b.booking_id)}
                                     >
+                                      <m3e-icon slot="icon" name="cancel"></m3e-icon>
                                       Cancel
                                     </m3e-button>
                                   ) : (
@@ -979,6 +1021,7 @@ export default function Page() {
             <div className="h-full w-full relative bg-[#150f0e]">
               {/* Floating Toolbar */}
               <div className="absolute top-4 left-4 z-10 bg-[#201a18] border border-[rgba(255,219,209,0.15)] rounded-[8px] p-3 flex items-center gap-3">
+                <m3e-icon name="schema" class="text-sm text-[#ffb59d]"></m3e-icon>
                 <span className="text-xs font-mono font-medium text-[#ffb59d]">
                   ER Graph
                 </span>
@@ -989,12 +1032,14 @@ export default function Page() {
                   variant="filled"
                   onClick={handleDivision}
                 >
+                  <m3e-icon slot="icon" name="verified_user"></m3e-icon>
                   Test Division
                 </m3e-button>
                 <m3e-button
                   variant="outlined"
                   onClick={handleInsert}
                 >
+                  <m3e-icon slot="icon" name="add_circle"></m3e-icon>
                   Test Insert
                 </m3e-button>
               </div>
@@ -1017,16 +1062,20 @@ export default function Page() {
             <div className="h-full flex flex-col p-6 bg-[#191210] overflow-hidden">
               <div className="max-w-5xl w-full mx-auto flex-1 flex flex-col space-y-4">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-sm font-semibold font-mono text-[#ede0dc]">
-                      SQL Execution and Relational Calculus Stream
-                    </h2>
-                    <p className="text-xs text-[#9d8e87]">
-                      Real-time queries generated by relational division evaluation and GiST exclusion checks
-                    </p>
+                  <div className="flex items-center gap-2.5">
+                    <m3e-icon name="terminal" class="text-base text-[#ffb59d]"></m3e-icon>
+                    <div>
+                      <h2 className="text-sm font-semibold font-mono text-[#ede0dc]">
+                        SQL Execution and Relational Calculus Stream
+                      </h2>
+                      <p className="text-xs text-[#9d8e87]">
+                        Real-time queries generated by relational division evaluation and GiST exclusion checks
+                      </p>
+                    </div>
                   </div>
                   <div className="flex gap-2">
                     <m3e-button variant="outlined" onClick={() => setLogs([])}>
+                      <m3e-icon slot="icon" name="delete_sweep"></m3e-icon>
                       Clear Log
                     </m3e-button>
                     <m3e-button
@@ -1035,6 +1084,7 @@ export default function Page() {
                         navigator.clipboard?.writeText(logs.join("\n"));
                       }}
                     >
+                      <m3e-icon slot="icon" name="content_copy"></m3e-icon>
                       Copy SQL
                     </m3e-button>
                   </div>
