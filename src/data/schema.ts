@@ -1,8 +1,10 @@
-export type Role = "Researcher" | "Faculty" | "Student";
+export type UserType = "admin" | "normal";
+export type Role = "Researcher" | "Faculty" | "Student" | "Technician";
 
 export interface User {
   user_id: number;
   name: string;
+  user_type: UserType;
   role: Role;
   department: string;
 }
@@ -51,9 +53,9 @@ export interface DbState {
 
 export const initialDb: DbState = {
   users: [
-    { user_id: 1, name: "Alice Chen", role: "Researcher", department: "Bioengineering" },
-    { user_id: 2, name: "Bob Kumar", role: "Researcher", department: "Materials Science" },
-    { user_id: 3, name: "Charlie Davis", role: "Faculty", department: "Physics" },
+    { user_id: 1, name: "Alice Chen", user_type: "normal", role: "Researcher", department: "Bioengineering" },
+    { user_id: 2, name: "Bob Kumar", user_type: "normal", role: "Researcher", department: "Materials Science" },
+    { user_id: 3, name: "Charlie Davis", user_type: "admin", role: "Faculty", department: "Physics" },
   ],
   qualifications: [
     { qualification_id: 101, name: "Laser Safety Level 2" },
