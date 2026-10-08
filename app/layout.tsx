@@ -28,7 +28,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className="min-h-full font-sans antialiased bg-background text-on-background"
+        className="min-h-full font-sans antialiased bg-surface text-on-surface"
         style={{ fontVariationSettings: "'ROND' 100" }}
       >
         {children}

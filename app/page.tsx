@@ -922,13 +922,13 @@ export default function Page() {
       style={{ fontVariationSettings: "'ROND' 100" }}
     >
       <div
-        className="flex flex-col min-h-screen w-screen bg-background text-on-background overflow-x-hidden"
+        className="flex flex-col min-h-screen w-screen bg-surface text-on-surface overflow-x-hidden"
         style={{ fontVariationSettings: "'ROND' 100" }}
       >
         {/* LOGIN SCREEN: Shown when not authenticated */}
         {!currentUser ? (
-          <div className="flex-1 flex items-center justify-center p-6 bg-surface-container-lowest">
-            <div className="max-w-md w-full bg-surface-container-low rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
+          <div className="flex-1 flex items-center justify-center p-6 bg-surface">
+            <div className="max-w-md w-full space-y-6">
               <div className="flex items-center gap-3">
                 <span className="p-2.5 rounded-xl bg-primary-container text-on-primary-container">
                   <m3e-icon name="inventory_2"></m3e-icon>
@@ -941,24 +941,6 @@ export default function Page() {
                     Inventory & Laboratory Management System
                   </p>
                 </div>
-              </div>
-
-              {/* Mode switch */}
-              <div className="flex gap-2 p-1 bg-surface-container rounded-xl">
-                <m3e-button
-                  variant={authMode === "login" ? "filled" : "text"}
-                  className="flex-1 rounded-lg text-xs font-title"
-                  onClick={() => setAuthMode("login")}
-                >
-                  Sign In
-                </m3e-button>
-                <m3e-button
-                  variant={authMode === "register" ? "filled" : "text"}
-                  className="flex-1 rounded-lg text-xs font-title"
-                  onClick={() => setAuthMode("register")}
-                >
-                  Create Account
-                </m3e-button>
               </div>
 
               {/* Sign In Form */}
@@ -1007,6 +989,16 @@ export default function Page() {
                   >
                     Enter Portal
                   </m3e-button>
+
+                  <div className="text-center pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setAuthMode("register")}
+                      className="text-xs text-primary hover:underline font-medium cursor-pointer"
+                    >
+                      New user? Create an account
+                    </button>
+                  </div>
                 </div>
               ) : (
                 /* Register User Form */
@@ -1072,6 +1064,16 @@ export default function Page() {
                   >
                     Create User & Sign In
                   </m3e-button>
+
+                  <div className="text-center pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setAuthMode("login")}
+                      className="text-xs text-primary hover:underline font-medium cursor-pointer"
+                    >
+                      Already have an account? Sign in
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -1190,7 +1192,7 @@ export default function Page() {
             </header>
 
             {/* Main Content Area */}
-            <main className="flex-1 relative bg-background min-h-0 flex flex-col">
+            <main className="flex-1 relative bg-surface min-h-0 flex flex-col">
               {/* Global Feedback Banner */}
               {feedback && (
                 <div className="max-w-4xl mx-auto w-full px-6 pt-4">
@@ -1316,7 +1318,7 @@ export default function Page() {
                     <h3 className="text-xs font-title tracking-wide text-on-surface">
                       Current Inventory ({db.equipment.length} items)
                     </h3>
-                    <div className="overflow-x-auto rounded-xl bg-surface-container-lowest">
+                    <div className="overflow-x-auto rounded-xl bg-surface-container-low">
                       <table className="w-full text-left text-xs font-mono">
                         <thead>
                           <tr className="bg-surface-container text-on-surface-variant">
@@ -2106,7 +2108,7 @@ export default function Page() {
                     </div>
                   </div>
 
-                  <div className="overflow-x-auto rounded-xl bg-surface-container-lowest">
+                  <div className="overflow-x-auto rounded-xl bg-surface-container-low">
                     <table className="w-full text-left text-xs font-mono">
                       <thead>
                         <tr className="bg-surface-container text-on-surface-variant">
@@ -2208,9 +2210,9 @@ export default function Page() {
                     height: "calc(100vh - 48px)",
                     minHeight: "500px",
                   }}
-                  className="relative bg-background"
+                  className="relative bg-surface"
                 >
-                  <div className="absolute top-4 left-4 z-10 bg-surface-container-lowest shadow-sm rounded-xl px-4 py-2 flex items-center gap-3">
+                  <div className="absolute top-4 left-4 z-10 bg-surface-container-low shadow-sm rounded-xl px-4 py-2 flex items-center gap-3">
                     <span className="text-xs font-title text-primary">
                       ER Graph
                     </span>
@@ -2256,7 +2258,7 @@ export default function Page() {
               {activeTab === "logs" && (
                 <div
                   style={{ width: "100%", height: "calc(100vh - 48px)" }}
-                  className="flex flex-col p-6 bg-background overflow-hidden"
+                  className="flex flex-col p-6 bg-surface overflow-hidden"
                 >
                   <div className="max-w-4xl w-full mx-auto flex-1 flex flex-col space-y-4">
                     <div className="flex items-center justify-between">

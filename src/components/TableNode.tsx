@@ -25,7 +25,7 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
   return (
     <div
       data-table={data.tableName}
-      className="min-w-[340px] max-w-[460px] rounded-xl bg-surface-container-lowest text-on-surface text-[13px] overflow-hidden shadow-sm"
+      className="min-w-[340px] max-w-[460px] rounded-xl bg-surface-container-low text-on-surface text-[13px] overflow-hidden shadow-sm"
     >
       {/* Table Header */}
       <div className="bg-surface-container px-4 py-3 text-[13px] text-primary flex items-center justify-between">
@@ -68,7 +68,7 @@ export default function TableNode({ data }: NodeProps<Node<TableNodeData>>) {
           </thead>
 
           {/* Table Data Rows */}
-          <tbody className="bg-surface-container-lowest">
+          <tbody className="bg-surface-container-low">
             {data.rows.length === 0 ? (
               <tr>
                 <td
