@@ -179,6 +179,10 @@ export async function cancelBooking(bookingId: number | string, userId: number):
   });
 }
 
+export async function getTimetableBookings(date: string): Promise<{ success: boolean; date: string; data: Booking[] }> {
+  return apiFetch(`/bookings/timetable?date=${date}`);
+}
+
 // 4. Admin Operations
 export async function getPendingApprovals(): Promise<{ success: boolean; count: number; data: Booking[] }> {
   return apiFetch("/admin/pending");

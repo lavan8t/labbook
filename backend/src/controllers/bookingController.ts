@@ -226,3 +226,57 @@ export async function cancelBooking(req: Request, res: Response, next: NextFunct
     next(err);
   }
 }
+
+// GET /api/bookings/timetable?date=YYYY-MM-DD
+export async function getTimetableBookings(req: Request, res: Response, next: NextFunction) {
+  try {
+    const dateStr = (req.query.date as string) || new Date().toISOString().split("T")[0];
+
+    const result = await query(
+      `SELECT 
+        b.booking_id,
+        b.booking_ref,
+        b.venue_id,
+        v.venue_name,
+        v.venue_type,
+        v.building,
+        v.seating_capacity,
+        b.user_id,
+        u.full_name AS requester_name,
+        u.email AS requester_email,
+        u.department,
+        r.role_code AS requester_role,
+        c.club_name,
+        e.event_id,
+        e.event_title,
+        e.event_type,
+        e.expected_attendees,
+        b.start_datetime,
+        b.end_datetime,
+        b.booking_status,
+        b.purpose_notes,
+        ba.decision AS approval_decision,
+        ba.remarks AS admin_remarks
+      FROM bookings b
+      JOIN venues v ON b.venue_id = v.venue_id
+      JOIN users u ON b.user_id = u.user_id
+      JOIN roles r ON u.role_id = r.role_id
+      JOIN events e ON b.event_id = e.event_id
+      LEFT JOIN clubs c ON e.club_id = c.club_id
+      LEFT JOIN booking_approvals ba ON b.booking_id = ba.booking_id
+      WHERE DATE(b.start_datetime AT TIME ZONE 'UTC') = $1
+        AND b.booking_status IN ('CONFIRMED', 'PENDING')
+      ORDER BY b.start_datetime ASC`,
+      [dateStr]
+    );
+
+    res.json({
+      success: true,
+      count: result.rows.length,
+      date: dateStr,
+      data: result.rows,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
