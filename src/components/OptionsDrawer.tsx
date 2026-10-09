@@ -183,10 +183,6 @@ export function OptionsDrawer({
                 </span>
               </div>
 
-              <p className="text-[11px] text-on-surface-variant leading-relaxed">
-                Re-fetch the latest campus auditorium schedules, booking queues, and clash matrices from the database.
-              </p>
-
               <m3e-button
                 variant="filled"
                 onClick={onSyncDb}
@@ -216,9 +212,6 @@ export function OptionsDrawer({
               onSubmit={handleUpdatePasscode}
               className="bg-surface-container-low border border-outline-variant/60 rounded-xl p-3.5 space-y-3"
             >
-              <p className="text-[11px] text-on-surface-variant leading-relaxed">
-                Update the administrator passcode used for accessing administrative overrides and pending approvals.
-              </p>
 
               {passcodeError && (
                 <div className="p-2.5 rounded-lg bg-error/10 border border-error/20 text-error text-[11px] flex items-start gap-2">

@@ -337,15 +337,6 @@ export function BookingForm({
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
       {/* Left Column: Booking Form */}
       <div className="lg:col-span-7 bg-surface rounded-lg border border-outline-variant p-6 sm:p-8">
-        <div className="border-b border-outline-variant pb-4 mb-6">
-          <h2 className="text-base font-bold text-on-surface">
-            Submit Auditorium / Hall Booking Request
-          </h2>
-          <p className="text-xs text-on-surface-variant mt-1">
-            Bookings are submitted in PENDING status and reviewed by the Estate Administrator.
-          </p>
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Target Venue / Hall Selector */}
           <div>

@@ -37,15 +37,6 @@ export function VenueCatalog({
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center mb-2">
-        <div>
-          <h2 className="text-base font-bold text-on-surface">Campus Venues Master Catalog</h2>
-          <p className="text-xs text-on-surface-variant">
-            Comprehensive overview of university auditoriums, mini-audis, and smart lecture halls.
-          </p>
-        </div>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {venues.map((venue) => {
           const isSelected =

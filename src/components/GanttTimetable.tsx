@@ -6,6 +6,8 @@ import {
   generateTimeSlots,
   getBookingSpan,
   formatSlotTime,
+  formatDateDDMMYYYY,
+  formatTimeRailway,
 } from "@/lib/timetableUtils";
 
 import "@m3e/web/card";
@@ -51,25 +53,11 @@ const CATEGORY_OPTIONS: CategoryOption[] = [
 ];
 
 function formatTimeDisplay(isoStr: string): string {
-  try {
-    const match = isoStr.match(/(\d{1,2}):(\d{2})/);
-    if (match) {
-      const h = parseInt(match[1], 10);
-      const m = match[2];
-      const period = h >= 12 ? "PM" : "AM";
-      const displayH = h % 12 === 0 ? 12 : h % 12;
-      return `${displayH}:${m} ${period}`;
-    }
-  } catch {
-    // fallback to raw string
-  }
-  return isoStr;
+  return formatTimeRailway(isoStr);
 }
 
 function formatTimeRangeDisplay(startIso: string, endIso: string): string {
-  const start = formatTimeDisplay(startIso);
-  const end = formatTimeDisplay(endIso);
-  return `${start} – ${end}`;
+  return `${formatTimeRailway(startIso)} – ${formatTimeRailway(endIso)}`;
 }
 
 export function GanttTimetable({
@@ -180,18 +168,7 @@ export function GanttTimetable({
   };
 
   const formattedDateTitle = useMemo(() => {
-    try {
-      const [y, m, d] = selectedDate.split("-").map(Number);
-      const dateObj = new Date(y, m - 1, d);
-      return dateObj.toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      });
-    } catch {
-      return selectedDate;
-    }
+    return formatDateDDMMYYYY(selectedDate);
   }, [selectedDate]);
 
   // Filter venues by selected category
@@ -320,42 +297,13 @@ export function GanttTimetable({
             })}
           </div>
         </div>
-
-        {/* Status Legend Row (strictly no dots anywhere) */}
-        <div className="mt-3 pt-3 border-t border-outline-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <span className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wider">
-              Status Legend:
-            </span>
-
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold">
-              <m3e-icon name="check_circle" className="text-xs text-emerald-600 dark:text-emerald-400"></m3e-icon>
-              Confirmed Booking
-            </span>
-
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/30 text-[11px] font-semibold">
-              <m3e-icon name="schedule" className="text-xs text-amber-600 dark:text-amber-400"></m3e-icon>
-              Pending Review
-            </span>
-
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container-low text-on-surface-variant border border-dashed border-outline-variant text-[11px] font-medium">
-              <m3e-icon name="add" className="text-xs text-primary"></m3e-icon>
-              Available Slot (Click to Book)
-            </span>
-          </div>
-
-          <div className="text-[11px] text-on-surface-variant italic">
-            Showing {filteredVenues.length} venue
-            {filteredVenues.length === 1 ? "" : "s"} &bull; 08:00 to 21:00
-          </div>
-        </div>
       </m3e-card>
 
       {/* Loading Bar */}
       {loading && (
         <div className="p-3 bg-surface-container-low rounded-lg border border-outline-variant flex items-center justify-center gap-2 text-xs text-primary font-medium">
           <m3e-icon name="sync" className="animate-spin text-sm"></m3e-icon>
-          Updating timetable bookings for {selectedDate}...
+          Updating timetable bookings for {formatDateDDMMYYYY(selectedDate)}...
         </div>
       )}
 
@@ -386,10 +334,7 @@ export function GanttTimetable({
                           : "bg-surface-container/60 text-on-surface-variant font-medium"
                       }`}
                     >
-                      <span className="text-[11px] leading-tight">
-                        {slot.label}
-                      </span>
-                      <span className="text-[9px] text-on-surface-variant/70 font-mono">
+                      <span className="text-[11px] font-mono font-semibold">
                         {slot.time}
                       </span>
                     </div>
@@ -726,7 +671,7 @@ export function GanttTimetable({
                   Date & Time
                 </div>
                 <div className="font-semibold text-on-surface">
-                  {selectedDate}
+                  {formatDateDDMMYYYY(selectedDate)}
                 </div>
                 <div className="text-[11px] text-on-surface-variant mt-0.5">
                   {formatTimeRangeDisplay(

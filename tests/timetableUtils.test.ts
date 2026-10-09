@@ -16,15 +16,23 @@ describe("timetableUtils", () => {
     expect(slots.length).toBe(TOTAL_SLOTS);
     expect(slots[0].slotIndex).toBe(0);
     expect(slots[0].time).toBe("08:00");
-    expect(slots[0].label).toBe("8:00 AM");
+    expect(slots[0].label).toBe("08:00");
     expect(slots[0].hour).toBe(8);
     expect(slots[0].minute).toBe(0);
 
     expect(slots[25].slotIndex).toBe(25);
     expect(slots[25].time).toBe("20:30");
-    expect(slots[25].label).toBe("8:30 PM");
+    expect(slots[25].label).toBe("20:30");
     expect(slots[25].hour).toBe(20);
     expect(slots[25].minute).toBe(30);
+  });
+
+  it("formats dates as DD/MM/YYYY and times as railway 24h", async () => {
+    const { formatDateDDMMYYYY, formatTimeRailway } = await import("../src/lib/timetableUtils");
+    expect(formatDateDDMMYYYY("2026-10-22")).toBe("22/10/2026");
+    expect(formatDateDDMMYYYY(new Date(2026, 9, 22))).toBe("22/10/2026");
+    expect(formatTimeRailway("2026-10-22T09:30:00.000Z")).toBe("09:30");
+    expect(formatTimeRailway("14:45")).toBe("14:45");
   });
 
   it("correctly converts time strings to slot indices", () => {

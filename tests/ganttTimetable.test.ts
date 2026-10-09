@@ -20,11 +20,10 @@ describe("GanttTimetable component", () => {
       })
     );
 
-    // Verify key elements exist in rendered output
-    expect(html).toContain("Status Legend");
-    expect(html).toContain("Confirmed Booking");
-    expect(html).toContain("Pending Review");
-    expect(html).toContain("Available Slot");
+    // Verify Status Legend is removed
+    expect(html).not.toContain("Status Legend");
+
+    // Verify category filters exist
     expect(html).toContain("All Venues");
     expect(html).toContain("Auditoriums");
     expect(html).toContain("Lecture Halls");
@@ -37,8 +36,9 @@ describe("GanttTimetable component", () => {
     // Verify events are rendered
     expect(html).toContain("ACM National Tech Symposium");
 
-    // Verify 8:00 AM slot is rendered
-    expect(html).toContain("8:00 AM");
+    // Verify DD/MM/YYYY date and railway time slot are rendered
+    expect(html).toContain("22/10/2026");
     expect(html).toContain("08:00");
+    expect(html).toContain("20:30");
   });
 });

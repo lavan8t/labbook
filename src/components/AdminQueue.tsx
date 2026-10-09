@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import type { Booking, CompetingClash } from "@/lib/api";
+import { formatDateDDMMYYYY, formatTimeRailway } from "@/lib/timetableUtils";
 
 import "@m3e/web/dialog";
 import "@m3e/web/card";
@@ -107,18 +108,10 @@ export function AdminQueue({
 
   return (
     <div className="bg-surface rounded-lg border border-outline-variant p-6 sm:p-8 space-y-6">
-      {/* Queue Header */}
-      <div className="border-b border-outline-variant pb-3 flex justify-between items-center">
-        <div>
-          <h2 className="text-base font-bold text-on-surface">
-            Administrator Pending Approvals Queue
-          </h2>
-          <p className="text-xs text-on-surface-variant">
-            Review candidate bookings, inspect slot clashes, and issue formal permits.
-          </p>
-        </div>
+      {/* Queue Toolbar */}
+      <div className="flex justify-end items-center pb-2">
         <div className="flex items-center gap-2">
-          <span className="text-xs text-on-surface-variant">Pending Requests:</span>
+          <span className="text-xs text-on-surface-variant font-medium">Pending Requests:</span>
           <m3e-badge className="font-bold text-xs">{pendingQueue.length}</m3e-badge>
         </div>
       </div>
@@ -186,18 +179,10 @@ export function AdminQueue({
                       <div>
                         <span className="text-on-surface-variant">Requested Time: </span>
                         <span className="font-medium text-on-surface block">
-                          {new Date(b.start_datetime).toLocaleDateString()}
+                          {formatDateDDMMYYYY(b.start_datetime)}
                         </span>
                         <span className="text-on-surface-variant text-[11px]">
-                          {new Date(b.start_datetime).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}{" "}
-                          –{" "}
-                          {new Date(b.end_datetime).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                          {formatTimeRailway(b.start_datetime)} – {formatTimeRailway(b.end_datetime)}
                         </span>
                       </div>
                     </div>
@@ -295,15 +280,7 @@ export function AdminQueue({
                           <span>• {c.expected_attendees} attendees</span>
                         </div>
                         <div className="text-[10px] text-on-surface-variant">
-                          {new Date(c.start_datetime).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}{" "}
-                          –{" "}
-                          {new Date(c.end_datetime).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                          {formatTimeRailway(c.start_datetime)} – {formatTimeRailway(c.end_datetime)}
                         </div>
                       </div>
                       <div className="text-right shrink-0">

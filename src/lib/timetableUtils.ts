@@ -11,13 +11,45 @@ export function generateTimeSlots(): TimeSlotDef[] {
   for (let hour = TIMETABLE_START_HOUR; hour < TIMETABLE_END_HOUR; hour++) {
     for (const minute of [0, 30]) {
       const time = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-      const period = hour >= 12 ? "PM" : "AM";
-      const displayHour = hour % 12 === 0 ? 12 : hour % 12;
-      const label = minute === 0 ? `${displayHour}:00 ${period}` : `${displayHour}:30 ${period}`;
-      slots.push({ slotIndex: index++, time, label, hour, minute });
+      slots.push({ slotIndex: index++, time, label: time, hour, minute });
     }
   }
   return slots;
+}
+
+export function formatDateDDMMYYYY(dateVal: Date | string | null | undefined): string {
+  if (!dateVal) return "";
+  if (typeof dateVal === "string") {
+    const isoMatch = dateVal.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (isoMatch) {
+      return `${isoMatch[3]}/${isoMatch[2]}/${isoMatch[1]}`;
+    }
+  }
+  const d = typeof dateVal === "string" ? new Date(dateVal) : dateVal;
+  if (d instanceof Date && !isNaN(d.getTime())) {
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+  return String(dateVal);
+}
+
+export function formatTimeRailway(dateVal: Date | string | null | undefined): string {
+  if (!dateVal) return "";
+  if (typeof dateVal === "string") {
+    const timeMatch = dateVal.match(/(?:T|\s|^)(\d{1,2}):(\d{2})/);
+    if (timeMatch) {
+      return `${timeMatch[1].padStart(2, "0")}:${timeMatch[2]}`;
+    }
+  }
+  const d = typeof dateVal === "string" ? new Date(dateVal) : dateVal;
+  if (d instanceof Date && !isNaN(d.getTime())) {
+    const hours = String(d.getHours()).padStart(2, "0");
+    const minutes = String(d.getMinutes()).padStart(2, "0");
+    return `${hours}:${minutes}`;
+  }
+  return String(dateVal);
 }
 
 export function timeToSlotIndex(timeStr: string): number {

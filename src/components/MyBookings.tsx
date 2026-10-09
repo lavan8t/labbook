@@ -3,6 +3,7 @@
 import React from "react";
 import type { CampusUser } from "@/data/schema";
 import type { Booking } from "@/lib/api";
+import { formatDateDDMMYYYY, formatTimeRailway } from "@/lib/timetableUtils";
 
 import "@m3e/web/card";
 import "@m3e/web/chips";
@@ -43,21 +44,13 @@ export default function MyBookings({
 
   return (
     <div className="bg-surface rounded-lg border border-outline-variant p-6 sm:p-8 space-y-6">
-      {/* Header section with title and refresh action */}
-      <div className="border-b border-outline-variant pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-        <div>
-          <h2 className="text-base font-bold text-on-surface">
-            My Venue Reservations ({currentUser.name})
-          </h2>
-          <p className="text-xs text-on-surface-variant mt-0.5">
-            Track the lifecycle of your booking requests, admin approvals, and permits.
-          </p>
-        </div>
+      {/* Actions toolbar */}
+      <div className="flex justify-end items-center pb-2">
         <m3e-button
           variant="text"
           onClick={handleRefresh}
           disabled={loading}
-          className="text-xs text-on-surface-variant hover:text-primary self-end sm:self-auto"
+          className="text-xs text-on-surface-variant hover:text-primary"
         >
           <m3e-icon slot="icon" name="sync"></m3e-icon>
           <span>{loading ? "Syncing..." : "Refresh Status"}</span>
@@ -83,16 +76,8 @@ export default function MyBookings({
         /* Booking Cards List using m3e-card */
         <div className="space-y-4">
           {activeBookings.map((b) => {
-            const startDate = new Date(b.start_datetime);
-            const endDate = new Date(b.end_datetime);
-            const dateStr = startDate.toLocaleDateString();
-            const timeStr = `${startDate.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })} – ${endDate.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}`;
+            const dateStr = formatDateDDMMYYYY(b.start_datetime);
+            const timeStr = `${formatTimeRailway(b.start_datetime)} – ${formatTimeRailway(b.end_datetime)}`;
 
             return (
               <m3e-card

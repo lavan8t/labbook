@@ -147,10 +147,6 @@ export default function UserSwitcherModal({
         </span>
 
         <div className="py-2 space-y-3">
-          <p className="text-xs text-on-surface-variant">
-            Select a user persona to test role-based permissions, credential verification, and administrative approvals:
-          </p>
-
           <div className="space-y-3 pt-1">
             {users.map((user) => {
               const isSelected = currentUser.user_id === user.user_id;
