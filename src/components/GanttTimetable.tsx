@@ -66,7 +66,16 @@ export function GanttTimetable({
 
   const dialogRef = useRef<HTMLElement>(null);
   const datePickerRef = useRef<HTMLElement>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const timeSlots = useMemo(() => generateTimeSlots(), []);
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Synchronize modal state with native m3e-dialog Web Component
   useEffect(() => {
@@ -350,7 +359,6 @@ export function GanttTimetable({
                       >
                         {/* 26 Discrete Slot Click Targets */}
                         {timeSlots.map((slot) => {
-                          const isHourBoundary = slot.minute === 0;
                           return (
                             <div
                               key={slot.slotIndex}
@@ -363,16 +371,12 @@ export function GanttTimetable({
                                 gridRow: `1 / span ${totalTracks}`,
                                 zIndex: 1,
                               }}
-                              className={`border-r border-outline-variant/20 h-full relative cursor-pointer hover:bg-primary-container/20 transition-colors flex items-center justify-center group/slot ${
-                                isHourBoundary
-                                  ? "bg-surface-container-lowest/40"
-                                  : "bg-surface"
-                              }`}
+                              className="border-r border-outline-variant/20 h-full relative cursor-pointer flex items-center justify-center group/slot bg-transparent select-none"
                             >
-                              <span className="opacity-0 group-hover/slot:opacity-100 text-[10px] text-primary font-bold transition-opacity select-none flex items-center gap-0.5 bg-surface/90 px-1.5 py-0.5 rounded shadow-2xs">
-                                <m3e-icon name="add" className="text-[10px]"></m3e-icon>
-                                Book
-                              </span>
+                              <m3e-icon
+                                name="add"
+                                className="opacity-0 group-hover/slot:opacity-100 text-primary text-sm transition-opacity select-none"
+                              ></m3e-icon>
                             </div>
                           );
                         })}
@@ -391,11 +395,19 @@ export function GanttTimetable({
                               key={booking.booking_id}
                               onClick={(e) => handleBookingClick(booking, e)}
                               onMouseEnter={(e) => {
+                                if (hoverTimeoutRef.current) {
+                                  clearTimeout(hoverTimeoutRef.current);
+                                  hoverTimeoutRef.current = null;
+                                }
                                 const rect =
                                   e.currentTarget.getBoundingClientRect();
                                 setHoveredPreview({ booking, rect });
                               }}
-                              onMouseLeave={() => setHoveredPreview(null)}
+                              onMouseLeave={() => {
+                                hoverTimeoutRef.current = setTimeout(() => {
+                                  setHoveredPreview(null);
+                                }, 180);
+                              }}
                               style={{
                                 gridColumnStart: span.startSlot + 1,
                                 gridColumnEnd: `span ${span.spanSlots}`,
@@ -404,8 +416,8 @@ export function GanttTimetable({
                               }}
                               className={`m-1 p-2 rounded-lg cursor-pointer transition-all border shadow-xs hover:shadow-md hover:scale-[1.01] flex flex-col justify-center overflow-hidden select-none ${
                                 isConfirmed
-                                  ? "bg-emerald-500/15 text-emerald-900 dark:text-emerald-100 border-emerald-500/40 hover:bg-emerald-500/25"
-                                  : "bg-amber-500/15 text-amber-900 dark:text-amber-100 border-amber-500/40 hover:bg-amber-500/25"
+                                  ? "bg-primary-container text-on-primary-container border-primary/30 hover:brightness-95 dark:hover:brightness-110"
+                                  : "bg-secondary-container text-on-secondary-container border-secondary/30 hover:brightness-95 dark:hover:brightness-110"
                               }`}
                             >
                               <div className="flex items-center justify-between gap-1 leading-tight">
@@ -420,14 +432,14 @@ export function GanttTimetable({
                                     name={isConfirmed ? "check" : "schedule"}
                                     className={`text-sm ${
                                       isConfirmed
-                                        ? "text-emerald-600 dark:text-emerald-400"
-                                        : "text-amber-600 dark:text-amber-400"
+                                        ? "text-primary"
+                                        : "text-secondary"
                                     }`}
                                   ></m3e-icon>
                                 </span>
                               </div>
 
-                              <div className="flex items-center gap-1.5 text-[10px] opacity-90 truncate mt-0.5">
+                              <div className="flex items-center gap-1.5 text-[10px] opacity-85 truncate mt-0.5 font-medium">
                                 <span>{timeRangeStr}</span>
                                 {booking.requester_name && (
                                   <>
@@ -454,27 +466,43 @@ export function GanttTimetable({
       {/* Floating Hover Preview Popover */}
       {hoveredPreview && (
         <div
+          onClick={() => {
+            setInspectingBooking(hoveredPreview.booking);
+            setHoveredPreview(null);
+          }}
+          onMouseEnter={() => {
+            if (hoverTimeoutRef.current) {
+              clearTimeout(hoverTimeoutRef.current);
+              hoverTimeoutRef.current = null;
+            }
+          }}
+          onMouseLeave={() => {
+            setHoveredPreview(null);
+          }}
           style={{
             top: `${Math.min(
-              window.innerHeight - 200,
-              hoveredPreview.rect.bottom + 8,
+              window.innerHeight - 150,
+              hoveredPreview.rect.bottom + 6,
             )}px`,
             left: `${Math.max(
               16,
-              Math.min(window.innerWidth - 320, hoveredPreview.rect.left),
+              Math.min(window.innerWidth - 300, hoveredPreview.rect.left),
             )}px`,
           }}
-          className="fixed z-50 w-80 p-3.5 bg-surface-container-highest/95 backdrop-blur-md rounded-xl shadow-xl border border-outline-variant pointer-events-none text-xs text-on-surface"
+          className="fixed z-50 w-72 p-3.5 bg-surface-container-high rounded-xl shadow-xl border border-outline-variant text-on-surface cursor-pointer select-none transition-all hover:border-primary"
         >
+          {/* Hidden cursor bridge zone connecting slot to card */}
+          <div className="absolute -top-3.5 -left-2 -right-2 h-4 bg-transparent cursor-pointer" />
+
           <div className="flex items-start justify-between gap-2 mb-2">
-            <span className="font-bold text-xs text-on-surface leading-tight line-clamp-2">
+            <span className="font-bold text-sm text-on-surface leading-snug line-clamp-2">
               {hoveredPreview.booking.event_title}
             </span>
             <span
-              className={`inline-flex items-center gap-1 text-[11px] font-semibold shrink-0 ${
+              className={`inline-flex items-center gap-1 text-xs font-semibold shrink-0 ${
                 hoveredPreview.booking.booking_status === "CONFIRMED"
-                  ? "text-emerald-600 dark:text-emerald-400"
-                  : "text-amber-600 dark:text-amber-400"
+                  ? "text-primary"
+                  : "text-secondary"
               }`}
             >
               <m3e-icon
@@ -483,56 +511,19 @@ export function GanttTimetable({
                     ? "check"
                     : "schedule"
                 }
-                className="text-xs"
+                className="text-sm"
               ></m3e-icon>
-              <span>
-                {hoveredPreview.booking.booking_status === "CONFIRMED"
-                  ? "Confirmed"
-                  : "Pending"}
-              </span>
             </span>
           </div>
 
-          <div className="space-y-1.5 text-[11px] text-on-surface-variant">
-            <div className="flex items-center gap-1.5">
-              <m3e-icon name="schedule" className="text-xs text-primary"></m3e-icon>
-              <span className="font-semibold text-on-surface">
-                {formatTimeRangeDisplay(
-                  hoveredPreview.booking.start_datetime,
-                  hoveredPreview.booking.end_datetime,
-                )}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              <m3e-icon name="person" className="text-xs"></m3e-icon>
-              <span className="truncate">
-                {hoveredPreview.booking.requester_name || "Unknown Requester"}
-              </span>
-            </div>
-
-            {hoveredPreview.booking.department && (
-              <div className="flex items-center gap-1.5">
-                <m3e-icon name="domain" className="text-xs"></m3e-icon>
-                <span className="truncate">
-                  {hoveredPreview.booking.department}
-                </span>
-              </div>
-            )}
-
-            {hoveredPreview.booking.expected_attendees !== undefined && (
-              <div className="flex items-center gap-1.5">
-                <m3e-icon name="groups" className="text-xs"></m3e-icon>
-                <span>
-                  {hoveredPreview.booking.expected_attendees} Expected Attendees
-                </span>
-              </div>
-            )}
-          </div>
-
-          <div className="mt-2.5 pt-2 border-t border-outline-variant/40 text-[10px] text-primary font-bold flex items-center justify-between">
-            <span>Click to view full reservation details</span>
-            <m3e-icon name="open_in_new" className="text-xs"></m3e-icon>
+          <div className="flex items-center gap-1.5 text-xs text-on-surface-variant font-medium">
+            <m3e-icon name="schedule" className="text-sm text-primary"></m3e-icon>
+            <span>
+              {formatTimeRangeDisplay(
+                hoveredPreview.booking.start_datetime,
+                hoveredPreview.booking.end_datetime,
+              )}
+            </span>
           </div>
         </div>
       )}
@@ -548,13 +539,13 @@ export function GanttTimetable({
             <m3e-icon
               name={
                 inspectingBooking?.booking_status === "CONFIRMED"
-                  ? "verified"
-                  : "pending_actions"
+                  ? "check"
+                  : "schedule"
               }
               className={
                 inspectingBooking?.booking_status === "CONFIRMED"
-                  ? "text-success text-xl"
-                  : "text-amber-500 text-xl"
+                  ? "text-primary text-xl"
+                  : "text-secondary text-xl"
               }
             ></m3e-icon>
             <div>
@@ -579,8 +570,8 @@ export function GanttTimetable({
                 <span
                   className={`inline-flex items-center gap-1 text-xs font-semibold ${
                     inspectingBooking.booking_status === "CONFIRMED"
-                      ? "text-emerald-600 dark:text-emerald-400"
-                      : "text-amber-600 dark:text-amber-400"
+                      ? "text-primary"
+                      : "text-secondary"
                   }`}
                 >
                   <m3e-icon

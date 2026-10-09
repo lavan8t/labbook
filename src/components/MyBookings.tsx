@@ -95,13 +95,13 @@ export default function MyBookings({
 
                       {/* Status Indicator */}
                       {b.booking_status === "CONFIRMED" && (
-                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary">
                           <m3e-icon name="check" className="text-sm"></m3e-icon>
                           <span>Confirmed</span>
                         </span>
                       )}
                       {b.booking_status === "PENDING" && (
-                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-secondary">
                           <m3e-icon name="schedule" className="text-sm"></m3e-icon>
                           <span>Pending</span>
                         </span>
