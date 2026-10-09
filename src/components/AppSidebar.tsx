@@ -5,9 +5,6 @@ import type { CampusUser } from "@/data/schema";
 
 import "@m3e/web/avatar";
 import "@m3e/web/badge";
-import "@m3e/web/button";
-import "@m3e/web/button-group";
-import "@m3e/web/split-button";
 import "@m3e/web/icon-button";
 import "@m3e/web/icon";
 import "@m3e/web/nav-rail";
@@ -84,8 +81,8 @@ export function AppSidebar({
   const sidebarContent = (
     <div className="flex flex-col h-full bg-surface border-r border-outline-variant select-none">
       {/* Top Brand Header: CampusBook alone, no title icon, no subtitle */}
-      <div className="px-3 py-3.5 border-b border-outline-variant/60 flex items-center justify-between shrink-0">
-        <span className="text-base font-bold tracking-tight text-on-surface truncate">
+      <div className="px-6 py-5 border-b border-outline-variant/60 flex items-center justify-between shrink-0">
+        <span className="text-xl font-bold tracking-tight text-on-surface truncate">
           CampusBook
         </span>
         {mobileOpen && (
@@ -101,9 +98,9 @@ export function AppSidebar({
       </div>
 
       {/* Account Info with Down Arrow Button */}
-      <div className="mx-2 my-2.5 p-2 rounded-xl bg-surface-container-low border border-outline-variant/60 flex items-center justify-between gap-1 shrink-0">
-        <div className="flex items-center gap-1.5 min-w-0">
-          <m3e-avatar className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-[11px] bg-primary text-on-primary shrink-0">
+      <div className="mx-4 my-4 p-3 rounded-2xl bg-surface-container-low border border-outline-variant/60 flex items-center justify-between gap-2 shrink-0">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <m3e-avatar className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs bg-primary text-on-primary shrink-0">
             {currentUser.avatar_initials}
           </m3e-avatar>
           <div className="min-w-0">
@@ -123,49 +120,51 @@ export function AppSidebar({
           }}
           aria-label="Switch User"
           title="Switch User"
-          className="shrink-0 -mr-1"
+          className="shrink-0"
         >
           <m3e-icon name="arrow_drop_down"></m3e-icon>
         </m3e-icon-button>
       </div>
 
-      {/* Navigation Rail from m3e repository */}
-      <div className="flex-1 overflow-y-auto px-1.5 py-1.5">
-        <m3e-nav-rail mode="expanded" className="w-full flex flex-col gap-0.5">
+      {/* Navigation Rail from m3e repository - vertical layout (name at bottom of icon) */}
+      <div className="flex-1 overflow-y-auto px-3 py-2">
+        <m3e-nav-rail mode="compact" className="w-full flex flex-col gap-1.5">
           {standardNavItems.map((item) => (
             <m3e-nav-item
               key={item.id}
+              orientation="vertical"
               selected={activeTab === item.id}
               onClick={() => handleNavClick(item.id)}
               className="cursor-pointer"
             >
               <m3e-icon slot="icon" name={item.icon}></m3e-icon>
-              <span className="flex items-center justify-between w-full min-w-0 pr-1 text-xs">
-                <span className="truncate">{item.label}</span>
+              <span className="flex items-center justify-center gap-1.5 text-xs text-center font-medium">
+                <span>{item.label}</span>
                 {Boolean(item.badge && item.badge > 0) && (
-                  <m3e-badge className="ml-1 shrink-0">{item.badge}</m3e-badge>
+                  <m3e-badge size="small">{item.badge}</m3e-badge>
                 )}
               </span>
             </m3e-nav-item>
           ))}
 
           {isAdmin && (
-            <div className="pt-3 mt-2 border-t border-outline-variant/60 flex flex-col gap-0.5">
-              <div className="px-2 pb-1 text-[9px] font-bold text-on-surface-variant uppercase tracking-wider truncate">
+            <div className="w-full pt-3 mt-2 border-t border-outline-variant/60 flex flex-col gap-1.5">
+              <div className="text-center pb-1 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
                 Admin
               </div>
               {adminNavItems.map((item) => (
                 <m3e-nav-item
                   key={item.id}
+                  orientation="vertical"
                   selected={activeTab === item.id}
                   onClick={() => handleNavClick(item.id)}
                   className="cursor-pointer"
                 >
                   <m3e-icon slot="icon" name={item.icon}></m3e-icon>
-                  <span className="flex items-center justify-between w-full min-w-0 pr-1 text-xs">
-                    <span className="truncate">{item.label}</span>
+                  <span className="flex items-center justify-center gap-1.5 text-xs text-center font-medium">
+                    <span>{item.label}</span>
                     {Boolean(item.badge && item.badge > 0) && (
-                      <m3e-badge className="ml-1 shrink-0">{item.badge}</m3e-badge>
+                      <m3e-badge size="small">{item.badge}</m3e-badge>
                     )}
                   </span>
                 </m3e-nav-item>
@@ -179,8 +178,8 @@ export function AppSidebar({
 
   return (
     <>
-      {/* Desktop Sidebar: reduced width by half to w-36 (144px) */}
-      <aside className="hidden md:block w-36 shrink-0 h-screen sticky top-0 z-30">
+      {/* Desktop Sidebar: reverted to default w-72 */}
+      <aside className="hidden md:block w-72 shrink-0 h-screen sticky top-0 z-30">
         {sidebarContent}
       </aside>
 
@@ -192,7 +191,7 @@ export function AppSidebar({
             onClick={onCloseMobile}
             aria-hidden="true"
           />
-          <aside className="relative w-36 max-w-[85vw] h-full shadow-2xl z-10 animate-in slide-in-from-left duration-150">
+          <aside className="relative w-72 max-w-[85vw] h-full shadow-2xl z-10 animate-in slide-in-from-left duration-150">
             {sidebarContent}
           </aside>
         </div>

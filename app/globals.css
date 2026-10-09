@@ -163,10 +163,13 @@
   --m3e-motion-easing-emphasized: cubic-bezier(0.25, 0.1, 0.25, 1);
   --m3e-motion-easing-standard: cubic-bezier(0.25, 0.1, 0.25, 1);
 
-  /* Navigation Rail Customizations for w-36 Sidebar */
+  /* Navigation Rail Customizations for Vertical Nav Item Layout */
   --m3e-nav-rail-expanded-width: 100%;
-  --m3e-nav-rail-inline-padding: 4px;
-  --m3e-nav-item-spacing: 6px;
+  --m3e-nav-rail-compact-width: 100%;
+  --m3e-nav-rail-top-space: 4px;
+  --m3e-nav-rail-bottom-space: 12px;
+  --m3e-nav-rail-inline-padding: 0px;
+  --m3e-nav-item-spacing: 4px;
   --m3e-nav-item-label-text-font-size: 11px;
 }
 
