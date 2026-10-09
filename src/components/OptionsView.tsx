@@ -166,7 +166,6 @@ export function OptionsView({
                 type={showPasscodes ? "text" : "password"}
                 value={currentCodeInput}
                 onChange={(e) => setCurrentCodeInput(e.target.value)}
-                placeholder="Enter current passcode"
                 className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
               />
               <m3e-icon slot="suffix" name="key"></m3e-icon>
@@ -183,7 +182,6 @@ export function OptionsView({
                 type={showPasscodes ? "text" : "password"}
                 value={newCodeInput}
                 onChange={(e) => setNewCodeInput(e.target.value)}
-                placeholder="Enter at least 4 digits/characters"
                 className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
               />
               <m3e-icon slot="suffix" name="lock"></m3e-icon>
@@ -200,7 +198,6 @@ export function OptionsView({
                 type={showPasscodes ? "text" : "password"}
                 value={confirmCodeInput}
                 onChange={(e) => setConfirmCodeInput(e.target.value)}
-                placeholder="Re-enter new passcode"
                 className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
               />
               <m3e-icon slot="suffix" name="lock_clock"></m3e-icon>

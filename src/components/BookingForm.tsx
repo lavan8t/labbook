@@ -511,7 +511,6 @@ export function BookingForm({
                 <input
                   id="event-title-input"
                   type="text"
-                  placeholder="e.g., Annual Tech Hackathon Inauguration"
                   value={eventTitle}
                   onChange={(e) => handleTitleChange(e.target.value)}
                   className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
@@ -572,7 +571,6 @@ export function BookingForm({
               <textarea
                 id="purpose-notes-textarea"
                 rows={2}
-                placeholder="Specify AV requirements, external guests, or departmental rationale..."
                 value={purposeNotes}
                 onChange={(e) => handleNotesChange(e.target.value)}
                 className="w-full text-xs bg-transparent text-on-surface focus:outline-none resize-none"

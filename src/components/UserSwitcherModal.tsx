@@ -226,7 +226,6 @@ export default function UserSwitcherModal({
                 type="password"
                 maxLength={6}
                 autoFocus
-                placeholder="Enter passcode"
                 value={codeValue}
                 onChange={(e) => handleCodeChange(e.target.value)}
                 onKeyDown={(e) => {

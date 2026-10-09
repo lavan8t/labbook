@@ -342,7 +342,6 @@ export function AdminQueue({
                 const val = (e.target as HTMLTextAreaElement).value;
                 (setApprovalRemarks as (val: string) => void)(val);
               }}
-              placeholder="Enter approval remarks..."
               className="w-full bg-transparent text-on-surface text-xs focus:outline-none"
             />
             <m3e-textarea-autosize for="approval-remarks-input" min-rows={2} max-rows={6} />
@@ -396,7 +395,6 @@ export function AdminQueue({
                 const val = (e.target as HTMLTextAreaElement).value;
                 (setRejectionRemarks as (val: string) => void)(val);
               }}
-              placeholder="Enter rejection reason..."
               className="w-full bg-transparent text-on-surface text-xs focus:outline-none"
             />
             <m3e-textarea-autosize for="rejection-remarks-input" min-rows={2} max-rows={6} />

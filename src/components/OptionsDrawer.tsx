@@ -235,7 +235,6 @@ export function OptionsDrawer({
                   type={showPasscodes ? "text" : "password"}
                   value={currentCodeInput}
                   onChange={(e) => setCurrentCodeInput(e.target.value)}
-                  placeholder="Enter current passcode"
                   className="w-full px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface text-xs focus:outline-hidden focus:border-primary"
                 />
               </div>
@@ -248,7 +247,6 @@ export function OptionsDrawer({
                   type={showPasscodes ? "text" : "password"}
                   value={newCodeInput}
                   onChange={(e) => setNewCodeInput(e.target.value)}
-                  placeholder="Enter new 4+ digit passcode"
                   className="w-full px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface text-xs focus:outline-hidden focus:border-primary"
                 />
               </div>
@@ -261,7 +259,6 @@ export function OptionsDrawer({
                   type={showPasscodes ? "text" : "password"}
                   value={confirmCodeInput}
                   onChange={(e) => setConfirmCodeInput(e.target.value)}
-                  placeholder="Repeat new passcode"
                   className="w-full px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface text-xs focus:outline-hidden focus:border-primary"
                 />
               </div>
