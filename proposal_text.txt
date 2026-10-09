@@ -1,0 +1,206 @@
+ASSESSMENT 6
+
+Project Proposal & Database Design Document
+Course: BCSE302P – Database Systems Lab
+Slot: D1 – L51 + L52
+Faculty Name: Sangeetha S
+Date: 09/10/2026
+Members
+Narayanan Subramanian - 24BCE2981
+Lavanbarath B - 24BDS0155
+
+BCSE302P – Database Systems Lab | 1
+
+PROJECT PROPOSAL & DATABASE DESIGN
+Project Title
+Campus Auditorium & Lecture Hall Reservation and Administrative Authorization System (CampusBook)
+
+1. Introduction and Background
+Universities and educational institutions host hundreds of academic and extracurricular gatherings every semester, ranging from combined department lectures, guest seminars, and examinations to student club hackathons, technical symposiums, and cultural festivals. These events rely heavily on finite campus venue infrastructure, primarily:
+1. Central Auditoriums and Mini-Auditoriums (large seating capacity, specialized audio-visual consoles, stage lighting, and acoustic setups).
+2. Smart Lecture Halls and Seminar Halls (medium capacity, smart podiums, projection arrays, and tiered seating).
+
+Managing auditorium and lecture hall bookings is inherently complex and cannot be treated as a trivial first-come-first-served calendar booking system. High-demand campus venues require rigorous administrative oversight:
+● Authorization & Credentials: Student club heads must furnish verified club registration, faculty coordinator approvals, and anticipated participant metrics. Faculty members require department validation for large multi-section lecture merges, symposia, or guest lectures.
+● Administrative Vetting: An Administrator (e.g., Estate Officer, Dean of Student Affairs, or Academic Facilities Manager) must oversee all venues, review pending requests, verify the legitimacy of requesters and their authorizations, verify that the slot is completely vacant, and explicitly grant a formal permit.
+● Temporal Integrity & Concurrency: Multiple faculty coordinators or club heads frequently apply for the exact same premium slots (e.g., Friday afternoons or weekends). Without atomic, database-level conflict prevention, concurrent booking submissions and parallel administrator approvals lead to devastating double-booking anomalies and scheduling clashes.
+
+The proposed system, CampusBook, provides a unified, relational database-driven platform designed specifically to manage auditorium and lecture hall allocation, enforce authorization hierarchies, handle high-concurrency requests, and prevent slot clashes at the database engine level.
+
+2. Problem Statement
+Manual, spreadsheet-based, or naive reservation systems suffer from critical structural shortcomings in university environments:
+● Double Booking & Slot Overlaps: Standard unique constraints (such as UNIQUE(venue_id, start_time)) fail to prevent overlapping ranges (e.g., Booking A from 10:00 to 13:00 conflicts with Booking B from 11:30 to 14:00).
+● Race Conditions During Approval: If two administrators simultaneously approve two competing requests for the same hall, or if an approval races with a new reservation, naive application-level checks allow race conditions to bypass validation.
+● Unverified & Unauthorized Access: Club heads or individuals may attempt to book large-capacity auditoriums without required institutional clearance, faculty endorsements, or valid club credentials.
+● Lack of Centralized Administrative Oversight: Administrators lack a unified dashboard to review slot conflicts, inspect competing candidate applications for the same time window, review equipment/capacity requirements, and issue official digital permits.
+● No Auditability & Utilization Intelligence: University leadership cannot reliably audit who authorized a venue, track cancellation histories, or assess resource utilization rates across academic departments and student bodies.
+
+The proposed system solves this problem by maintaining an ACID-compliant PostgreSQL relational database that manages users, roles, venues, clubs, events, credentials, bookings, administrative approvals, and concurrency control in an integrated, mathematically verifiable manner.
+
+BCSE302P – Database Systems Lab | 2
+
+3. Objectives
+The main objectives of the proposed system are:
+1. To provide a centralized relational system for booking campus auditoriums and lecture halls.
+2. To establish a clear two-tier user access architecture:
+   - Normal Users: Faculty (academic lectures, exams, symposia) and Student Club Heads (workshops, club events).
+   - Administrators: Estate/Facilities Administrators who oversee all halls and grant permits upon authorization verification.
+3. To enforce prerequisite authorization and credential checks before a venue booking can be submitted or approved (using relational division).
+4. To prevent slot clashes and double bookings at the database engine level using PostgreSQL GiST range exclusions (tstzrange with btree_gist).
+5. To eliminate concurrency race conditions during booking creation and administrative approvals using pessimistic row locks (SELECT ... FOR UPDATE) and atomic database transactions.
+6. To automate conflict resolution so that approving one booking atomically flags or rejects competing pending requests for the same slot.
+7. To maintain complete booking, approval, and audit history for institutional accountability.
+8. To generate analytical reports on venue utilization, peak-hour bottlenecks, club activity, and approval turnaround times.
+
+4. Scope of the Project
+4.1 Included in the Scope
+The system includes:
+● User registration and role management: Normal Users (Faculty, Student Club Heads) and Administrators.
+● Club and department profiles and coordinator associations.
+● Management of campus venues:
+  - Central Auditoriums
+  - Mini-Auditoriums
+  - Smart Lecture Halls
+  - Seminar Halls
+● Venue specifications: seating capacity, acoustic facilities, smart podiums, air conditioning, and projector arrays.
+● Management of user authorizations, credentials, and venue clearance requirements.
+● Event information for academic lectures, exams, guest addresses, and student club activities.
+● Booking requests lifecycle: PENDING, CONFIRMED, REJECTED, and CANCELLED states.
+● Administrative approval and permit workflow with mandatory admin ID, timestamp, and remarks.
+● Database-level concurrency control and slot clash prevention:
+  - GiST exclusion constraints on temporal ranges (tstzrange).
+  - Transaction-isolated stored procedures for atomic approval.
+  - Automatic clash resolution for overlapping pending requests.
+● Audit trails tracking state changes, timestamps, and approving authorities.
+● SQL queries and analytical reports for utilization metrics and administrative monitoring.
+
+BCSE302P – Database Systems Lab | 3
+
+4.2 Excluded from the Scope
+The following are outside the scope of the system:
+● Physical smart-card door locks or biometric turnstile integration.
+● In-person ticketing and payment processing.
+● Real-time HVAC/air conditioning automated IoT switching.
+● Automated computer vision attendee head-counting.
+
+5. Requirement Analysis
+5.1 Users of the System
+Normal Users:
+1. Faculty:
+   ● Browse auditorium and lecture hall availability.
+   ● Submit booking requests for academic lectures, combined classes, symposia, exams, and guest lectures.
+   ● Provide course and department credentials.
+   ● View booking approval status and history.
+   ● Cancel own bookings if required.
+2. Student Club Head:
+   ● Browse auditorium and seminar hall schedules.
+   ● Submit booking requests for club events, workshops, hackathons, and cultural fests.
+   ● Provide club profile, expected audience size, and faculty coordinator endorsements.
+   ● Track the progress of administrative permit requests.
+   ● View past club reservations.
+
+Administrators (Facilities In-Charge / Estate Officer / Dean):
+   ● Oversee all auditoriums and lecture halls across campus.
+   ● Review the queue of pending booking requests.
+   ● Verify requester authorizations and credentials.
+   ● Inspect slot availability and evaluate competing requests for the same time window.
+   ● Grant permits (confirm bookings) or reject requests with recorded administrative remarks.
+   ● Schedule venue maintenance blackout intervals.
+   ● View comprehensive venue utilization analytics and audit logs.
+
+5.2 Data to be Stored
+User Data:
+● user_id, full_name, email (unique), phone, role_id, department, is_active
+Role Data:
+● role_id, role_name (ADMIN, FACULTY, CLUB_HEAD), description
+Venue Data:
+● venue_id, venue_name, venue_type (AUDITORIUM, MINI_AUDITORIUM, LECTURE_HALL, SEMINAR_HALL), building, floor, capacity, has_ac, projector_count, sound_system, is_active
+Club Data:
+● club_id, club_name, category, club_head_user_id, faculty_coordinator_name, contact_email
+Event Data:
+● event_id, event_title, event_type, description, expected_attendees, organizer_user_id, club_id (nullable)
+Authorization Data:
+● auth_id, auth_name, description, issuing_body, validity_days
+User Authorization Mapping:
+● user_id, auth_id, issue_date, expiry_date, status
+Venue Requirements Data:
+● venue_id, required_auth_id
+Booking Data:
+● booking_id, booking_ref (unique), venue_id, user_id, event_id, start_datetime, end_datetime, booking_status (PENDING, CONFIRMED, REJECTED, CANCELLED), created_at
+Approval Data:
+● approval_id, booking_id, admin_id, decision (APPROVED, REJECTED), decision_datetime, remarks
+Venue Maintenance Data:
+● maintenance_id, venue_id, start_datetime, end_datetime, reason, status
+Audit Log Data:
+● log_id, table_name, action, record_id, changed_by, old_values, new_values, logged_at
+
+BCSE302P – Database Systems Lab | 4
+
+5.3 Major Operations
+The system supports:
+● Venue discovery and free-slot query filtering.
+● Submission of booking requests into PENDING status.
+● Relational division check to verify requester possesses all credentials required for the venue.
+● Temporal conflict detection against confirmed bookings and maintenance windows.
+● Transactional administrative approval with row locking to eliminate race conditions.
+● Automatic cascading rejection of competing pending requests upon approval.
+● Self-service booking cancellation by requesters.
+● Venue maintenance window scheduling.
+● Generation of utilization, occupancy, and audit reports.
+
+5.4 Information to be Retrieved and Analysed
+● Free slot search: Find all auditoriums of capacity >= 500 available during a specified time window.
+● Pending requests queue: Retrieve all pending requests sorted by urgency with applicant details.
+● Conflict detection: Identify all overlapping pending requests competing for the same venue and slot.
+● Relational division credential check: Verify if a requester holds all credentials for a restricted auditorium.
+● Venue utilization rate: Compute total booked hours per auditorium across a semester.
+● Department/club activity: Rank organizations by approved booking hours and cancellation rates.
+● Admin audit trail: Trace which administrator approved or rejected each booking request.
+
+BCSE302P – Database Systems Lab | 5
+
+6. Database Selection and Justification
+6.1 Selected Database
+PostgreSQL 16+
+
+6.2 Database Type
+Relational Database Management System (RDBMS)
+
+6.3 Justification
+PostgreSQL is chosen because venue scheduling and administrative authorization demand absolute ACID integrity and specialized temporal mechanics:
+1. PostgreSQL GiST Range Exclusion:
+   Standard databases only enforce equality constraints (UNIQUE(venue_id, start_datetime)). This cannot prevent interval overlaps. PostgreSQL provides native range types (tstzrange) and GiST exclusion constraints:
+   
+   ALTER TABLE bookings ADD CONSTRAINT no_overlapping_confirmed_bookings
+   EXCLUDE USING gist (
+       venue_id WITH =,
+       tstzrange(start_datetime, end_datetime, '[)') WITH &&
+   )
+   WHERE (booking_status = 'CONFIRMED');
+
+   This guarantees that no two confirmed bookings for the same venue can overlap in time, enforced mathematically at the database engine level.
+2. ACID Concurrency & Row-Level Locking:
+   Using SELECT ... FOR UPDATE within stored procedures prevents race conditions when multiple administrators review or approve requests simultaneously.
+3. Relational Division:
+   PostgreSQL handles relational division queries efficiently via set difference (EXCEPT) or aggregate filters to ensure requesters meet all venue prerequisites.
+4. Extensible Stored Procedures (PL/pgSQL):
+   Business rules for atomic approval, slot validation, and cascading conflict rejection are implemented directly inside database transactions.
+
+BCSE302P – Database Systems Lab | 6
+
+7. Relational Schema Summary
+ROLES(role_id PK, role_name, description)
+USERS(user_id PK, full_name, email UNIQUE, phone, role_id FK -> ROLES.role_id, department, is_active)
+VENUES(venue_id PK, venue_name, venue_type, building, floor, capacity, has_ac, projector_count, sound_system, is_active)
+CLUBS(club_id PK, club_name, category, club_head_user_id FK -> USERS.user_id, faculty_coordinator_name, contact_email)
+EVENTS(event_id PK, event_title, event_type, description, expected_attendees, organizer_user_id FK -> USERS.user_id, club_id FK -> CLUBS.club_id [nullable])
+AUTHORIZATIONS(auth_id PK, auth_name, description, issuing_body, validity_days)
+USER_AUTHORIZATIONS(user_id PK/FK -> USERS.user_id, auth_id PK/FK -> AUTHORIZATIONS.auth_id, issue_date, expiry_date, status)
+VENUE_REQUIREMENTS(venue_id PK/FK -> VENUES.venue_id, auth_id PK/FK -> AUTHORIZATIONS.auth_id)
+BOOKINGS(booking_id PK, booking_ref UNIQUE, venue_id FK -> VENUES.venue_id, user_id FK -> USERS.user_id, event_id FK -> EVENTS.event_id, start_datetime, end_datetime, booking_status, created_at)
+  -- Constraint: EXCLUDE USING gist (venue_id WITH =, tstzrange(start_datetime, end_datetime, '[)') WITH &&) WHERE (booking_status = 'CONFIRMED')
+BOOKING_APPROVALS(approval_id PK, booking_id FK UNIQUE -> BOOKINGS.booking_id, admin_id FK -> USERS.user_id, decision, decision_datetime, remarks)
+VENUE_MAINTENANCE(maintenance_id PK, venue_id FK -> VENUES.venue_id, start_datetime, end_datetime, reason, status)
+AUDIT_LOGS(log_id PK, table_name, action, record_id, changed_by FK -> USERS.user_id, old_values, new_values, logged_at)
+
+BCSE302P – Database Systems Lab | 7

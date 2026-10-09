@@ -1,10 +1,15 @@
-# LabBook
+# CampusBook
 
-LabBook is a laboratory equipment reservation system built with Next.js and Bun. It demonstrates temporal range exclusion and relational division directly in the browser.
+CampusBook is a campus auditorium and smart lecture hall reservation system built for high-concurrency scheduling and administrative authorization. It demonstrates PostgreSQL temporal range exclusion (`tstzrange` with `btree_gist`), ACID pessimistic locking, and relational division.
+
+## Documentation Links
+- [Project Proposal (BCSE302P Database Systems Lab)](file:///home/kinglynara/Desktop/labbook/docs/PROJECT_PROPOSAL.md)
+- [Backend PRD & Database Design Specification](file:///home/kinglynara/Desktop/labbook/docs/BACKEND_PRD_AND_DATABASE_DESIGN.md)
+- [PostgreSQL Database DDL & Seed Script](file:///home/kinglynara/Desktop/labbook/database/schema.sql)
 
 ## What it does
 
-Research facilities must prevent overlapping bookings and verify safety credentials before staff operate equipment. LabBook demonstrates this workflow with an interactive booking console, an entity-relationship schema graph rendered with React Flow, and a live SQL audit console.
+Universities must prevent overlapping venue reservations and verify administrative clearances before staff or student clubs reserve auditoriums. CampusBook demonstrates this workflow with an interactive booking console, an entity-relationship schema graph rendered with React Flow, and a live SQL audit console.
 
 1. **Staff selection.** The user selects a researcher profile, such as Alice Chen or Bob Kumar.
 2. **Equipment selection.** The user chooses an instrument, such as a confocal microscope or field emission SEM.
