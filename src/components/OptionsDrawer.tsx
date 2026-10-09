@@ -90,7 +90,7 @@ export function OptionsDrawer({
         {/* Header */}
         <div className="p-4 border-b border-outline-variant flex items-center justify-between bg-surface-container-low">
           <div className="flex items-center gap-2">
-            <m3e-icon className="text-primary text-xl">tune</m3e-icon>
+            <m3e-icon name="tune" className="text-primary text-xl"></m3e-icon>
             <h2 className="text-base font-bold text-on-surface">Options</h2>
           </div>
           <button
@@ -99,7 +99,7 @@ export function OptionsDrawer({
             className="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
             aria-label="Close Options"
           >
-            <m3e-icon>close</m3e-icon>
+            <m3e-icon name="close"></m3e-icon>
           </button>
         </div>
 
@@ -108,7 +108,7 @@ export function OptionsDrawer({
           {/* Section 1: Appearance & Theme */}
           <section className="space-y-3">
             <div className="flex items-center gap-2">
-              <m3e-icon className="text-primary text-base">palette</m3e-icon>
+              <m3e-icon name="palette" className="text-primary text-base"></m3e-icon>
               <h3 className="text-xs font-bold text-on-surface uppercase tracking-wider">
                 Appearance
               </h3>
@@ -134,7 +134,7 @@ export function OptionsDrawer({
                       : "bg-surface text-on-surface-variant border-outline-variant hover:bg-surface-container"
                   }`}
                 >
-                  <m3e-icon className="text-base">light_mode</m3e-icon>
+                  <m3e-icon name="light_mode" className="text-base"></m3e-icon>
                   <span>Light</span>
                 </button>
 
@@ -149,7 +149,7 @@ export function OptionsDrawer({
                       : "bg-surface text-on-surface-variant border-outline-variant hover:bg-surface-container"
                   }`}
                 >
-                  <m3e-icon className="text-base">dark_mode</m3e-icon>
+                  <m3e-icon name="dark_mode" className="text-base"></m3e-icon>
                   <span>Dark</span>
                 </button>
               </div>
@@ -159,7 +159,7 @@ export function OptionsDrawer({
           {/* Section 2: Database Sync */}
           <section className="space-y-3">
             <div className="flex items-center gap-2">
-              <m3e-icon className="text-primary text-base">database</m3e-icon>
+              <m3e-icon name="database" className="text-primary text-base"></m3e-icon>
               <h3 className="text-xs font-bold text-on-surface uppercase tracking-wider">
                 Database Synchronization
               </h3>
@@ -175,12 +175,11 @@ export function OptionsDrawer({
                       : "bg-amber-500/15 text-amber-700 dark:text-amber-300"
                   }`}
                 >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      backendOnline ? "bg-emerald-500" : "bg-amber-500"
-                    }`}
-                  />
-                  {backendOnline ? "PostgreSQL Connected" : "Offline Fallback"}
+                  <m3e-icon
+                    name={backendOnline ? "cloud_done" : "cloud_off"}
+                    className="text-xs"
+                  ></m3e-icon>
+                  <span>{backendOnline ? "PostgreSQL Connected" : "Offline Fallback"}</span>
                 </span>
               </div>
 
@@ -194,9 +193,11 @@ export function OptionsDrawer({
                 disabled={syncLoading}
                 className="w-full text-xs justify-center font-semibold"
               >
-                <m3e-icon slot="icon" className={syncLoading ? "animate-spin" : ""}>
-                  sync
-                </m3e-icon>
+                <m3e-icon
+                  slot="icon"
+                  name="sync"
+                  className={syncLoading ? "animate-spin" : ""}
+                ></m3e-icon>
                 {syncLoading ? "Syncing..." : "Sync DB"}
               </m3e-button>
             </div>
@@ -205,7 +206,7 @@ export function OptionsDrawer({
           {/* Section 3: Change Password / Passcode */}
           <section className="space-y-3">
             <div className="flex items-center gap-2">
-              <m3e-icon className="text-primary text-base">lock_reset</m3e-icon>
+              <m3e-icon name="lock_reset" className="text-primary text-base"></m3e-icon>
               <h3 className="text-xs font-bold text-on-surface uppercase tracking-wider">
                 Change Passcode
               </h3>
@@ -221,14 +222,14 @@ export function OptionsDrawer({
 
               {passcodeError && (
                 <div className="p-2.5 rounded-lg bg-error/10 border border-error/20 text-error text-[11px] flex items-start gap-2">
-                  <m3e-icon className="text-sm shrink-0 mt-0.5">error</m3e-icon>
+                  <m3e-icon name="error" className="text-sm shrink-0 mt-0.5"></m3e-icon>
                   <span>{passcodeError}</span>
                 </div>
               )}
 
               {passcodeSuccess && (
                 <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[11px] flex items-start gap-2">
-                  <m3e-icon className="text-sm shrink-0 mt-0.5">check_circle</m3e-icon>
+                  <m3e-icon name="check_circle" className="text-sm shrink-0 mt-0.5"></m3e-icon>
                   <span>{passcodeSuccess}</span>
                 </div>
               )}
@@ -278,9 +279,10 @@ export function OptionsDrawer({
                   onClick={() => setShowPasscodes(!showPasscodes)}
                   className="text-[11px] text-primary hover:underline flex items-center gap-1"
                 >
-                  <m3e-icon className="text-sm">
-                    {showPasscodes ? "visibility_off" : "visibility"}
-                  </m3e-icon>
+                  <m3e-icon
+                    name={showPasscodes ? "visibility_off" : "visibility"}
+                    className="text-sm"
+                  ></m3e-icon>
                   <span>{showPasscodes ? "Hide Passcode" : "Show Passcode"}</span>
                 </button>
 
@@ -289,7 +291,7 @@ export function OptionsDrawer({
                   type="submit"
                   className="text-xs"
                 >
-                  <m3e-icon slot="icon">key</m3e-icon>
+                  <m3e-icon slot="icon" name="key"></m3e-icon>
                   Update Passcode
                 </m3e-button>
               </div>

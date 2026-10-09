@@ -126,7 +126,7 @@ export function AdminQueue({
       {/* Queue Booking List */}
       {pendingQueue.length === 0 ? (
         <m3e-card variant="outlined" className="p-8 text-center bg-surface-container-low">
-          <m3e-icon className="text-3xl text-on-surface-variant mb-2">inbox</m3e-icon>
+          <m3e-icon name="inbox" className="text-3xl text-on-surface-variant mb-2"></m3e-icon>
           <p className="text-sm font-medium text-on-surface">
             Queue is clear! No requests currently awaiting administrative approval.
           </p>
@@ -157,12 +157,12 @@ export function AdminQueue({
                           onClick={() => onInspectClashes(b)}
                           className="cursor-pointer"
                         >
-                          <m3e-icon slot="icon" className="text-error">warning</m3e-icon>
+                          <m3e-icon slot="icon" name="warning" className="text-error"></m3e-icon>
                           {b.competing_pending_count} Clash Bid(s)
                         </m3e-chip>
                       ) : (
                         <m3e-chip variant="assist">
-                          <m3e-icon slot="icon" className="text-success">verified</m3e-icon>
+                          <m3e-icon slot="icon" name="verified" className="text-success"></m3e-icon>
                           Slot Vacant
                         </m3e-chip>
                       )}
@@ -222,7 +222,7 @@ export function AdminQueue({
                       onClick={() => onOpenApprove(b)}
                       className="w-full sm:w-auto"
                     >
-                      <m3e-icon slot="icon">check_circle</m3e-icon>
+                      <m3e-icon slot="icon" name="check_circle"></m3e-icon>
                       Approve
                     </m3e-button>
                     <m3e-button
@@ -230,7 +230,7 @@ export function AdminQueue({
                       onClick={() => onOpenReject(b)}
                       className="w-full sm:w-auto"
                     >
-                      <m3e-icon slot="icon">close</m3e-icon>
+                      <m3e-icon slot="icon" name="close"></m3e-icon>
                       Reject
                     </m3e-button>
                   </div>
@@ -249,7 +249,7 @@ export function AdminQueue({
         onclosed={onCloseClashes}
       >
         <div slot="header" className="flex items-center gap-2">
-          <m3e-icon className="text-primary text-xl">warning</m3e-icon>
+          <m3e-icon name="warning" className="text-primary text-xl"></m3e-icon>
           <span className="text-base font-bold text-on-surface">
             Slot Clash Analysis: {inspectingBooking?.booking_ref}
           </span>
@@ -261,12 +261,12 @@ export function AdminQueue({
 
           {clashesLoading ? (
             <div className="py-8 text-center text-xs text-on-surface-variant flex items-center justify-center gap-2">
-              <m3e-icon className="animate-spin text-primary">sync</m3e-icon>
+              <m3e-icon name="sync" className="animate-spin text-primary"></m3e-icon>
               <span>Scanning PostgreSQL GiST range overlaps...</span>
             </div>
           ) : clashesData.length === 0 ? (
             <div className="py-6 px-4 text-center text-xs text-on-surface bg-surface-container-low rounded-lg flex items-center justify-center gap-2 border border-outline-variant">
-              <m3e-icon className="text-success">verified</m3e-icon>
+              <m3e-icon name="verified" className="text-success"></m3e-icon>
               <span>No overlapping bids detected for this time range.</span>
             </div>
           ) : (
@@ -317,7 +317,7 @@ export function AdminQueue({
               </div>
 
               <div className="p-3 rounded-lg bg-surface-container border border-outline-variant text-[11px] text-on-surface-variant flex items-start gap-2 mt-2">
-                <m3e-icon className="text-primary text-sm shrink-0 mt-0.5">info</m3e-icon>
+                <m3e-icon name="info" className="text-primary text-sm shrink-0 mt-0.5"></m3e-icon>
                 <div>
                   <strong>Automatic Cascade Rule:</strong> Approving {inspectingBooking?.booking_ref}{" "}
                   will grant its official permit and atomically transition these competing bids to{" "}
@@ -342,7 +342,7 @@ export function AdminQueue({
         onclosed={onCancelModal}
       >
         <div slot="header" className="flex items-center gap-2">
-          <m3e-icon className="text-success text-xl">verified</m3e-icon>
+          <m3e-icon name="verified" className="text-success text-xl"></m3e-icon>
           <span className="text-base font-bold text-on-surface">
             Issue Administrative Permit: {actionBooking?.booking_ref}
           </span>
@@ -397,7 +397,7 @@ export function AdminQueue({
         onclosed={onCancelModal}
       >
         <div slot="header" className="flex items-center gap-2">
-          <m3e-icon className="text-error text-xl">cancel</m3e-icon>
+          <m3e-icon name="cancel" className="text-error text-xl"></m3e-icon>
           <span className="text-base font-bold text-on-surface">
             Reject Booking Request: {actionBooking?.booking_ref}
           </span>

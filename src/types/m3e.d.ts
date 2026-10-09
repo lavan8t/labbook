@@ -21,9 +21,12 @@ declare module "@m3e/web/progress-indicator";
 declare module "@m3e/web/segmented-button";
 declare module "@m3e/web/select";
 declare module "@m3e/web/snackbar";
+declare module "@m3e/web/split-button";
 declare module "@m3e/web/switch";
 declare module "@m3e/web/tabs";
 declare module "@m3e/web/textarea-autosize";
+declare module "@m3e/web/nav-bar";
+declare module "@m3e/web/nav-rail";
 declare module "@m3e/web/theme";
 declare module "@m3e/web/timepicker";
 declare module "@m3e/web/tooltip";
@@ -33,7 +36,7 @@ type CustomElementProps = React.HTMLAttributes<HTMLElement> & {
   scheme?: string;
   color?: string;
   open?: boolean;
-  value?: string | number;
+  value?: string | number | Date | null;
   label?: string;
   selected?: boolean;
   disabled?: boolean;
@@ -55,6 +58,10 @@ type CustomElementProps = React.HTMLAttributes<HTMLElement> & {
   density?: number;
   format?: string;
   indeterminate?: boolean;
+  for?: string;
+  mode?: string;
+  size?: string;
+  date?: string | Date | null;
   [key: string]: unknown;
 };
 
@@ -70,6 +77,7 @@ declare namespace React {
       "m3e-form-field": CustomElementProps;
       "m3e-button": CustomElementProps;
       "m3e-button-group": CustomElementProps;
+      "m3e-split-button": CustomElementProps;
       "m3e-icon-button": CustomElementProps;
       "m3e-segmented-button": CustomElementProps;
       "m3e-button-segment": CustomElementProps;
@@ -88,6 +96,10 @@ declare namespace React {
       "m3e-timepicker": CustomElementProps;
       "m3e-timepicker-dial": CustomElementProps;
       "m3e-timepicker-toggle": CustomElementProps;
+      "m3e-timepicker-input": CustomElementProps;
+      "m3e-nav-rail": CustomElementProps;
+      "m3e-nav-rail-toggle": CustomElementProps;
+      "m3e-nav-item": CustomElementProps;
       "m3e-tabs": CustomElementProps;
       "m3e-tab": CustomElementProps;
       "m3e-tab-panel": CustomElementProps;
@@ -106,3 +118,4 @@ declare namespace React {
     }
   }
 }
+

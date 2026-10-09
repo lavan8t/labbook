@@ -103,7 +103,7 @@ export default function AppHeader({
               onClick={handleSwitchRole}
               className="text-xs font-semibold"
             >
-              <m3e-icon slot="icon">swap_horiz</m3e-icon>
+              <m3e-icon slot="icon" name="swap_horiz"></m3e-icon>
               Switch User
             </m3e-button>
           </div>
@@ -120,21 +120,21 @@ export default function AppHeader({
                   selected={activeTab === "book"}
                   onClick={() => setActiveTab("book")}
                 >
-                  <m3e-icon slot="icon">event</m3e-icon>
+                  <m3e-icon slot="icon" name="event"></m3e-icon>
                   Book Hall / Audi
                 </m3e-tab>
                 <m3e-tab
                   selected={activeTab === "catalog"}
                   onClick={() => setActiveTab("catalog")}
                 >
-                  <m3e-icon slot="icon">apartment</m3e-icon>
+                  <m3e-icon slot="icon" name="apartment"></m3e-icon>
                   Venues Catalog
                 </m3e-tab>
                 <m3e-tab
                   selected={activeTab === "my-bookings"}
                   onClick={() => setActiveTab("my-bookings")}
                 >
-                  <m3e-icon slot="icon">book_online</m3e-icon>
+                  <m3e-icon slot="icon" name="book_online"></m3e-icon>
                   My Bookings
                   {totalBookings > 0 && (
                     <span className="ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full bg-primary text-on-primary font-bold">
@@ -149,7 +149,7 @@ export default function AppHeader({
                   selected={activeTab === "admin-pending"}
                   onClick={() => setActiveTab("admin-pending")}
                 >
-                  <m3e-icon slot="icon">pending_actions</m3e-icon>
+                  <m3e-icon slot="icon" name="pending_actions"></m3e-icon>
                   Pending Approvals Queue
                   {totalPending > 0 && (
                     <span className="ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full bg-error text-on-error font-bold">
@@ -161,14 +161,14 @@ export default function AppHeader({
                   selected={activeTab === "admin-venues"}
                   onClick={() => setActiveTab("admin-venues")}
                 >
-                  <m3e-icon slot="icon">meeting_room</m3e-icon>
+                  <m3e-icon slot="icon" name="meeting_room"></m3e-icon>
                   All Auditoriums
                 </m3e-tab>
                 <m3e-tab
                   selected={activeTab === "admin-reports"}
                   onClick={() => setActiveTab("admin-reports")}
                 >
-                  <m3e-icon slot="icon">analytics</m3e-icon>
+                  <m3e-icon slot="icon" name="analytics"></m3e-icon>
                   Monthly Reports
                 </m3e-tab>
               </>
@@ -183,7 +183,7 @@ export default function AppHeader({
               className="text-xs text-on-surface-variant hover:text-primary"
               title="Refresh from PostgreSQL"
             >
-              <m3e-icon slot="icon">sync</m3e-icon>
+              <m3e-icon slot="icon" name="sync"></m3e-icon>
               <span>{loading ? "Syncing..." : "Sync DB"}</span>
             </m3e-button>
           </div>

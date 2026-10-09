@@ -59,7 +59,7 @@ export default function MyBookings({
           disabled={loading}
           className="text-xs text-on-surface-variant hover:text-primary self-end sm:self-auto"
         >
-          <m3e-icon slot="icon">sync</m3e-icon>
+          <m3e-icon slot="icon" name="sync"></m3e-icon>
           <span>{loading ? "Syncing..." : "Refresh Status"}</span>
         </m3e-button>
       </div>
@@ -67,9 +67,7 @@ export default function MyBookings({
       {/* Empty State */}
       {activeBookings.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 px-4 text-center rounded-lg bg-surface-container-low border border-outline-variant">
-          <m3e-icon className="text-5xl text-on-surface-variant opacity-60 mb-3">
-            event_busy
-          </m3e-icon>
+          <m3e-icon name="event_busy" className="text-5xl text-on-surface-variant opacity-60 mb-3"></m3e-icon>
           <h3 className="text-base font-semibold text-on-surface mb-1">
             No reservations found
           </h3>
@@ -77,7 +75,7 @@ export default function MyBookings({
             No booking requests have been recorded for your active profile yet.
           </p>
           <m3e-button variant="filled" onClick={handleNavigateToBook}>
-            <m3e-icon slot="icon">add</m3e-icon>
+            <m3e-icon slot="icon" name="add"></m3e-icon>
             Submit a Booking Request
           </m3e-button>
         </div>
@@ -116,9 +114,7 @@ export default function MyBookings({
                           variant="outlined"
                           className="text-xs font-semibold bg-success-container text-on-success-container border-success/40"
                         >
-                          <m3e-icon slot="icon" className="text-xs">
-                            check_circle
-                          </m3e-icon>
+                          <m3e-icon slot="icon" name="check_circle" className="text-xs"></m3e-icon>
                           CONFIRMED
                         </m3e-chip>
                       )}
@@ -127,9 +123,7 @@ export default function MyBookings({
                           variant="outlined"
                           className="text-xs font-semibold bg-primary-container text-on-primary-container border-primary/40"
                         >
-                          <m3e-icon slot="icon" className="text-xs">
-                            hourglass_empty
-                          </m3e-icon>
+                          <m3e-icon slot="icon" name="hourglass_empty" className="text-xs"></m3e-icon>
                           PENDING
                         </m3e-chip>
                       )}
@@ -138,9 +132,7 @@ export default function MyBookings({
                           variant="outlined"
                           className="text-xs font-semibold bg-error-container text-on-error-container border-error/40"
                         >
-                          <m3e-icon slot="icon" className="text-xs">
-                            block
-                          </m3e-icon>
+                          <m3e-icon slot="icon" name="block" className="text-xs"></m3e-icon>
                           REJECTED
                         </m3e-chip>
                       )}
@@ -149,9 +141,7 @@ export default function MyBookings({
                           variant="outlined"
                           className="text-xs font-semibold bg-surface-container-high text-on-surface-variant border-outline-variant"
                         >
-                          <m3e-icon slot="icon" className="text-xs">
-                            cancel
-                          </m3e-icon>
+                          <m3e-icon slot="icon" name="cancel" className="text-xs"></m3e-icon>
                           CANCELLED
                         </m3e-chip>
                       )}
@@ -210,7 +200,7 @@ export default function MyBookings({
                           onClick={() => handleCancel(b.booking_id)}
                           className="text-xs text-error border-error hover:bg-error-container/20"
                         >
-                          <m3e-icon slot="icon">cancel</m3e-icon>
+                          <m3e-icon slot="icon" name="cancel"></m3e-icon>
                           Cancel
                         </m3e-button>
                       )}

@@ -149,7 +149,7 @@ export default function UserSwitcherModal({
             onClick={handleUserModalClose}
             className="text-on-surface-variant hover:text-on-surface"
           >
-            <m3e-icon>close</m3e-icon>
+            <m3e-icon name="close"></m3e-icon>
           </m3e-button>
         </div>
 
@@ -215,7 +215,7 @@ export default function UserSwitcherModal({
         onclosed={handleAdminModalClose}
       >
         <div slot="header" className="flex items-center gap-2">
-          <m3e-icon className="text-primary text-xl">lock</m3e-icon>
+          <m3e-icon name="lock" className="text-primary text-xl"></m3e-icon>
           <span className="text-base font-bold text-on-surface">
             Administrator Access Verification
           </span>

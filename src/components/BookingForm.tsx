@@ -13,6 +13,7 @@ import "@m3e/web/timepicker";
 import "@m3e/web/segmented-button";
 import "@m3e/web/textarea-autosize";
 import "@m3e/web/button";
+import "@m3e/web/icon-button";
 import "@m3e/web/card";
 import "@m3e/web/chips";
 import "@m3e/web/icon";
@@ -133,6 +134,55 @@ export function BookingForm({
     if (propSetPurposeNotes) propSetPurposeNotes(notes);
     setInternalPurposeNotes(notes);
   };
+
+  const bookingDateInputRef = React.useRef<HTMLElement>(null);
+  const bookingDatePickerRef = React.useRef<HTMLElement>(null);
+
+  React.useEffect(() => {
+    const inputEl = bookingDateInputRef.current as
+      | (HTMLElement & { value?: Date | string })
+      | null;
+    const pickerEl = bookingDatePickerRef.current as
+      | (HTMLElement & { date?: Date | string })
+      | null;
+
+    if (inputEl) {
+      try {
+        const [y, m, d] = bookingDate.split("-").map(Number);
+        inputEl.value = new Date(y, m - 1, d);
+      } catch {
+        inputEl.value = bookingDate;
+      }
+    }
+    if (pickerEl) {
+      try {
+        const [y, m, d] = bookingDate.split("-").map(Number);
+        pickerEl.date = new Date(y, m - 1, d);
+      } catch {
+        pickerEl.date = bookingDate;
+      }
+    }
+
+    const handleChange = (e: Event) => {
+      const target = e.target as { value?: Date | string; date?: Date | string } | null;
+      const val = target?.value ?? target?.date;
+      if (val instanceof Date && !isNaN(val.getTime())) {
+        const yr = val.getFullYear();
+        const mo = String(val.getMonth() + 1).padStart(2, "0");
+        const day = String(val.getDate()).padStart(2, "0");
+        handleDateChange(`${yr}-${mo}-${day}`);
+      } else if (typeof val === "string" && /^\d{4}-\d{2}-\d{2}$/.test(val)) {
+        handleDateChange(val);
+      }
+    };
+
+    inputEl?.addEventListener("change", handleChange);
+    pickerEl?.addEventListener("change", handleChange);
+    return () => {
+      inputEl?.removeEventListener("change", handleChange);
+      pickerEl?.removeEventListener("change", handleChange);
+    };
+  }, [bookingDate]);
 
   // Determine current active venue
   const activeVenue = useMemo(() => {
@@ -304,48 +354,87 @@ export function BookingForm({
             </div>
           </m3e-card>
 
-          {/* Date & Time Range Inputs (Native picker icons only, no duplicate suffix icons) */}
+          {/* Date & Time Range Inputs using m3e Web Components (no default form date picker) */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
             <div>
               <m3e-form-field className="w-full">
                 <label slot="label" htmlFor="booking-date-field">Reservation Date</label>
-                <input
+                <m3e-date-input
                   id="booking-date-field"
+                  ref={bookingDateInputRef}
                   type="date"
-                  value={bookingDate}
-                  onChange={(e) => handleDateChange(e.target.value)}
-                  className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
-                  required
-                />
+                ></m3e-date-input>
+                <m3e-icon-button slot="suffix" aria-label="Open Calendar">
+                  <m3e-icon name="calendar_today"></m3e-icon>
+                  <m3e-datepicker-toggle for="booking-datepicker-popover"></m3e-datepicker-toggle>
+                </m3e-icon-button>
               </m3e-form-field>
+              <m3e-datepicker
+                id="booking-datepicker-popover"
+                ref={bookingDatePickerRef}
+                for="booking-date-field"
+                date={bookingDate}
+              ></m3e-datepicker>
             </div>
 
             <div>
               <m3e-form-field className="w-full">
                 <label slot="label" htmlFor="start-time-field">Start Time</label>
-                <input
+                <m3e-date-input
                   id="start-time-field"
                   type="time"
+                  time-format="24"
                   value={startTime}
-                  onChange={(e) => handleStartTimeChange(e.target.value)}
-                  className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
-                  required
-                />
+                  onChange={(e: React.FormEvent<HTMLElement>) => {
+                    const target = e.target as HTMLElement & { value?: string };
+                    if (target.value) handleStartTimeChange(String(target.value));
+                  }}
+                ></m3e-date-input>
+                <m3e-icon-button slot="suffix" aria-label="Open Timepicker">
+                  <m3e-icon name="schedule"></m3e-icon>
+                  <m3e-timepicker-toggle for="start-time-popover"></m3e-timepicker-toggle>
+                </m3e-icon-button>
               </m3e-form-field>
+              <m3e-timepicker
+                id="start-time-popover"
+                for="start-time-field"
+                format="24"
+                onChange={(e: React.FormEvent<HTMLElement>) => {
+                  const target = e.target as HTMLElement & { date?: string; value?: string };
+                  if (target.date) handleStartTimeChange(String(target.date));
+                  else if (target.value) handleStartTimeChange(String(target.value));
+                }}
+              ></m3e-timepicker>
             </div>
 
             <div>
               <m3e-form-field className="w-full">
                 <label slot="label" htmlFor="end-time-field">End Time</label>
-                <input
+                <m3e-date-input
                   id="end-time-field"
                   type="time"
+                  time-format="24"
                   value={endTime}
-                  onChange={(e) => handleEndTimeChange(e.target.value)}
-                  className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
-                  required
-                />
+                  onChange={(e: React.FormEvent<HTMLElement>) => {
+                    const target = e.target as HTMLElement & { value?: string };
+                    if (target.value) handleEndTimeChange(String(target.value));
+                  }}
+                ></m3e-date-input>
+                <m3e-icon-button slot="suffix" aria-label="Open Timepicker">
+                  <m3e-icon name="schedule"></m3e-icon>
+                  <m3e-timepicker-toggle for="end-time-popover"></m3e-timepicker-toggle>
+                </m3e-icon-button>
               </m3e-form-field>
+              <m3e-timepicker
+                id="end-time-popover"
+                for="end-time-field"
+                format="24"
+                onChange={(e: React.FormEvent<HTMLElement>) => {
+                  const target = e.target as HTMLElement & { date?: string; value?: string };
+                  if (target.date) handleEndTimeChange(String(target.date));
+                  else if (target.value) handleEndTimeChange(String(target.value));
+                }}
+              ></m3e-timepicker>
             </div>
           </div>
 

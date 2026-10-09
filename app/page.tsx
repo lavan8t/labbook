@@ -391,31 +391,10 @@ export default function CampusBookPage() {
     }
   }
 
-  const tabTitle = useMemo(() => {
-    switch (activeTab) {
-      case "timetable":
-        return "Campus Timetable Schedule Matrix";
-      case "book":
-        return "Submit Venue Booking Request";
-      case "catalog":
-        return "Campus Venues Master Catalog";
-      case "my-bookings":
-        return `My Reservations (${currentUser.name})`;
-      case "admin-pending":
-        return "Administrator Pending Approvals Queue";
-      case "admin-venues":
-        return "Campus Facilities Management";
-      case "admin-reports":
-        return "Monthly Venue Utilization Analytics";
-      default:
-        return "CampusBook";
-    }
-  }, [activeTab, currentUser]);
-
   return (
     <m3e-theme color="#C85A32" scheme={theme} variant="tonal-spot">
       <div className={`min-h-screen flex ${theme === "dark" ? "dark bg-surface-container-lowest" : "bg-surface"} text-on-surface font-sans`}>
-        {/* Unified Left Vertical Sidebar (Merges both top rows) */}
+        {/* Unified Left Vertical Sidebar */}
         <AppSidebar
           currentUser={currentUser}
           activeTab={activeTab}
@@ -428,39 +407,33 @@ export default function CampusBookPage() {
         />
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col min-w-0">
-          {/* Top Header Bar with Mobile Menu Toggle, View Title & 3-Dot Options Trigger */}
-          <header className="h-14 border-b border-outline-variant px-4 sm:px-6 flex items-center justify-between bg-surface shrink-0 z-20">
-            <div className="flex items-center gap-3 min-w-0">
-              <button
-                type="button"
-                onClick={() => setMobileNavOpen(true)}
-                className="md:hidden p-2 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors"
-                aria-label="Open navigation menu"
-              >
-                <m3e-icon className="text-xl">menu</m3e-icon>
-              </button>
+        <div className="flex-1 flex flex-col min-w-0 relative">
+          {/* Top Right Options Trigger (3-dot icon) */}
+          <div className="absolute top-4 right-4 sm:right-6 z-20 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowOptionsDrawer(true)}
+              className="p-2 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high bg-surface-container-low/90 backdrop-blur-xs border border-outline-variant/60 shadow-2xs transition-colors"
+              title="Options"
+              aria-label="Options"
+            >
+              <m3e-icon name="more_vert" className="text-xl"></m3e-icon>
+            </button>
+          </div>
 
-              <div className="min-w-0">
-                <h1 className="text-sm font-bold text-on-surface truncate">
-                  {tabTitle}
-                </h1>
-              </div>
-            </div>
-
-            {/* Right Controls: 3-Dot Icon for Options Panel */}
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setShowOptionsDrawer(true)}
-                className="p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
-                title="Options"
-                aria-label="Options"
-              >
-                <m3e-icon className="text-xl">more_vert</m3e-icon>
-              </button>
-            </div>
-          </header>
+          {/* Mobile Navigation Trigger (Mobile only) */}
+          <div className="md:hidden flex items-center justify-between p-3 border-b border-outline-variant bg-surface shrink-0">
+            <button
+              type="button"
+              onClick={() => setMobileNavOpen(true)}
+              className="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors"
+              aria-label="Open navigation menu"
+            >
+              <m3e-icon name="menu" className="text-xl"></m3e-icon>
+            </button>
+            <span className="font-bold text-sm text-on-surface">CampusBook</span>
+            <div className="w-8" />
+          </div>
 
           {/* Main View Port */}
           <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
@@ -641,7 +614,7 @@ export default function CampusBookPage() {
         >
           {snackbarMessage}
         </m3e-snackbar>
-      </div>
+        </div>
     </m3e-theme>
   );
 }

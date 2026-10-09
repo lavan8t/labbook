@@ -14,6 +14,11 @@ import "@m3e/web/chips";
 import "@m3e/web/button";
 import "@m3e/web/dialog";
 import "@m3e/web/icon";
+import "@m3e/web/icon-button";
+import "@m3e/web/form-field";
+import "@m3e/web/date-input";
+import "@m3e/web/datepicker";
+import "@m3e/web/progress-indicator";
 
 export interface GanttTimetableProps {
   venues: Venue[];
@@ -24,7 +29,7 @@ export interface GanttTimetableProps {
     venueId: number,
     date: string,
     startTime: string,
-    endTime: string
+    endTime: string,
   ) => void;
   onInspectBooking?: (booking: Booking) => void;
   loading?: boolean;
@@ -78,7 +83,7 @@ export function GanttTimetable({
 }: GanttTimetableProps) {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("ALL");
   const [inspectingBooking, setInspectingBooking] = useState<Booking | null>(
-    null
+    null,
   );
   const [hoveredPreview, setHoveredPreview] = useState<{
     booking: Booking;
@@ -86,6 +91,8 @@ export function GanttTimetable({
   } | null>(null);
 
   const dialogRef = useRef<HTMLElement>(null);
+  const dateInputRef = useRef<HTMLElement>(null);
+  const datePickerRef = useRef<HTMLElement>(null);
   const timeSlots = useMemo(() => generateTimeSlots(), []);
 
   // Synchronize modal state with native m3e-dialog Web Component
@@ -105,6 +112,53 @@ export function GanttTimetable({
       }
     }
   }, [inspectingBooking]);
+
+  // Synchronize m3e-date-input & m3e-datepicker with React state
+  useEffect(() => {
+    const inputEl = dateInputRef.current as
+      | (HTMLElement & { value?: Date | string })
+      | null;
+    const pickerEl = datePickerRef.current as
+      | (HTMLElement & { date?: Date | string })
+      | null;
+
+    if (inputEl) {
+      try {
+        const [y, m, d] = selectedDate.split("-").map(Number);
+        inputEl.value = new Date(y, m - 1, d);
+      } catch {
+        inputEl.value = selectedDate;
+      }
+    }
+    if (pickerEl) {
+      try {
+        const [y, m, d] = selectedDate.split("-").map(Number);
+        pickerEl.date = new Date(y, m - 1, d);
+      } catch {
+        pickerEl.date = selectedDate;
+      }
+    }
+
+    const handleChange = (e: Event) => {
+      const target = e.target as { value?: Date | string; date?: Date | string } | null;
+      const val = target?.value ?? target?.date;
+      if (val instanceof Date && !isNaN(val.getTime())) {
+        const yr = val.getFullYear();
+        const mo = String(val.getMonth() + 1).padStart(2, "0");
+        const day = String(val.getDate()).padStart(2, "0");
+        onDateChange(`${yr}-${mo}-${day}`);
+      } else if (typeof val === "string" && /^\d{4}-\d{2}-\d{2}$/.test(val)) {
+        onDateChange(val);
+      }
+    };
+
+    inputEl?.addEventListener("change", handleChange);
+    pickerEl?.addEventListener("change", handleChange);
+    return () => {
+      inputEl?.removeEventListener("change", handleChange);
+      pickerEl?.removeEventListener("change", handleChange);
+    };
+  }, [selectedDate, onDateChange]);
 
   // Date manipulation helpers
   const shiftDate = (days: number) => {
@@ -146,7 +200,7 @@ export function GanttTimetable({
     if (categoryFilter === "AUDITORIUM") {
       return venues.filter(
         (v) =>
-          v.venue_type === "AUDITORIUM" || v.venue_type === "MINI_AUDITORIUM"
+          v.venue_type === "AUDITORIUM" || v.venue_type === "MINI_AUDITORIUM",
       );
     }
     return venues.filter((v) => v.venue_type === categoryFilter);
@@ -174,7 +228,7 @@ export function GanttTimetable({
     if (!inspectingBooking) return null;
     return (
       venues.find(
-        (v) => Number(v.venue_id) === Number(inspectingBooking.venue_id)
+        (v) => Number(v.venue_id) === Number(inspectingBooking.venue_id),
       ) || null
     );
   }, [inspectingBooking, venues]);
@@ -187,18 +241,26 @@ export function GanttTimetable({
         className="block rounded-xl border border-outline-variant bg-surface p-4 shadow-xs"
       >
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          {/* Date Picker & Quick Navigation */}
+          {/* Date Picker using m3e Web Components (no default form date picker) */}
           <div className="flex items-center gap-2 flex-wrap">
-            <div className="flex items-center bg-surface-container-low rounded-lg border border-outline-variant px-3 py-1.5 shadow-2xs">
-              <m3e-icon className="text-primary text-base mr-2">
-                calendar_month
-              </m3e-icon>
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => onDateChange(e.target.value)}
-                className="bg-transparent text-xs font-semibold text-on-surface focus:outline-none cursor-pointer"
-              />
+            <div className="flex items-center">
+              <m3e-form-field className="text-xs">
+                <m3e-date-input
+                  id="gantt-timetable-date-input"
+                  ref={dateInputRef}
+                  type="date"
+                ></m3e-date-input>
+                <m3e-icon-button slot="suffix" aria-label="Open Calendar">
+                  <m3e-icon name="calendar_today"></m3e-icon>
+                  <m3e-datepicker-toggle for="gantt-timetable-datepicker"></m3e-datepicker-toggle>
+                </m3e-icon-button>
+              </m3e-form-field>
+              <m3e-datepicker
+                id="gantt-timetable-datepicker"
+                ref={datePickerRef}
+                for="gantt-timetable-date-input"
+                variant="auto"
+              ></m3e-datepicker>
             </div>
 
             <div className="flex items-center gap-1">
@@ -208,9 +270,7 @@ export function GanttTimetable({
                 className="h-8 text-xs px-2.5"
                 title="Previous Day"
               >
-                <m3e-icon slot="icon" className="text-xs">
-                  chevron_left
-                </m3e-icon>
+                <m3e-icon slot="icon" name="chevron_left"></m3e-icon>
                 Prev
               </m3e-button>
 
@@ -229,9 +289,7 @@ export function GanttTimetable({
                 title="Next Day"
               >
                 Next
-                <m3e-icon slot="trailing-icon" className="text-xs">
-                  chevron_right
-                </m3e-icon>
+                <m3e-icon slot="trailing-icon" name="chevron_right"></m3e-icon>
               </m3e-button>
             </div>
 
@@ -255,7 +313,7 @@ export function GanttTimetable({
                       : "bg-surface-container-low text-on-surface-variant border-outline-variant hover:bg-surface-container hover:text-on-surface"
                   }`}
                 >
-                  <m3e-icon className="text-xs">{cat.icon}</m3e-icon>
+                  <m3e-icon name={cat.icon} className="text-xs"></m3e-icon>
                   {cat.label}
                 </button>
               );
@@ -263,27 +321,27 @@ export function GanttTimetable({
           </div>
         </div>
 
-        {/* Legend Row */}
+        {/* Status Legend Row (strictly no dots anywhere) */}
         <div className="mt-3 pt-3 border-t border-outline-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <span className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wider">
               Status Legend:
             </span>
 
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-300 text-[11px] font-semibold">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block" />
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold">
+              <m3e-icon name="check_circle" className="text-xs text-emerald-600 dark:text-emerald-400"></m3e-icon>
               Confirmed Booking
-            </div>
+            </span>
 
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-300 text-[11px] font-semibold">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" />
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/30 text-[11px] font-semibold">
+              <m3e-icon name="schedule" className="text-xs text-amber-600 dark:text-amber-400"></m3e-icon>
               Pending Review
-            </div>
+            </span>
 
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-container-lowest text-on-surface-variant border border-dashed border-outline text-[11px] font-medium">
-              <m3e-icon className="text-xs text-primary">add_circle</m3e-icon>
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container-low text-on-surface-variant border border-dashed border-outline-variant text-[11px] font-medium">
+              <m3e-icon name="add" className="text-xs text-primary"></m3e-icon>
               Available Slot (Click to Book)
-            </div>
+            </span>
           </div>
 
           <div className="text-[11px] text-on-surface-variant italic">
@@ -295,8 +353,8 @@ export function GanttTimetable({
 
       {/* Loading Bar */}
       {loading && (
-        <div className="p-3 bg-surface-container-low rounded-lg border border-outline-variant flex items-center justify-center gap-2 text-xs text-primary font-medium animate-pulse">
-          <m3e-icon className="animate-spin text-sm">sync</m3e-icon>
+        <div className="p-3 bg-surface-container-low rounded-lg border border-outline-variant flex items-center justify-center gap-2 text-xs text-primary font-medium">
+          <m3e-icon name="sync" className="animate-spin text-sm"></m3e-icon>
           Updating timetable bookings for {selectedDate}...
         </div>
       )}
@@ -308,13 +366,11 @@ export function GanttTimetable({
             {/* Header: Venue Column + 26 Time Slots */}
             <div className="flex border-b border-outline-variant bg-surface-container-high sticky top-0 z-30">
               {/* Sticky Top-Left Corner Header */}
-              <div className="sticky left-0 z-40 bg-surface-container-high min-w-[240px] max-w-[240px] p-3 border-r border-outline-variant flex items-center justify-between">
+              <div className="sticky left-0 z-40 bg-surface-container-high min-w-[220px] max-w-[220px] px-4 py-3 border-r border-outline-variant flex items-center justify-between">
                 <span className="text-xs font-bold text-on-surface uppercase tracking-wider">
-                  Venue Catalog ({filteredVenues.length})
+                  Venues ({filteredVenues.length})
                 </span>
-                <m3e-icon className="text-on-surface-variant text-sm">
-                  apartment
-                </m3e-icon>
+                <m3e-icon name="apartment" className="text-on-surface-variant text-sm"></m3e-icon>
               </div>
 
               {/* Time Slot Columns Header */}
@@ -345,9 +401,7 @@ export function GanttTimetable({
             {/* Matrix Body: Venue Rows */}
             {filteredVenues.length === 0 ? (
               <div className="p-12 text-center text-xs text-on-surface-variant bg-surface">
-                <m3e-icon className="text-3xl text-on-surface-variant/50 mb-2">
-                  search_off
-                </m3e-icon>
+                <m3e-icon name="search_off" className="text-3xl text-on-surface-variant/50 mb-2"></m3e-icon>
                 <p>No venues match the selected category filter.</p>
               </div>
             ) : (
@@ -355,7 +409,7 @@ export function GanttTimetable({
                 {filteredVenues.map((venue) => {
                   const venueIdNum = Number(venue.venue_id);
                   const venueBookings = bookings.filter(
-                    (b) => Number(b.venue_id) === venueIdNum
+                    (b) => Number(b.venue_id) === venueIdNum,
                   );
 
                   // Calculate booking tracks for conflict/overlap stacking
@@ -370,7 +424,7 @@ export function GanttTimetable({
                     const span = getBookingSpan(
                       b.start_datetime,
                       b.end_datetime,
-                      selectedDate
+                      selectedDate,
                     );
                     if (!span.isVisible) continue;
 
@@ -395,7 +449,7 @@ export function GanttTimetable({
                   }
 
                   const totalTracks = Math.max(1, tracks.length);
-                  const rowHeight = Math.max(68, totalTracks * 38 + 12);
+                  const rowHeight = Math.max(64, totalTracks * 38 + 12);
 
                   return (
                     <div
@@ -403,50 +457,24 @@ export function GanttTimetable({
                       className="flex hover:bg-surface-container-lowest/30 transition-colors"
                       style={{ minHeight: `${rowHeight}px` }}
                     >
-                      {/* Sticky Left Venue Cell */}
-                      <div className="sticky left-0 z-20 bg-surface border-r border-outline-variant min-w-[240px] max-w-[240px] p-3 flex flex-col justify-center">
-                        <div className="flex items-center justify-between gap-1">
-                          <span
-                            className="font-bold text-xs text-on-surface truncate"
-                            title={venue.venue_name}
-                          >
-                            {venue.venue_name}
-                          </span>
-                        </div>
-
-                        <div className="text-[10px] text-primary font-semibold uppercase tracking-wider mt-0.5">
-                          {venue.venue_type.replace(/_/g, " ")}
-                        </div>
-
-                        <div className="flex items-center gap-2 text-[10px] text-on-surface-variant mt-1">
-                          <span
-                            className="flex items-center gap-0.5"
-                            title="Seating Capacity"
-                          >
-                            <m3e-icon className="text-[11px]">groups</m3e-icon>
-                            {venue.seating_capacity} cap
-                          </span>
-                          <span>&bull;</span>
-                          <span
-                            className="truncate flex items-center gap-0.5"
-                            title={venue.building}
-                          >
-                            <m3e-icon className="text-[11px]">
-                              location_on
-                            </m3e-icon>
-                            {venue.building}
-                          </span>
-                        </div>
+                      {/* Sticky Left Venue Cell: Venue name only, nothing else */}
+                      <div className="sticky left-0 z-20 bg-surface border-r border-outline-variant min-w-[220px] max-w-[220px] px-4 py-3 flex items-center">
+                        <span
+                          className="font-bold text-xs text-on-surface truncate"
+                          title={venue.venue_name}
+                        >
+                          {venue.venue_name}
+                        </span>
                       </div>
 
                       {/* Timeline Grid Row with 26 Slots and Overlaid Bookings */}
                       <div
                         className="flex-1 grid grid-cols-[repeat(26,minmax(64px,1fr))] relative"
                         style={{
-                          gridTemplateRows: `repeat(${totalTracks}, minmax(36px, 1fr))`,
+                          gridTemplateRows: `repeat(${totalTracks}, minmax(36px, auto))`,
                         }}
                       >
-                        {/* 26 Background Clickable Free Slots */}
+                        {/* 26 Discrete Slot Click Targets */}
                         {timeSlots.map((slot) => {
                           const isHourBoundary = slot.minute === 0;
                           return (
@@ -468,7 +496,7 @@ export function GanttTimetable({
                               }`}
                             >
                               <span className="opacity-0 group-hover/slot:opacity-100 text-[10px] text-primary font-bold transition-opacity select-none flex items-center gap-0.5 bg-surface/90 px-1.5 py-0.5 rounded shadow-2xs">
-                                <m3e-icon className="text-[10px]">add</m3e-icon>
+                                <m3e-icon name="add" className="text-[10px]"></m3e-icon>
                                 Book
                               </span>
                             </div>
@@ -481,7 +509,7 @@ export function GanttTimetable({
                             booking.booking_status === "CONFIRMED";
                           const timeRangeStr = formatTimeRangeDisplay(
                             booking.start_datetime,
-                            booking.end_datetime
+                            booking.end_datetime,
                           );
 
                           return (
@@ -551,14 +579,11 @@ export function GanttTimetable({
           style={{
             top: `${Math.min(
               window.innerHeight - 200,
-              hoveredPreview.rect.bottom + 8
+              hoveredPreview.rect.bottom + 8,
             )}px`,
             left: `${Math.max(
               16,
-              Math.min(
-                window.innerWidth - 320,
-                hoveredPreview.rect.left
-              )
+              Math.min(window.innerWidth - 320, hoveredPreview.rect.left),
             )}px`,
           }}
           className="fixed z-50 w-80 p-3.5 bg-surface-container-highest/95 backdrop-blur-md rounded-xl shadow-xl border border-outline-variant pointer-events-none text-xs text-on-surface"
@@ -580,17 +605,17 @@ export function GanttTimetable({
 
           <div className="space-y-1.5 text-[11px] text-on-surface-variant">
             <div className="flex items-center gap-1.5">
-              <m3e-icon className="text-xs text-primary">schedule</m3e-icon>
+              <m3e-icon name="schedule" className="text-xs text-primary"></m3e-icon>
               <span className="font-semibold text-on-surface">
                 {formatTimeRangeDisplay(
                   hoveredPreview.booking.start_datetime,
-                  hoveredPreview.booking.end_datetime
+                  hoveredPreview.booking.end_datetime,
                 )}
               </span>
             </div>
 
             <div className="flex items-center gap-1.5">
-              <m3e-icon className="text-xs">person</m3e-icon>
+              <m3e-icon name="person" className="text-xs"></m3e-icon>
               <span className="truncate">
                 {hoveredPreview.booking.requester_name || "Unknown Requester"}
               </span>
@@ -598,7 +623,7 @@ export function GanttTimetable({
 
             {hoveredPreview.booking.department && (
               <div className="flex items-center gap-1.5">
-                <m3e-icon className="text-xs">domain</m3e-icon>
+                <m3e-icon name="domain" className="text-xs"></m3e-icon>
                 <span className="truncate">
                   {hoveredPreview.booking.department}
                 </span>
@@ -607,7 +632,7 @@ export function GanttTimetable({
 
             {hoveredPreview.booking.expected_attendees !== undefined && (
               <div className="flex items-center gap-1.5">
-                <m3e-icon className="text-xs">groups</m3e-icon>
+                <m3e-icon name="groups" className="text-xs"></m3e-icon>
                 <span>
                   {hoveredPreview.booking.expected_attendees} Expected Attendees
                 </span>
@@ -617,7 +642,7 @@ export function GanttTimetable({
 
           <div className="mt-2.5 pt-2 border-t border-outline-variant/40 text-[10px] text-primary font-bold flex items-center justify-between">
             <span>Click to view full reservation details</span>
-            <m3e-icon className="text-xs">open_in_new</m3e-icon>
+            <m3e-icon name="open_in_new" className="text-xs"></m3e-icon>
           </div>
         </div>
       )}
@@ -625,24 +650,23 @@ export function GanttTimetable({
       {/* Full Detail Modal: <m3e-dialog> */}
       <m3e-dialog
         ref={dialogRef}
-        open={Boolean(inspectingBooking) || undefined}
-        dismissible
-        onclosed={() => setInspectingBooking(null)}
+        open={Boolean(inspectingBooking)}
         className="w-full max-w-lg"
       >
         <div slot="header" className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
             <m3e-icon
+              name={
+                inspectingBooking?.booking_status === "CONFIRMED"
+                  ? "verified"
+                  : "pending_actions"
+              }
               className={
                 inspectingBooking?.booking_status === "CONFIRMED"
                   ? "text-success text-xl"
                   : "text-amber-500 text-xl"
               }
-            >
-              {inspectingBooking?.booking_status === "CONFIRMED"
-                ? "verified"
-                : "pending_actions"}
-            </m3e-icon>
+            ></m3e-icon>
             <div>
               <span className="text-base font-bold text-on-surface">
                 Reservation Record
@@ -707,7 +731,7 @@ export function GanttTimetable({
                 <div className="text-[11px] text-on-surface-variant mt-0.5">
                   {formatTimeRangeDisplay(
                     inspectingBooking.start_datetime,
-                    inspectingBooking.end_datetime
+                    inspectingBooking.end_datetime,
                   )}
                 </div>
               </div>
@@ -750,7 +774,7 @@ export function GanttTimetable({
                         {Math.round(
                           (inspectingBooking.expected_attendees /
                             inspectingVenue.seating_capacity) *
-                            100
+                            100,
                         )}
                         %)
                       </span>
@@ -764,8 +788,8 @@ export function GanttTimetable({
                             Math.round(
                               (inspectingBooking.expected_attendees /
                                 inspectingVenue.seating_capacity) *
-                                100
-                            )
+                                100,
+                            ),
                           )}%`,
                         }}
                       />
