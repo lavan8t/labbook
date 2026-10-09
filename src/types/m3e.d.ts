@@ -1,30 +1,70 @@
-declare module "@m3e/web/select";
-declare module "@m3e/web/option";
-declare module "@m3e/web/form-field";
-declare module "@m3e/web/button";
-declare module "@m3e/web/theme";
-declare module "@m3e/web/card";
+declare module "@m3e/web/all";
+declare module "@m3e/web/app-bar";
+declare module "@m3e/web/avatar";
 declare module "@m3e/web/badge";
-declare module "@m3e/web/chips";
-declare module "@m3e/web/switch";
+declare module "@m3e/web/button";
+declare module "@m3e/web/button-group";
+declare module "@m3e/web/card";
 declare module "@m3e/web/checkbox";
+declare module "@m3e/web/chips";
 declare module "@m3e/web/date-input";
 declare module "@m3e/web/datepicker";
-declare module "@m3e/web/timepicker";
-declare module "@m3e/web/tabs";
-declare module "@m3e/web/icon";
+declare module "@m3e/web/dialog";
 declare module "@m3e/web/divider";
-declare module "@m3e/web/tooltip";
-declare module "@m3e/web/button-group";
+declare module "@m3e/web/form-field";
+declare module "@m3e/web/icon";
 declare module "@m3e/web/icon-button";
+declare module "@m3e/web/list";
+declare module "@m3e/web/loading-indicator";
+declare module "@m3e/web/option";
+declare module "@m3e/web/progress-indicator";
 declare module "@m3e/web/segmented-button";
+declare module "@m3e/web/select";
+declare module "@m3e/web/snackbar";
+declare module "@m3e/web/switch";
+declare module "@m3e/web/tabs";
+declare module "@m3e/web/textarea-autosize";
+declare module "@m3e/web/theme";
+declare module "@m3e/web/timepicker";
+declare module "@m3e/web/tooltip";
 
-type CustomElementProps = React.HTMLAttributes<HTMLElement> & Record<string, unknown>;
+type CustomElementProps = React.HTMLAttributes<HTMLElement> & {
+  variant?: string;
+  scheme?: string;
+  color?: string;
+  open?: boolean;
+  value?: string | number;
+  label?: string;
+  selected?: boolean;
+  disabled?: boolean;
+  required?: boolean;
+  name?: string;
+  type?: string;
+  placeholder?: string;
+  min?: string | number;
+  max?: string | number;
+  rows?: number;
+  lines?: string;
+  headline?: string;
+  supportingText?: string;
+  leadingIcon?: string;
+  trailingIcon?: string;
+  slot?: string;
+  contrast?: string;
+  motion?: string;
+  density?: number;
+  format?: string;
+  indeterminate?: boolean;
+  [key: string]: unknown;
+};
 
 declare namespace React {
   namespace JSX {
     interface IntrinsicElements {
       "m3e-theme": CustomElementProps;
+      "m3e-app-bar": CustomElementProps;
+      "m3e-top-app-bar": CustomElementProps;
+      "m3e-avatar": CustomElementProps;
       "m3e-select": CustomElementProps;
       "m3e-option": CustomElementProps;
       "m3e-form-field": CustomElementProps;
@@ -32,6 +72,7 @@ declare namespace React {
       "m3e-button-group": CustomElementProps;
       "m3e-icon-button": CustomElementProps;
       "m3e-segmented-button": CustomElementProps;
+      "m3e-button-segment": CustomElementProps;
       "m3e-card": CustomElementProps;
       "m3e-badge": CustomElementProps;
       "m3e-chip": CustomElementProps;
@@ -45,6 +86,7 @@ declare namespace React {
       "m3e-datepicker": CustomElementProps;
       "m3e-datepicker-toggle": CustomElementProps;
       "m3e-timepicker": CustomElementProps;
+      "m3e-timepicker-dial": CustomElementProps;
       "m3e-timepicker-toggle": CustomElementProps;
       "m3e-tabs": CustomElementProps;
       "m3e-tab": CustomElementProps;
@@ -52,6 +94,15 @@ declare namespace React {
       "m3e-icon": CustomElementProps;
       "m3e-divider": CustomElementProps;
       "m3e-tooltip": CustomElementProps;
+      "m3e-dialog": CustomElementProps;
+      "m3e-dialog-action": CustomElementProps;
+      "m3e-dialog-trigger": CustomElementProps;
+      "m3e-list": CustomElementProps;
+      "m3e-list-item": CustomElementProps;
+      "m3e-linear-progress-indicator": CustomElementProps;
+      "m3e-circular-progress-indicator": CustomElementProps;
+      "m3e-snackbar": CustomElementProps;
+      "m3e-textarea-autosize": CustomElementProps;
     }
   }
 }

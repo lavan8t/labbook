@@ -36,38 +36,38 @@
 :root {
   color-scheme: light;
 
-  /* Material 3 System Colors - Red Vibrant Palette */
-  --md-sys-color-background: #fffbfa;
-  --md-sys-color-on-background: #201a19;
-  --md-sys-color-surface: #fffbfa;
-  --md-sys-color-on-surface: #201a19;
-  --md-sys-color-surface-dim: #e8dedb;
-  --md-sys-color-surface-bright: #fffbfa;
-  --md-sys-color-surface-container-lowest: #fdf1ee;
-  --md-sys-color-surface-container-low: #fdf1ee;
-  --md-sys-color-surface-container: #f7ebe8;
+  /* Material 3 System Colors - Terracotta Red (#c85a32) Light Palette */
+  --md-sys-color-background: #fff8f6;
+  --md-sys-color-on-background: #231917;
+  --md-sys-color-surface: #fff8f6;
+  --md-sys-color-on-surface: #231917;
+  --md-sys-color-surface-dim: #e8dbd7;
+  --md-sys-color-surface-bright: #fff8f6;
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #fcf1ed;
+  --md-sys-color-surface-container: #f6ebe7;
   --md-sys-color-surface-container-high: #f1e5e2;
   --md-sys-color-surface-container-highest: #ebdfdc;
   --md-sys-color-surface-variant: #f5ded8;
   --md-sys-color-on-surface-variant: #53433f;
   --md-sys-color-outline: #85736e;
   --md-sys-color-outline-variant: #d8c2bc;
-  --md-sys-color-primary: #ba1a1a;
+  --md-sys-color-primary: #a83818;
   --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: #ffdad6;
-  --md-sys-color-on-primary-container: #410002;
-  --md-sys-color-secondary: #775652;
+  --md-sys-color-primary-container: #ffdbd2;
+  --md-sys-color-on-primary-container: #3a0901;
+  --md-sys-color-secondary: #77574e;
   --md-sys-color-on-secondary: #ffffff;
-  --md-sys-color-secondary-container: #ffdad6;
-  --md-sys-color-on-secondary-container: #2c1512;
+  --md-sys-color-secondary-container: #ffdbd2;
+  --md-sys-color-on-secondary-container: #2c1510;
   --md-sys-color-error: #ba1a1a;
   --md-sys-color-on-error: #ffffff;
   --md-sys-color-error-container: #ffdad6;
   --md-sys-color-on-error-container: #410002;
-  --md-sys-color-success: #14532d;
+  --md-sys-color-success: #20693a;
   --md-sys-color-on-success: #ffffff;
-  --md-sys-color-success-container: #dcfce7;
-  --md-sys-color-on-success-container: #14532d;
+  --md-sys-color-success-container: #a5f2b4;
+  --md-sys-color-on-success-container: #00210b;
 
   /* Clean Standard Shapes for Controls & Fields */
   --m3e-button-shape: 8px;
@@ -86,6 +86,8 @@
   --m3e-form-field-container-shape: 8px;
   --m3e-outlined-form-field-container-shape: 8px;
   --m3e-form-field-active-indicator-shape: 8px;
+  --m3e-card-shape: 8px;
+  --m3e-card-padding: 24px;
   --m3e-chip-shape: 8px;
   --m3e-datepicker-container-shape: 16px;
   --m3e-datepicker-docked-container-shape: 16px;
@@ -105,8 +107,9 @@
   --m3e-option-first-child-shape: 8px;
   --m3e-option-last-child-shape: 8px;
 
-  /* Borderless Surfaces */
-  --m3e-form-field-outline-color: transparent;
+  /* Visible Outlines for Material 3 Form Fields */
+  --m3e-form-field-outline-color: var(--md-sys-color-outline-variant);
+  --m3e-form-field-hover-outline-color: var(--md-sys-color-outline);
   --m3e-form-field-focus-outline-color: var(--md-sys-color-primary);
   --m3e-form-field-label-color: var(--md-sys-color-on-surface-variant);
   --m3e-form-field-focus-label-color: var(--md-sys-color-primary);
@@ -147,30 +150,20 @@ h6,
   letter-spacing: 0.015em;
 }
 
-/* Clean Standard Form Fields and Controls */
+/* Clean Standard Form Fields and Controls without clipping floating labels */
 m3e-form-field {
   --m3e-form-field-container-shape: 8px;
   --m3e-outlined-form-field-container-shape: 8px;
   --m3e-form-field-active-indicator-shape: 8px;
-  border-radius: 8px !important;
-  overflow: hidden !important;
-  isolation: isolate;
-  clip-path: inset(0 round 8px);
-}
-
-m3e-form-field::part(container),
-m3e-form-field::part(outline),
-m3e-form-field .base {
-  border-radius: 8px !important;
-  overflow: hidden !important;
+  margin-top: 10px;
+  margin-bottom: 4px;
+  display: block;
+  overflow: visible;
 }
 
 m3e-select {
   --m3e-select-container-shape: 8px;
   border-radius: 8px !important;
-  overflow: hidden !important;
-  isolation: isolate;
-  clip-path: inset(0 round 8px);
 }
 
 m3e-button,

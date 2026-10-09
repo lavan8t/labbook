@@ -10,7 +10,12 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="h-full antialiased" style={{ fontVariationSettings: "'ROND' 100" }}>
+    <html
+      lang="en"
+      className="h-full antialiased"
+      style={{ fontVariationSettings: "'ROND' 100" }}
+      suppressHydrationWarning
+    >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -30,6 +35,7 @@ export default function RootLayout({
       <body
         className="min-h-full font-sans antialiased bg-surface text-on-surface"
         style={{ fontVariationSettings: "'ROND' 100" }}
+        suppressHydrationWarning
       >
         {children}
       </body>
