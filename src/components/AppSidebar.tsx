@@ -42,15 +42,15 @@ export function AppSidebar({
 
   const standardNavItems: NavItemDef[] = [
     { id: "timetable", label: "Timetable", icon: "calendar_month" },
-    { id: "book", label: "Book Hall / Audi", icon: "add_circle" },
-    { id: "catalog", label: "Venues Catalog", icon: "domain" },
+    { id: "book", label: "Book Venue", icon: "add_circle" },
+    { id: "catalog", label: "Venues", icon: "domain" },
     {
       id: "my-bookings",
-      label: "My Bookings",
-      icon: "book_online",
+      label: "History",
+      icon: "history",
       badge: myBookingsCount,
     },
-    { id: "options", label: "Options", icon: "more_horiz" },
+    { id: "options", label: "Options", icon: "settings" },
   ];
 
   const adminNavItems: NavItemDef[] = [
@@ -81,11 +81,26 @@ export function AppSidebar({
 
   const sidebarContent = (
     <div className="flex flex-col h-full bg-surface border-r border-outline-variant select-none">
-      {/* Top Brand Header: CampusBook alone, no title icon, no subtitle */}
-      <div className="px-6 py-5 border-b border-outline-variant/60 flex items-center justify-between shrink-0">
-        <span className="text-xl font-bold tracking-tight text-on-surface truncate">
-          CampusBook
-        </span>
+      {/* Top Brand Header: CampusBook with user icon directly to the right */}
+      <div className="px-4 py-3.5 flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-base font-bold tracking-tight text-on-surface truncate">
+            CampusBook
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              onOpenUserModal();
+              if (onCloseMobile) onCloseMobile();
+            }}
+            className="p-1 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors cursor-pointer shrink-0"
+            aria-label={`Switch user (${currentUser.name})`}
+            title={`Current: ${currentUser.name} (${currentUser.role_display}). Tap to switch.`}
+          >
+            <m3e-icon name="account_circle" className="text-xl text-primary"></m3e-icon>
+          </button>
+        </div>
+
         {mobileOpen && (
           <button
             type="button"
@@ -98,48 +113,19 @@ export function AppSidebar({
         )}
       </div>
 
-      {/* Account Info with Down Arrow Button */}
-      <div className="mx-4 my-4 p-3 rounded-2xl bg-surface-container-low border border-outline-variant/60 flex items-center justify-between gap-2 shrink-0">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <m3e-avatar className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs bg-primary text-on-primary shrink-0">
-            {currentUser.avatar_initials}
-          </m3e-avatar>
-          <div className="min-w-0">
-            <div className="text-xs font-semibold text-on-surface truncate" title={currentUser.name}>
-              {currentUser.name}
-            </div>
-            <div className="text-[10px] text-on-surface-variant truncate" title={currentUser.role_display}>
-              {currentUser.role_display}
-            </div>
-          </div>
-        </div>
-
-        <m3e-icon-button
-          onClick={() => {
-            onOpenUserModal();
-            if (onCloseMobile) onCloseMobile();
-          }}
-          aria-label="Switch User"
-          title="Switch User"
-          className="shrink-0"
-        >
-          <m3e-icon name="arrow_drop_down"></m3e-icon>
-        </m3e-icon-button>
-      </div>
-
-      {/* Navigation Rail from m3e repository - vertical layout (name at bottom of icon) */}
-      <div className="flex-1 overflow-y-auto px-3 py-2">
-        <m3e-nav-rail mode="compact" className="w-full flex flex-col gap-1.5">
+      {/* Navigation Rail - left-aligned horizontal layout */}
+      <div className="flex-1 overflow-y-auto px-2 py-1">
+        <m3e-nav-rail mode="expanded" className="w-full flex flex-col gap-1">
           {standardNavItems.map((item) => (
             <m3e-nav-item
               key={item.id}
-              orientation="vertical"
+              orientation="horizontal"
               selected={activeTab === item.id}
               onClick={() => handleNavClick(item.id)}
               className="cursor-pointer"
             >
               <m3e-icon slot="icon" name={item.icon}></m3e-icon>
-              <span className="flex items-center justify-center gap-1.5 text-xs text-center font-medium">
+              <span className="flex items-center gap-1.5 text-xs font-medium">
                 <span>{item.label}</span>
                 {Boolean(item.badge && item.badge > 0) && (
                   <m3e-badge size="small">{item.badge}</m3e-badge>
@@ -149,20 +135,20 @@ export function AppSidebar({
           ))}
 
           {isAdmin && (
-            <div className="w-full pt-3 mt-2 border-t border-outline-variant/60 flex flex-col gap-1.5">
-              <div className="text-center pb-1 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
+            <div className="w-full pt-3 mt-1 flex flex-col gap-1">
+              <div className="px-3 pb-1 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
                 Admin
               </div>
               {adminNavItems.map((item) => (
                 <m3e-nav-item
                   key={item.id}
-                  orientation="vertical"
+                  orientation="horizontal"
                   selected={activeTab === item.id}
                   onClick={() => handleNavClick(item.id)}
                   className="cursor-pointer"
                 >
                   <m3e-icon slot="icon" name={item.icon}></m3e-icon>
-                  <span className="flex items-center justify-center gap-1.5 text-xs text-center font-medium">
+                  <span className="flex items-center gap-1.5 text-xs font-medium">
                     <span>{item.label}</span>
                     {Boolean(item.badge && item.badge > 0) && (
                       <m3e-badge size="small">{item.badge}</m3e-badge>
@@ -179,8 +165,8 @@ export function AppSidebar({
 
   return (
     <>
-      {/* Desktop Sidebar: reverted to default w-72 */}
-      <aside className="hidden md:block w-72 shrink-0 h-screen sticky top-0 z-30">
+      {/* Desktop Sidebar: 30% smaller (w-52) */}
+      <aside className="hidden md:block w-52 shrink-0 h-screen sticky top-0 z-30">
         {sidebarContent}
       </aside>
 
@@ -192,7 +178,7 @@ export function AppSidebar({
             onClick={onCloseMobile}
             aria-hidden="true"
           />
-          <aside className="relative w-72 max-w-[85vw] h-full shadow-2xl z-10 animate-in slide-in-from-left duration-150">
+          <aside className="relative w-52 max-w-[85vw] h-full shadow-2xl z-10 animate-in slide-in-from-left duration-150">
             {sidebarContent}
           </aside>
         </div>

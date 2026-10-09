@@ -93,42 +93,30 @@ export default function MyBookings({
                         {b.booking_ref}
                       </span>
 
-                      {/* Status Chip */}
+                      {/* Status Indicator */}
                       {b.booking_status === "CONFIRMED" && (
-                        <m3e-chip
-                          variant="outlined"
-                          className="text-xs font-semibold bg-success-container text-on-success-container border-success/40"
-                        >
-                          <m3e-icon slot="icon" name="check_circle" className="text-xs"></m3e-icon>
-                          CONFIRMED
-                        </m3e-chip>
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                          <m3e-icon name="check" className="text-sm"></m3e-icon>
+                          <span>Confirmed</span>
+                        </span>
                       )}
                       {b.booking_status === "PENDING" && (
-                        <m3e-chip
-                          variant="outlined"
-                          className="text-xs font-semibold bg-primary-container text-on-primary-container border-primary/40"
-                        >
-                          <m3e-icon slot="icon" name="hourglass_empty" className="text-xs"></m3e-icon>
-                          PENDING
-                        </m3e-chip>
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
+                          <m3e-icon name="schedule" className="text-sm"></m3e-icon>
+                          <span>Pending</span>
+                        </span>
                       )}
                       {b.booking_status === "REJECTED" && (
-                        <m3e-chip
-                          variant="outlined"
-                          className="text-xs font-semibold bg-error-container text-on-error-container border-error/40"
-                        >
-                          <m3e-icon slot="icon" name="block" className="text-xs"></m3e-icon>
-                          REJECTED
-                        </m3e-chip>
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-error">
+                          <m3e-icon name="block" className="text-sm"></m3e-icon>
+                          <span>Rejected</span>
+                        </span>
                       )}
                       {b.booking_status === "CANCELLED" && (
-                        <m3e-chip
-                          variant="outlined"
-                          className="text-xs font-semibold bg-surface-container-high text-on-surface-variant border-outline-variant"
-                        >
-                          <m3e-icon slot="icon" name="cancel" className="text-xs"></m3e-icon>
-                          CANCELLED
-                        </m3e-chip>
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-on-surface-variant">
+                          <m3e-icon name="cancel" className="text-sm"></m3e-icon>
+                          <span>Cancelled</span>
+                        </span>
                       )}
 
                       <span className="text-xs font-semibold text-on-surface">

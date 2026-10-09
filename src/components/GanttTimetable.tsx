@@ -404,8 +404,8 @@ export function GanttTimetable({
                               }}
                               className={`m-1 p-2 rounded-lg cursor-pointer transition-all border shadow-xs hover:shadow-md hover:scale-[1.01] flex flex-col justify-center overflow-hidden select-none ${
                                 isConfirmed
-                                  ? "bg-emerald-700 text-white border-emerald-600 hover:bg-emerald-800"
-                                  : "bg-amber-600 text-white border-amber-500 hover:bg-amber-700"
+                                  ? "bg-emerald-500/15 text-emerald-900 dark:text-emerald-100 border-emerald-500/40 hover:bg-emerald-500/25"
+                                  : "bg-amber-500/15 text-amber-900 dark:text-amber-100 border-amber-500/40 hover:bg-amber-500/25"
                               }`}
                             >
                               <div className="flex items-center justify-between gap-1 leading-tight">
@@ -413,13 +413,17 @@ export function GanttTimetable({
                                   {booking.event_title}
                                 </span>
                                 <span
-                                  className={`text-[9px] font-extrabold px-1.5 py-0.2 rounded uppercase shrink-0 ${
-                                    isConfirmed
-                                      ? "bg-white/20 text-white"
-                                      : "bg-black/20 text-white"
-                                  }`}
+                                  className="shrink-0 flex items-center"
+                                  title={isConfirmed ? "Confirmed" : "Pending"}
                                 >
-                                  {isConfirmed ? "Confirmed" : "Pending"}
+                                  <m3e-icon
+                                    name={isConfirmed ? "check" : "schedule"}
+                                    className={`text-sm ${
+                                      isConfirmed
+                                        ? "text-emerald-600 dark:text-emerald-400"
+                                        : "text-amber-600 dark:text-amber-400"
+                                    }`}
+                                  ></m3e-icon>
                                 </span>
                               </div>
 
@@ -467,13 +471,25 @@ export function GanttTimetable({
               {hoveredPreview.booking.event_title}
             </span>
             <span
-              className={`text-[10px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0 ${
+              className={`inline-flex items-center gap-1 text-[11px] font-semibold shrink-0 ${
                 hoveredPreview.booking.booking_status === "CONFIRMED"
-                  ? "bg-emerald-100 text-emerald-800"
-                  : "bg-amber-100 text-amber-800"
+                  ? "text-emerald-600 dark:text-emerald-400"
+                  : "text-amber-600 dark:text-amber-400"
               }`}
             >
-              {hoveredPreview.booking.booking_status}
+              <m3e-icon
+                name={
+                  hoveredPreview.booking.booking_status === "CONFIRMED"
+                    ? "check"
+                    : "schedule"
+                }
+                className="text-xs"
+              ></m3e-icon>
+              <span>
+                {hoveredPreview.booking.booking_status === "CONFIRMED"
+                  ? "Confirmed"
+                  : "Pending"}
+              </span>
             </span>
           </div>
 
@@ -561,13 +577,25 @@ export function GanttTimetable({
                   {inspectingBooking.event_title}
                 </div>
                 <span
-                  className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase ${
+                  className={`inline-flex items-center gap-1 text-xs font-semibold ${
                     inspectingBooking.booking_status === "CONFIRMED"
-                      ? "bg-emerald-100 text-emerald-800"
-                      : "bg-amber-100 text-amber-800"
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : "text-amber-600 dark:text-amber-400"
                   }`}
                 >
-                  {inspectingBooking.booking_status}
+                  <m3e-icon
+                    name={
+                      inspectingBooking.booking_status === "CONFIRMED"
+                        ? "check"
+                        : "schedule"
+                    }
+                    className="text-sm"
+                  ></m3e-icon>
+                  <span>
+                    {inspectingBooking.booking_status === "CONFIRMED"
+                      ? "Confirmed"
+                      : "Pending"}
+                  </span>
                 </span>
               </div>
               <div className="text-[11px] text-on-surface-variant mt-1">
