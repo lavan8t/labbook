@@ -23,11 +23,11 @@ describe("GanttTimetable component", () => {
     // Verify Status Legend is removed
     expect(html).not.toContain("Status Legend");
 
-    // Verify category filters exist
-    expect(html).toContain("All Venues");
-    expect(html).toContain("Auditoriums");
-    expect(html).toContain("Lecture Halls");
-    expect(html).toContain("Seminar Halls");
+    // Verify category filters are removed
+    expect(html).not.toContain("All Venues");
+    expect(html).not.toContain("Auditoriums");
+    expect(html).not.toContain("Lecture Halls");
+    expect(html).not.toContain("Seminar Halls");
 
     // Verify venues are rendered
     expect(html).toContain("Anna Auditorium");

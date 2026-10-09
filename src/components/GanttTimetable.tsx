@@ -37,20 +37,6 @@ export interface GanttTimetableProps {
   loading?: boolean;
 }
 
-type CategoryFilter = "ALL" | "AUDITORIUM" | "LECTURE_HALL" | "SEMINAR_HALL";
-
-interface CategoryOption {
-  id: CategoryFilter;
-  label: string;
-  icon: string;
-}
-
-const CATEGORY_OPTIONS: CategoryOption[] = [
-  { id: "ALL", label: "All Venues", icon: "domain" },
-  { id: "AUDITORIUM", label: "Auditoriums", icon: "theater_comedy" },
-  { id: "LECTURE_HALL", label: "Lecture Halls", icon: "school" },
-  { id: "SEMINAR_HALL", label: "Seminar Halls", icon: "meeting_room" },
-];
 
 function formatTimeDisplay(isoStr: string): string {
   return formatTimeRailway(isoStr);
@@ -69,7 +55,6 @@ export function GanttTimetable({
   onInspectBooking,
   loading = false,
 }: GanttTimetableProps) {
-  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("ALL");
   const [inspectingBooking, setInspectingBooking] = useState<Booking | null>(
     null,
   );
@@ -171,17 +156,7 @@ export function GanttTimetable({
     return formatDateDDMMYYYY(selectedDate);
   }, [selectedDate]);
 
-  // Filter venues by selected category
-  const filteredVenues = useMemo(() => {
-    if (categoryFilter === "ALL") return venues;
-    if (categoryFilter === "AUDITORIUM") {
-      return venues.filter(
-        (v) =>
-          v.venue_type === "AUDITORIUM" || v.venue_type === "MINI_AUDITORIUM",
-      );
-    }
-    return venues.filter((v) => v.venue_type === categoryFilter);
-  }, [venues, categoryFilter]);
+  const filteredVenues = venues;
 
   const handleBookingClick = (booking: Booking, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -274,28 +249,6 @@ export function GanttTimetable({
               {formattedDateTitle}
             </span>
           </div>
-
-          {/* Category Filter Pills */}
-          <div className="flex items-center gap-1.5 flex-wrap">
-            {CATEGORY_OPTIONS.map((cat) => {
-              const isSelected = categoryFilter === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => setCategoryFilter(cat.id)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors border ${
-                    isSelected
-                      ? "bg-primary text-on-primary border-primary shadow-2xs"
-                      : "bg-surface-container-low text-on-surface-variant border-outline-variant hover:bg-surface-container hover:text-on-surface"
-                  }`}
-                >
-                  <m3e-icon name={cat.icon} className="text-xs"></m3e-icon>
-                  {cat.label}
-                </button>
-              );
-            })}
-          </div>
         </div>
       </m3e-card>
 
@@ -347,7 +300,7 @@ export function GanttTimetable({
             {filteredVenues.length === 0 ? (
               <div className="p-12 text-center text-xs text-on-surface-variant bg-surface">
                 <m3e-icon name="search_off" className="text-3xl text-on-surface-variant/50 mb-2"></m3e-icon>
-                <p>No venues match the selected category filter.</p>
+                <p>No venues registered in system.</p>
               </div>
             ) : (
               <div className="divide-y divide-outline-variant/30">
