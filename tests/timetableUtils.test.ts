@@ -28,9 +28,10 @@ describe("timetableUtils", () => {
   });
 
   it("formats dates as DD/MM/YYYY and times as railway 24h", async () => {
-    const { formatDateDDMMYYYY, formatTimeRailway } = await import("../src/lib/timetableUtils");
+    const { formatDateDDMMYYYY, formatDateDayDDMonYYYY, formatTimeRailway } = await import("../src/lib/timetableUtils");
     expect(formatDateDDMMYYYY("2026-10-22")).toBe("22/10/2026");
     expect(formatDateDDMMYYYY(new Date(2026, 9, 22))).toBe("22/10/2026");
+    expect(formatDateDayDDMonYYYY("2026-10-22")).toBe("Thursday, 22 Oct 2026");
     expect(formatTimeRailway("2026-10-22T09:30:00.000Z")).toBe("09:30");
     expect(formatTimeRailway("14:45")).toBe("14:45");
   });

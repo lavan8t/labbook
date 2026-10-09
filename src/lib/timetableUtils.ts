@@ -35,6 +35,34 @@ export function formatDateDDMMYYYY(dateVal: Date | string | null | undefined): s
   return String(dateVal);
 }
 
+export function formatDateDayDDMonYYYY(dateVal: Date | string | null | undefined): string {
+  if (!dateVal) return "";
+  let y = 0, m = 0, d = 0;
+  if (typeof dateVal === "string") {
+    const match = dateVal.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) {
+      y = Number(match[1]);
+      m = Number(match[2]);
+      d = Number(match[3]);
+    }
+  }
+  let dateObj: Date;
+  if (y && m && d) {
+    dateObj = new Date(y, m - 1, d);
+  } else {
+    dateObj = typeof dateVal === "string" ? new Date(dateVal) : (dateVal as Date);
+  }
+  if (!dateObj || isNaN(dateObj.getTime())) return String(dateVal);
+
+  const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const dayName = weekdays[dateObj.getDay()] || "";
+  const dayStr = String(dateObj.getDate()).padStart(2, "0");
+  const monStr = months[dateObj.getMonth()] || "";
+  const yearStr = dateObj.getFullYear();
+  return `${dayName}, ${dayStr} ${monStr} ${yearStr}`;
+}
+
 export function formatTimeRailway(dateVal: Date | string | null | undefined): string {
   if (!dateVal) return "";
   if (typeof dateVal === "string") {

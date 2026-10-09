@@ -7,6 +7,7 @@ import {
   getBookingSpan,
   formatSlotTime,
   formatDateDDMMYYYY,
+  formatDateDayDDMonYYYY,
   formatTimeRailway,
 } from "@/lib/timetableUtils";
 
@@ -64,7 +65,6 @@ export function GanttTimetable({
   } | null>(null);
 
   const dialogRef = useRef<HTMLElement>(null);
-  const dateInputRef = useRef<HTMLElement>(null);
   const datePickerRef = useRef<HTMLElement>(null);
   const timeSlots = useMemo(() => generateTimeSlots(), []);
 
@@ -86,23 +86,12 @@ export function GanttTimetable({
     }
   }, [inspectingBooking]);
 
-  // Synchronize m3e-date-input & m3e-datepicker with React state
+  // Synchronize m3e-datepicker with React state
   useEffect(() => {
-    const inputEl = dateInputRef.current as
-      | (HTMLElement & { value?: Date | null })
-      | null;
     const pickerEl = datePickerRef.current as
       | (HTMLElement & { date?: Date | null })
       | null;
 
-    if (inputEl) {
-      const parts = selectedDate ? selectedDate.split("-").map(Number) : [];
-      if (parts.length === 3 && parts[0] && parts[1] && parts[2]) {
-        inputEl.value = new Date(parts[0], parts[1] - 1, parts[2]);
-      } else {
-        inputEl.value = null;
-      }
-    }
     if (pickerEl) {
       const parts = selectedDate ? selectedDate.split("-").map(Number) : [];
       if (parts.length === 3 && parts[0] && parts[1] && parts[2]) {
@@ -114,7 +103,7 @@ export function GanttTimetable({
 
     const handleChange = (e: Event) => {
       const target = e.target as { value?: Date | string; date?: Date | string } | null;
-      const val = target?.value ?? target?.date;
+      const val = target?.date ?? target?.value;
       if (val instanceof Date && !isNaN(val.getTime())) {
         const yr = val.getFullYear();
         const mo = String(val.getMonth() + 1).padStart(2, "0");
@@ -125,10 +114,8 @@ export function GanttTimetable({
       }
     };
 
-    inputEl?.addEventListener("change", handleChange);
     pickerEl?.addEventListener("change", handleChange);
     return () => {
-      inputEl?.removeEventListener("change", handleChange);
       pickerEl?.removeEventListener("change", handleChange);
     };
   }, [selectedDate, onDateChange]);
@@ -153,7 +140,7 @@ export function GanttTimetable({
   };
 
   const formattedDateTitle = useMemo(() => {
-    return formatDateDDMMYYYY(selectedDate);
+    return formatDateDayDDMonYYYY(selectedDate);
   }, [selectedDate]);
 
   const filteredVenues = venues;
@@ -188,69 +175,56 @@ export function GanttTimetable({
   return (
     <div className="space-y-4">
       {/* Top Controls Bar */}
-      <m3e-card
-        variant="outlined"
-        className="block rounded-xl border border-outline-variant bg-surface p-4 shadow-xs"
-      >
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          {/* Date Picker using m3e Web Components (no default form date picker) */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <div className="flex items-center">
-              <m3e-form-field className="text-xs">
-                <m3e-date-input
-                  id="gantt-timetable-date-input"
-                  ref={dateInputRef}
-                  type="date"
-                ></m3e-date-input>
-                <m3e-icon-button slot="suffix" aria-label="Open Calendar">
-                  <m3e-icon name="calendar_today"></m3e-icon>
-                  <m3e-datepicker-toggle for="gantt-timetable-datepicker"></m3e-datepicker-toggle>
-                </m3e-icon-button>
-              </m3e-form-field>
-              <m3e-datepicker
-                id="gantt-timetable-datepicker"
-                ref={datePickerRef}
-                for="gantt-timetable-date-input"
-                variant="auto"
-              ></m3e-datepicker>
-            </div>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          {/* Date Text Trigger (No form input field) */}
+          <div className="relative inline-flex items-center">
+            <button
+              type="button"
+              id="gantt-timetable-date-trigger"
+              className="relative inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-outline-variant bg-surface hover:bg-surface-container text-xs font-semibold text-on-surface transition-colors cursor-pointer select-none"
+            >
+              <m3e-icon name="calendar_today" className="text-sm text-primary"></m3e-icon>
+              <span>{formattedDateTitle}</span>
+              <m3e-datepicker-toggle for="gantt-timetable-datepicker"></m3e-datepicker-toggle>
+            </button>
+            <m3e-datepicker
+              id="gantt-timetable-datepicker"
+              ref={datePickerRef}
+              variant="modal"
+            ></m3e-datepicker>
+          </div>
 
-            <div className="flex items-center gap-1">
-              <m3e-button
-                variant="outlined"
-                onClick={() => shiftDate(-1)}
-                className="h-8 text-xs px-2.5"
-                title="Previous Day"
-              >
-                <m3e-icon slot="icon" name="chevron_left"></m3e-icon>
-                Prev
-              </m3e-button>
-
-              <m3e-button
-                variant="tonal"
-                onClick={handleSetToday}
-                className="h-8 text-xs px-3 font-semibold"
-              >
-                Today
-              </m3e-button>
-
-              <m3e-button
-                variant="outlined"
-                onClick={() => shiftDate(1)}
-                className="h-8 text-xs px-2.5"
-                title="Next Day"
-              >
-                Next
-                <m3e-icon slot="trailing-icon" name="chevron_right"></m3e-icon>
-              </m3e-button>
-            </div>
-
-            <span className="text-xs font-bold text-on-surface-variant ml-2 hidden sm:inline">
-              {formattedDateTitle}
-            </span>
+          {/* Prev / Today / Next Segmented Control */}
+          <div className="inline-flex items-center rounded-lg border border-outline-variant bg-surface p-0.5">
+            <button
+              type="button"
+              onClick={() => shiftDate(-1)}
+              className="h-7 px-2 inline-flex items-center justify-center rounded-md text-xs font-medium text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
+              title="Previous Day"
+              aria-label="Previous Day"
+            >
+              <m3e-icon name="chevron_left" className="text-base"></m3e-icon>
+            </button>
+            <button
+              type="button"
+              onClick={handleSetToday}
+              className="h-7 px-2.5 inline-flex items-center justify-center rounded-md text-xs font-semibold text-on-surface hover:bg-surface-container border-x border-outline-variant/50 transition-colors cursor-pointer"
+            >
+              Today
+            </button>
+            <button
+              type="button"
+              onClick={() => shiftDate(1)}
+              className="h-7 px-2 inline-flex items-center justify-center rounded-md text-xs font-medium text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
+              title="Next Day"
+              aria-label="Next Day"
+            >
+              <m3e-icon name="chevron_right" className="text-base"></m3e-icon>
+            </button>
           </div>
         </div>
-      </m3e-card>
+      </div>
 
       {/* Loading Bar */}
       {loading && (

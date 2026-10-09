@@ -109,6 +109,31 @@ export default function CampusBookPage() {
     setSnackbarOpen(true);
   }
 
+  // Restore saved theme on mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("campusbook_theme") as "light" | "dark" | null;
+    if (savedTheme === "light" || savedTheme === "dark") {
+      setTheme(savedTheme);
+    }
+  }, []);
+
+  // Synchronize theme with document, body, and storage
+  useEffect(() => {
+    const isDark = theme === "dark";
+    if (typeof document !== "undefined") {
+      document.documentElement.classList.toggle("dark", isDark);
+      document.documentElement.setAttribute("data-theme", theme);
+      document.documentElement.style.colorScheme = theme;
+      document.body.classList.toggle("dark", isDark);
+      document.body.setAttribute("data-theme", theme);
+      try {
+        localStorage.setItem("campusbook_theme", theme);
+      } catch {
+        // Ignore quota/private browsing issues
+      }
+    }
+  }, [theme]);
+
   // Check health and load initial data
   useEffect(() => {
     checkHealthAndFetch();
@@ -526,30 +551,18 @@ export default function CampusBookPage() {
 
             {/* TAB 6: ADMIN FACILITIES OVERVIEW */}
             {activeTab === "admin-venues" && currentUser.user_type === "admin" && (
-              <div className="space-y-6">
-                <div className="bg-surface rounded-lg border border-outline-variant p-6">
-                  <div className="border-b border-outline-variant pb-3 mb-4">
-                    <h2 className="text-base font-bold text-on-surface flex items-center gap-2">
-                      <m3e-icon className="text-primary text-xl">domain</m3e-icon>
-                      <span>Campus Facilities Management</span>
-                    </h2>
-                    <p className="text-xs text-on-surface-variant mt-0.5">
-                      Operational inventory and telemetry for campus auditoriums and smart lecture halls.
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {venues.map((v) => (
-                      <m3e-card key={v.venue_id} variant="outlined" className="p-4 text-xs bg-surface-container-low">
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="font-bold text-on-surface">{v.venue_name}</span>
-                          <m3e-badge variant="small">{v.venue_status}</m3e-badge>
-                        </div>
-                        <div className="text-on-surface-variant">{v.venue_type} • {v.seating_capacity} seats</div>
-                        <div className="text-on-surface-variant opacity-80 mt-0.5">{v.building}, Floor {v.floor_number}</div>
-                      </m3e-card>
-                    ))}
-                  </div>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {venues.map((v) => (
+                    <m3e-card key={v.venue_id} variant="outlined" className="p-4 text-xs bg-surface-container-low">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="font-bold text-on-surface">{v.venue_name}</span>
+                        <m3e-badge variant="small">{v.venue_status}</m3e-badge>
+                      </div>
+                      <div className="text-on-surface-variant">{v.venue_type} • {v.seating_capacity} seats</div>
+                      <div className="text-on-surface-variant opacity-80 mt-0.5">{v.building}, Floor {v.floor_number}</div>
+                    </m3e-card>
+                  ))}
                 </div>
               </div>
             )}
@@ -564,6 +577,7 @@ export default function CampusBookPage() {
               <OptionsView
                 theme={theme}
                 onToggleTheme={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+                onSelectTheme={setTheme}
                 onSyncDb={refreshData}
                 syncLoading={loading}
                 adminPasscode={adminAccessCode}

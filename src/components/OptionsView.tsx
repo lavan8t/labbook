@@ -9,6 +9,7 @@ import "@m3e/web/card";
 export interface OptionsViewProps {
   theme: "light" | "dark";
   onToggleTheme: () => void;
+  onSelectTheme?: (theme: "light" | "dark") => void;
   onSyncDb: () => void;
   syncLoading?: boolean;
   adminPasscode: string;
@@ -18,6 +19,7 @@ export interface OptionsViewProps {
 export function OptionsView({
   theme,
   onToggleTheme,
+  onSelectTheme,
   onSyncDb,
   syncLoading = false,
   adminPasscode,
@@ -62,9 +64,17 @@ export function OptionsView({
     setConfirmCodeInput("");
   };
 
+  const handleChooseTheme = (chosen: "light" | "dark") => {
+    if (onSelectTheme) {
+      onSelectTheme(chosen);
+    } else if (theme !== chosen) {
+      onToggleTheme();
+    }
+  };
+
   return (
-    <div className="bg-surface rounded-xl border border-outline-variant p-6 sm:p-8 space-y-6 max-w-2xl">
-      {/* Section 1: Appearance & Theme */}
+    <div className="space-y-8 max-w-xl">
+      {/* Section 1: Appearance */}
       <section className="space-y-3">
         <div className="flex items-center gap-2">
           <m3e-icon name="palette" className="text-primary text-base"></m3e-icon>
@@ -73,52 +83,36 @@ export function OptionsView({
           </span>
         </div>
 
-        <m3e-card
-          variant="outlined"
-          className="block bg-surface-container-low border border-outline-variant/60 rounded-xl p-4 space-y-3"
-        >
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-on-surface font-medium">Theme Mode</span>
-            <span className="text-on-surface-variant capitalize text-[11px] font-mono">
-              {theme} mode active
-            </span>
-          </div>
+        <div className="grid grid-cols-2 gap-3 max-w-xs">
+          <button
+            type="button"
+            onClick={() => handleChooseTheme("light")}
+            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
+              theme === "light"
+                ? "bg-primary text-on-primary border-primary font-semibold"
+                : "bg-surface text-on-surface-variant border-outline-variant hover:bg-surface-container"
+            }`}
+          >
+            <m3e-icon name="light_mode" className="text-base"></m3e-icon>
+            <span>Light</span>
+          </button>
 
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={() => {
-                if (theme !== "light") onToggleTheme();
-              }}
-              className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-medium border transition-colors ${
-                theme === "light"
-                  ? "bg-primary text-on-primary border-primary font-semibold shadow-xs"
-                  : "bg-surface text-on-surface-variant border-outline-variant hover:bg-surface-container"
-              }`}
-            >
-              <m3e-icon name="light_mode" className="text-base"></m3e-icon>
-              <span>Light</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                if (theme !== "dark") onToggleTheme();
-              }}
-              className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-medium border transition-colors ${
-                theme === "dark"
-                  ? "bg-primary text-on-primary border-primary font-semibold shadow-xs"
-                  : "bg-surface text-on-surface-variant border-outline-variant hover:bg-surface-container"
-              }`}
-            >
-              <m3e-icon name="dark_mode" className="text-base"></m3e-icon>
-              <span>Dark</span>
-            </button>
-          </div>
-        </m3e-card>
+          <button
+            type="button"
+            onClick={() => handleChooseTheme("dark")}
+            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
+              theme === "dark"
+                ? "bg-primary text-on-primary border-primary font-semibold"
+                : "bg-surface text-on-surface-variant border-outline-variant hover:bg-surface-container"
+            }`}
+          >
+            <m3e-icon name="dark_mode" className="text-base"></m3e-icon>
+            <span>Dark</span>
+          </button>
+        </div>
       </section>
 
-      {/* Section 2: Database Sync (without yellow fallback pill) */}
+      {/* Section 2: Database Sync */}
       <section className="space-y-3">
         <div className="flex items-center gap-2">
           <m3e-icon name="database" className="text-primary text-base"></m3e-icon>
@@ -127,14 +121,7 @@ export function OptionsView({
           </span>
         </div>
 
-        <m3e-card
-          variant="outlined"
-          className="block bg-surface-container-low border border-outline-variant/60 rounded-xl p-4 space-y-3"
-        >
-          <p className="text-xs text-on-surface-variant">
-            Re-sync schema entities, venue inventories, and active bookings with the database backend.
-          </p>
-
+        <div>
           <m3e-button
             variant="filled"
             onClick={onSyncDb}
@@ -148,7 +135,7 @@ export function OptionsView({
             ></m3e-icon>
             {syncLoading ? "Syncing..." : "Sync DB"}
           </m3e-button>
-        </m3e-card>
+        </div>
       </section>
 
       {/* Section 3: Change Passcode */}
@@ -160,10 +147,7 @@ export function OptionsView({
           </span>
         </div>
 
-        <form
-          onSubmit={handleUpdatePasscode}
-          className="bg-surface-container-low border border-outline-variant/60 rounded-xl p-4 space-y-3"
-        >
+        <form onSubmit={handleUpdatePasscode} className="space-y-3 max-w-md">
           {passcodeError && (
             <div className="p-2.5 rounded-lg bg-error/10 border border-error/20 text-error text-[11px] flex items-start gap-2">
               <m3e-icon name="error" className="text-sm shrink-0 mt-0.5"></m3e-icon>

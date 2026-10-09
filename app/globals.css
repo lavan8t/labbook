@@ -33,7 +33,9 @@
   --color-on-success-container: var(--md-sys-color-on-success-container);
 }
 
-:root {
+:root,
+[data-theme="light"],
+m3e-theme[scheme="light"] {
   color-scheme: light;
 
   /* Material 3 System Colors - Terracotta Red (#c85a32) Light Palette */
@@ -41,33 +43,86 @@
   --md-sys-color-on-background: #231917;
   --md-sys-color-surface: #fff8f6;
   --md-sys-color-on-surface: #231917;
-  --md-sys-color-surface-dim: #e8dbd7;
+  --md-sys-color-surface-dim: #e8d6d1;
   --md-sys-color-surface-bright: #fff8f6;
   --md-sys-color-surface-container-lowest: #ffffff;
-  --md-sys-color-surface-container-low: #fcf1ed;
-  --md-sys-color-surface-container: #f6ebe7;
-  --md-sys-color-surface-container-high: #f1e5e2;
-  --md-sys-color-surface-container-highest: #ebdfdc;
-  --md-sys-color-surface-variant: #f5ded8;
+  --md-sys-color-surface-container-low: #fff1ed;
+  --md-sys-color-surface-container: #fceae5;
+  --md-sys-color-surface-container-high: #f7e4df;
+  --md-sys-color-surface-container-highest: #f1dfd9;
+  --md-sys-color-surface-variant: #f5ded7;
   --md-sys-color-on-surface-variant: #53433f;
   --md-sys-color-outline: #85736e;
-  --md-sys-color-outline-variant: #d8c2bc;
-  --md-sys-color-primary: #a83818;
+  --md-sys-color-outline-variant: #d8c2bb;
+  --md-sys-color-inverse-surface: #392e2b;
+  --md-sys-color-inverse-on-surface: #ffede8;
+  --md-sys-color-primary: #8f4c35;
+  --md-sys-color-primary-dim: #80412a;
   --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: #ffdbd2;
-  --md-sys-color-on-primary-container: #3a0901;
-  --md-sys-color-secondary: #77574e;
+  --md-sys-color-primary-container: #ffdbcf;
+  --md-sys-color-on-primary-container: #723520;
+  --md-sys-color-secondary: #77574c;
+  --md-sys-color-secondary-dim: #6a4b41;
   --md-sys-color-on-secondary: #ffffff;
-  --md-sys-color-secondary-container: #ffdbd2;
-  --md-sys-color-on-secondary-container: #2c1510;
+  --md-sys-color-secondary-container: #ffdbcf;
+  --md-sys-color-on-secondary-container: #5d4036;
   --md-sys-color-error: #ba1a1a;
+  --md-sys-color-error-dim: #a80710;
   --md-sys-color-on-error: #ffffff;
   --md-sys-color-error-container: #ffdad6;
-  --md-sys-color-on-error-container: #410002;
+  --md-sys-color-on-error-container: #93000a;
   --md-sys-color-success: #20693a;
   --md-sys-color-on-success: #ffffff;
   --md-sys-color-success-container: #a5f2b4;
   --md-sys-color-on-success-container: #00210b;
+}
+
+:root.dark,
+[data-theme="dark"],
+.dark,
+m3e-theme[scheme="dark"] {
+  color-scheme: dark;
+
+  /* Material 3 System Colors - Terracotta Red (#c85a32) Dark Palette */
+  --md-sys-color-background: #1a110f;
+  --md-sys-color-on-background: #f1dfd9;
+  --md-sys-color-surface: #1a110f;
+  --md-sys-color-surface-dim: #1a110f;
+  --md-sys-color-surface-bright: #423733;
+  --md-sys-color-surface-container-lowest: #140c0a;
+  --md-sys-color-surface-container-low: #231917;
+  --md-sys-color-surface-container: #271d1a;
+  --md-sys-color-surface-container-high: #322825;
+  --md-sys-color-surface-container-highest: #3d322f;
+  --md-sys-color-surface-variant: #53433f;
+  --md-sys-color-on-surface: #f1dfd9;
+  --md-sys-color-on-surface-variant: #d8c2bb;
+  --md-sys-color-outline: #a08d87;
+  --md-sys-color-outline-variant: #53433f;
+  --md-sys-color-inverse-surface: #f1dfd9;
+  --md-sys-color-inverse-on-surface: #392e2b;
+  --md-sys-color-primary: #ffb59c;
+  --md-sys-color-primary-dim: #f9a387;
+  --md-sys-color-on-primary: #55200c;
+  --md-sys-color-primary-container: #723520;
+  --md-sys-color-on-primary-container: #ffdbcf;
+  --md-sys-color-secondary: #e7bdb0;
+  --md-sys-color-secondary-dim: #ffd3c6;
+  --md-sys-color-on-secondary: #442a21;
+  --md-sys-color-secondary-container: #5d4036;
+  --md-sys-color-on-secondary-container: #ffdbcf;
+  --md-sys-color-error: #ffb4ab;
+  --md-sys-color-error-dim: #ff554a;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000a;
+  --md-sys-color-on-error-container: #ffdad6;
+  --md-sys-color-success: #6cdb8d;
+  --md-sys-color-on-success: #003915;
+  --md-sys-color-success-container: #005322;
+  --md-sys-color-on-success-container: #88f8a7;
+}
+
+:root {
 
   /* Clean Standard Shapes for Controls & Fields */
   --m3e-button-shape: 8px;
@@ -337,7 +392,7 @@ input[type="date"]::-webkit-datetime-edit-year-field,
 input[type="time"]::-webkit-datetime-edit-hour-field,
 input[type="time"]::-webkit-datetime-edit-minute-field,
 input[type="time"]::-webkit-datetime-edit-ampm-field {
-  color-scheme: light;
+  color-scheme: inherit;
   font-size: 14px !important;
   font-weight: 500 !important;
   line-height: 20px !important;

@@ -36,8 +36,8 @@ describe("GanttTimetable component", () => {
     // Verify events are rendered
     expect(html).toContain("ACM National Tech Symposium");
 
-    // Verify DD/MM/YYYY date and railway time slot are rendered
-    expect(html).toContain("22/10/2026");
+    // Verify Day, DD Mon YYYY date format and railway time slot are rendered
+    expect(html).toContain("22 Oct 2026");
     expect(html).toContain("08:00");
     expect(html).toContain("20:30");
   });
