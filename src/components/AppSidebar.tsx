@@ -50,6 +50,7 @@ export function AppSidebar({
       icon: "book_online",
       badge: myBookingsCount,
     },
+    { id: "options", label: "Options", icon: "more_horiz" },
   ];
 
   const adminNavItems: NavItemDef[] = [

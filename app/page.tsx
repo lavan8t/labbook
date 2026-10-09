@@ -33,7 +33,7 @@ import "@m3e/web/icon";
 import "@m3e/web/snackbar";
 
 import AppSidebar from "@/components/AppSidebar";
-import OptionsDrawer from "@/components/OptionsDrawer";
+import OptionsView from "@/components/OptionsView";
 import GanttTimetable from "@/components/GanttTimetable";
 import { BookingForm } from "@/components/BookingForm";
 import { VenueCatalog } from "@/components/VenueCatalog";
@@ -49,7 +49,8 @@ type ActiveTab =
   | "my-bookings"
   | "admin-pending"
   | "admin-venues"
-  | "admin-reports";
+  | "admin-reports"
+  | "options";
 
 export default function CampusBookPage() {
   // 1. Current Active User State (Default: Aditya Sharma - Club Head)
@@ -59,7 +60,6 @@ export default function CampusBookPage() {
   // 2. Theme State & Mobile Nav State
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [mobileNavOpen, setMobileNavOpen] = useState<boolean>(false);
-  const [showOptionsDrawer, setShowOptionsDrawer] = useState<boolean>(false);
   const [adminAccessCode, setAdminAccessCode] = useState<string>(ADMIN_ACCESS_CODE);
 
   // 3. Timetable State (Home View)
@@ -408,19 +408,6 @@ export default function CampusBookPage() {
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col min-w-0 relative">
-          {/* Top Right Options Trigger (3-dot icon) */}
-          <div className="absolute top-4 right-4 sm:right-6 z-20 flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setShowOptionsDrawer(true)}
-              className="p-2 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high bg-surface-container-low/90 backdrop-blur-xs border border-outline-variant/60 shadow-2xs transition-colors"
-              title="Options"
-              aria-label="Options"
-            >
-              <m3e-icon name="more_vert" className="text-xl"></m3e-icon>
-            </button>
-          </div>
-
           {/* Mobile Navigation Trigger (Mobile only) */}
           <div className="md:hidden flex items-center justify-between p-3 border-b border-outline-variant bg-surface shrink-0">
             <button
@@ -571,24 +558,23 @@ export default function CampusBookPage() {
             {activeTab === "admin-reports" && currentUser.user_type === "admin" && (
               <AdminReports utilizationStats={utilizationStats} />
             )}
+
+            {/* TAB 8: OPTIONS PAGE */}
+            {activeTab === "options" && (
+              <OptionsView
+                theme={theme}
+                onToggleTheme={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+                onSyncDb={refreshData}
+                syncLoading={loading}
+                adminPasscode={adminAccessCode}
+                onUpdateAdminPasscode={(newCode) => {
+                  setAdminAccessCode(newCode);
+                  showToast("Administrator passcode updated successfully.");
+                }}
+              />
+            )}
           </main>
         </div>
-
-        {/* Options Drawer Panel on the Right Side (Triggered by 3-dot icon button) */}
-        <OptionsDrawer
-          open={showOptionsDrawer}
-          onClose={() => setShowOptionsDrawer(false)}
-          theme={theme}
-          onToggleTheme={() => setTheme(theme === "light" ? "dark" : "light")}
-          onSyncDb={refreshData}
-          syncLoading={loading}
-          backendOnline={backendOnline}
-          adminPasscode={adminAccessCode}
-          onUpdateAdminPasscode={(newCode) => {
-            setAdminAccessCode(newCode);
-            showToast("Administrator passcode updated successfully.");
-          }}
-        />
 
         {/* User Persona Switcher & Passcode Modal */}
         <UserSwitcherModal
