@@ -16,19 +16,18 @@ export function AdminReports({ utilizationStats }: AdminReportsProps) {
   return (
     <div className="bg-surface rounded-lg border border-outline-variant p-6 sm:p-8 space-y-6">
       {utilizationStats.length === 0 ? (
-        <m3e-card variant="outlined" className="p-8 text-center bg-surface-container-low">
+        <div className="p-8 text-center rounded-lg bg-surface-container-low">
           <m3e-icon name="monitoring" className="text-3xl text-on-surface-variant mb-2"></m3e-icon>
           <p className="text-xs text-on-surface-variant">
             No confirmed events recorded yet this month to compute utilization stats.
           </p>
-        </m3e-card>
+        </div>
       ) : (
         <div className="space-y-4">
           {utilizationStats.map((stat) => (
-            <m3e-card
+            <div
               key={stat.venue_id}
-              variant="outlined"
-              className="block rounded-lg border border-outline-variant bg-surface-container-low"
+              className="rounded-lg bg-surface-container-low"
             >
               <div className="p-5 sm:p-6 space-y-3">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
@@ -57,7 +56,7 @@ export function AdminReports({ utilizationStats }: AdminReportsProps) {
                   className="w-full"
                 />
               </div>
-            </m3e-card>
+            </div>
           ))}
         </div>
       )}

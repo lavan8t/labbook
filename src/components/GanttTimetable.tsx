@@ -599,7 +599,7 @@ export function GanttTimetable({
 
             {/* Venue & Schedule */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="p-3 rounded-lg border border-outline-variant bg-surface">
+              <div className="p-3 rounded-lg bg-surface-container">
                 <div className="text-[10px] font-bold text-on-surface-variant uppercase mb-1">
                   Venue Location
                 </div>
@@ -614,7 +614,7 @@ export function GanttTimetable({
                 </div>
               </div>
 
-              <div className="p-3 rounded-lg border border-outline-variant bg-surface">
+              <div className="p-3 rounded-lg bg-surface-container">
                 <div className="text-[10px] font-bold text-on-surface-variant uppercase mb-1">
                   Date & Time
                 </div>
@@ -631,11 +631,11 @@ export function GanttTimetable({
             </div>
 
             {/* Organizer & Capacity Ratio */}
-            <div className="p-3 rounded-lg border border-outline-variant bg-surface space-y-2">
+            <div className="p-3 rounded-lg bg-surface-container space-y-2">
               <div className="flex justify-between items-start">
                 <div>
                   <div className="text-[10px] font-bold text-on-surface-variant uppercase">
-                    Organizer / Requester
+                    Requester
                   </div>
                   <div className="font-semibold text-on-surface">
                     {inspectingBooking.requester_name || "Unknown"}
@@ -692,7 +692,7 @@ export function GanttTimetable({
             </div>
 
             {/* Notes & Justification */}
-            <div className="p-3 rounded-lg border border-outline-variant bg-surface">
+            <div className="p-3 rounded-lg bg-surface-container">
               <div className="text-[10px] font-bold text-on-surface-variant uppercase mb-1">
                 Purpose & Justification
               </div>
@@ -704,7 +704,7 @@ export function GanttTimetable({
             {/* Administrative Remarks if any */}
             {(inspectingBooking.admin_remarks ||
               inspectingBooking.approval_decision) && (
-              <div className="p-3 rounded-lg border border-outline-variant bg-surface-container-low">
+              <div className="p-3 rounded-lg bg-surface-container">
                 <div className="text-[10px] font-bold text-on-surface-variant uppercase mb-1">
                   Administrative Decision & Remarks
                 </div>

@@ -59,7 +59,7 @@ export default function MyBookings({
 
       {/* Empty State */}
       {activeBookings.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-12 px-4 text-center rounded-lg bg-surface-container-low border border-outline-variant">
+        <div className="flex flex-col items-center justify-center py-12 px-4 text-center rounded-lg bg-surface-container-low">
           <m3e-icon name="event_busy" className="text-5xl text-on-surface-variant opacity-60 mb-3"></m3e-icon>
           <h3 className="text-base font-semibold text-on-surface mb-1">
             No reservations found
@@ -73,17 +73,16 @@ export default function MyBookings({
           </m3e-button>
         </div>
       ) : (
-        /* Booking Cards List using m3e-card */
+        /* Booking Cards List */
         <div className="space-y-4">
           {activeBookings.map((b) => {
             const dateStr = formatDateDDMMYYYY(b.start_datetime);
             const timeStr = `${formatTimeRailway(b.start_datetime)} – ${formatTimeRailway(b.end_datetime)}`;
 
             return (
-              <m3e-card
+              <div
                 key={b.booking_id}
-                variant="outlined"
-                className="block rounded-lg border border-outline-variant bg-surface hover:bg-surface-container-low transition-colors"
+                className="rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors"
               >
                 <div className="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   {/* Left Column: Details */}
@@ -155,7 +154,7 @@ export default function MyBookings({
                     </div>
 
                     {(b.admin_remarks || b.purpose_notes) && (
-                      <div className="text-xs bg-surface-container-low border border-outline-variant/60 rounded px-2.5 py-1.5 text-on-surface-variant">
+                      <div className="text-xs bg-surface-container rounded px-2.5 py-1.5 text-on-surface-variant">
                         <span className="font-medium text-on-surface">
                           {b.admin_remarks ? "Admin Remarks: " : "Notes: "}
                         </span>
@@ -179,7 +178,7 @@ export default function MyBookings({
                       )}
                   </div>
                 </div>
-              </m3e-card>
+              </div>
             );
           })}
         </div>

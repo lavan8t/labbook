@@ -151,9 +151,8 @@ export default function UserSwitcherModal({
             {users.map((user) => {
               const isSelected = currentUser.user_id === user.user_id;
               return (
-                <m3e-card
+                <div
                   key={user.user_id}
-                  variant="outlined"
                   onClick={() => handleUserClick(user)}
                   className={`block rounded-lg transition-colors cursor-pointer border ${
                     isSelected
@@ -183,7 +182,7 @@ export default function UserSwitcherModal({
                       </div>
                     </div>
                   </div>
-                </m3e-card>
+                </div>
               );
             })}
           </div>

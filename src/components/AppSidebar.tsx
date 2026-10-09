@@ -93,11 +93,11 @@ export function AppSidebar({
               onOpenUserModal();
               if (onCloseMobile) onCloseMobile();
             }}
-            className="p-1 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors cursor-pointer shrink-0"
+            className="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center text-[11px] font-bold shadow-xs hover:opacity-90 transition-opacity cursor-pointer shrink-0"
             aria-label={`Switch user (${currentUser.name})`}
             title={`Current: ${currentUser.name} (${currentUser.role_display}). Tap to switch.`}
           >
-            <m3e-icon name="account_circle" className="text-xl text-primary"></m3e-icon>
+            {currentUser.avatar_initials}
           </button>
         </div>
 

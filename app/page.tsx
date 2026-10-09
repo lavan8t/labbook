@@ -443,7 +443,18 @@ export default function CampusBookPage() {
             >
               <m3e-icon name="menu" className="text-xl"></m3e-icon>
             </button>
-            <span className="font-bold text-sm text-on-surface">CampusBook</span>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-sm text-on-surface">CampusBook</span>
+              <button
+                type="button"
+                onClick={() => setShowUserModal(true)}
+                className="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center text-[10px] font-bold shadow-xs hover:opacity-90 transition-opacity cursor-pointer shrink-0"
+                aria-label={`Switch user (${currentUser.name})`}
+                title={`Current: ${currentUser.name}. Tap to switch.`}
+              >
+                {currentUser.avatar_initials}
+              </button>
+            </div>
             <div className="w-8" />
           </div>
 
@@ -554,14 +565,14 @@ export default function CampusBookPage() {
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {venues.map((v) => (
-                    <m3e-card key={v.venue_id} variant="outlined" className="p-4 text-xs bg-surface-container-low">
+                    <div key={v.venue_id} className="p-4 rounded-xl text-xs bg-surface-container-low">
                       <div className="flex justify-between items-center mb-1">
                         <span className="font-bold text-on-surface">{v.venue_name}</span>
                         <m3e-badge variant="small">{v.venue_status}</m3e-badge>
                       </div>
                       <div className="text-on-surface-variant">{v.venue_type} • {v.seating_capacity} seats</div>
                       <div className="text-on-surface-variant opacity-80 mt-0.5">{v.building}, Floor {v.floor_number}</div>
-                    </m3e-card>
+                    </div>
                   ))}
                 </div>
               </div>

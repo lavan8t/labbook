@@ -74,26 +74,36 @@ export function BookingForm({
 }: BookingFormProps) {
   // Local state fallbacks for controlled/uncontrolled operation
   const [internalVenueId, setInternalVenueId] = useState<number>(
-    venues[0]?.venue_id ? Number(venues[0].venue_id) : 1
+    venues[0]?.venue_id ? Number(venues[0].venue_id) : 1,
   );
-  const [internalBookingDate, setInternalBookingDate] = useState<string>("2026-10-22");
+  const [internalBookingDate, setInternalBookingDate] =
+    useState<string>("2026-10-22");
   const [internalStartTime, setInternalStartTime] = useState<string>("10:00");
   const [internalEndTime, setInternalEndTime] = useState<string>("13:00");
   const [internalEventTitle, setInternalEventTitle] = useState<string>("");
-  const [internalEventType, setInternalEventType] = useState<string>("ACADEMIC_LECTURE");
-  const [internalExpectedAttendees, setInternalExpectedAttendees] = useState<number>(100);
+  const [internalEventType, setInternalEventType] =
+    useState<string>("ACADEMIC_LECTURE");
+  const [internalExpectedAttendees, setInternalExpectedAttendees] =
+    useState<number>(100);
   const [internalPurposeNotes, setInternalPurposeNotes] = useState<string>("");
   const [durationPreset, setDurationPreset] = useState<string>("preset-custom");
 
   const venueId = propVenueId !== undefined ? propVenueId : internalVenueId;
-  const bookingDate = propBookingDate !== undefined ? propBookingDate : internalBookingDate;
-  const startTime = propStartTime !== undefined ? propStartTime : internalStartTime;
+  const bookingDate =
+    propBookingDate !== undefined ? propBookingDate : internalBookingDate;
+  const startTime =
+    propStartTime !== undefined ? propStartTime : internalStartTime;
   const endTime = propEndTime !== undefined ? propEndTime : internalEndTime;
-  const eventTitle = propEventTitle !== undefined ? propEventTitle : internalEventTitle;
-  const eventType = propEventType !== undefined ? propEventType : internalEventType;
+  const eventTitle =
+    propEventTitle !== undefined ? propEventTitle : internalEventTitle;
+  const eventType =
+    propEventType !== undefined ? propEventType : internalEventType;
   const expectedAttendees =
-    propExpectedAttendees !== undefined ? propExpectedAttendees : internalExpectedAttendees;
-  const purposeNotes = propPurposeNotes !== undefined ? propPurposeNotes : internalPurposeNotes;
+    propExpectedAttendees !== undefined
+      ? propExpectedAttendees
+      : internalExpectedAttendees;
+  const purposeNotes =
+    propPurposeNotes !== undefined ? propPurposeNotes : internalPurposeNotes;
 
   const handleVenueChange = (newId: number) => {
     if (propSetVenueId) propSetVenueId(newId);
@@ -144,11 +154,9 @@ export function BookingForm({
 
   React.useEffect(() => {
     const inputEl = bookingDateInputRef.current as
-      | (HTMLElement & { value?: Date | null })
-      | null;
+      (HTMLElement & { value?: Date | null }) | null;
     const pickerEl = bookingDatePickerRef.current as
-      | (HTMLElement & { date?: Date | null })
-      | null;
+      (HTMLElement & { date?: Date | null }) | null;
 
     if (inputEl) {
       const parts = bookingDate ? bookingDate.split("-").map(Number) : [];
@@ -168,7 +176,10 @@ export function BookingForm({
     }
 
     const handleChange = (e: Event) => {
-      const target = e.target as { value?: Date | string; date?: Date | string } | null;
+      const target = e.target as {
+        value?: Date | string;
+        date?: Date | string;
+      } | null;
       const val = target?.value ?? target?.date;
       if (val instanceof Date && !isNaN(val.getTime())) {
         const yr = val.getFullYear();
@@ -204,10 +215,14 @@ export function BookingForm({
       return `${h}:${m}`;
     };
 
-    const startInput = startTimeInputRef.current as (HTMLElement & { value?: Date | null }) | null;
-    const startPicker = startTimePickerRef.current as (HTMLElement & { date?: Date | null }) | null;
-    const endInput = endTimeInputRef.current as (HTMLElement & { value?: Date | null }) | null;
-    const endPicker = endTimePickerRef.current as (HTMLElement & { date?: Date | null }) | null;
+    const startInput = startTimeInputRef.current as
+      (HTMLElement & { value?: Date | null }) | null;
+    const startPicker = startTimePickerRef.current as
+      (HTMLElement & { date?: Date | null }) | null;
+    const endInput = endTimeInputRef.current as
+      (HTMLElement & { value?: Date | null }) | null;
+    const endPicker = endTimePickerRef.current as
+      (HTMLElement & { date?: Date | null }) | null;
 
     if (startInput) startInput.value = parseTime(startTime);
     if (startPicker) startPicker.date = parseTime(startTime);
@@ -215,7 +230,10 @@ export function BookingForm({
     if (endPicker) endPicker.date = parseTime(endTime);
 
     const handleStartChange = (e: Event) => {
-      const target = e.target as { value?: Date | string; date?: Date | string } | null;
+      const target = e.target as {
+        value?: Date | string;
+        date?: Date | string;
+      } | null;
       const val = target?.value ?? target?.date;
       if (val instanceof Date && !isNaN(val.getTime())) {
         handleStartTimeChange(formatTime(val));
@@ -225,7 +243,10 @@ export function BookingForm({
     };
 
     const handleEndChange = (e: Event) => {
-      const target = e.target as { value?: Date | string; date?: Date | string } | null;
+      const target = e.target as {
+        value?: Date | string;
+        date?: Date | string;
+      } | null;
       const val = target?.value ?? target?.date;
       if (val instanceof Date && !isNaN(val.getTime())) {
         handleEndTimeChange(formatTime(val));
@@ -279,7 +300,9 @@ export function BookingForm({
       return { eligible: true, missing: [] };
     }
 
-    const userCredsText = (currentUser?.credentials || []).join(" ").toUpperCase();
+    const userCredsText = (currentUser?.credentials || [])
+      .join(" ")
+      .toUpperCase();
     const missing = activeVenue.required_authorizations.filter((req) => {
       return !userCredsText.includes(req.auth_code.toUpperCase());
     });
@@ -345,7 +368,9 @@ export function BookingForm({
               <m3e-select
                 value={String(venueId)}
                 onChange={(e: React.FormEvent<HTMLElement>) => {
-                  const target = e.target as HTMLElement & { value?: string | number };
+                  const target = e.target as HTMLElement & {
+                    value?: string | number;
+                  };
                   if (target.value !== undefined) {
                     handleVenueChange(Number(target.value));
                   }
@@ -353,7 +378,8 @@ export function BookingForm({
               >
                 {venues.map((v) => (
                   <m3e-option key={v.venue_id} value={String(v.venue_id)}>
-                    {v.venue_name} ({v.venue_type} — {v.seating_capacity} Seats, {v.building})
+                    {v.venue_name} ({v.venue_type} — {v.seating_capacity} Seats,{" "}
+                    {v.building})
                   </m3e-option>
                 ))}
               </m3e-select>
@@ -361,18 +387,21 @@ export function BookingForm({
           </div>
 
           {/* Relational Division Prerequisite Check Banner */}
-          <m3e-card
-            variant="outlined"
-            className={`p-4 rounded-lg border text-xs ${
+          <div
+            className={`p-4 rounded-lg text-xs ${
               prerequisiteCheck.eligible
-                ? "bg-surface-container-low border-outline-variant text-on-surface"
-                : "bg-error-container text-on-error-container border-outline-variant"
+                ? "bg-surface-container-low text-on-surface"
+                : "bg-error-container text-on-error-container"
             }`}
           >
             <div className="flex items-start gap-3">
               <m3e-icon
                 name={prerequisiteCheck.eligible ? "check_circle" : "error"}
-                className={prerequisiteCheck.eligible ? "text-primary text-base shrink-0 mt-0.5" : "text-on-error-container text-base shrink-0 mt-0.5"}
+                className={
+                  prerequisiteCheck.eligible
+                    ? "text-primary text-base shrink-0 mt-0.5"
+                    : "text-on-error-container text-base shrink-0 mt-0.5"
+                }
               >
                 {prerequisiteCheck.eligible ? "check_circle" : "error"}
               </m3e-icon>
@@ -387,32 +416,39 @@ export function BookingForm({
                     `You possess all required clearances for ${activeVenue.venue_name}.`
                   ) : (
                     <span>
-                      This venue requires mandatory institutional clearance. Your request cannot be processed without these credentials.
+                      This venue requires mandatory institutional clearance.
+                      Your request cannot be processed without these
+                      credentials.
                     </span>
                   )}
                 </div>
 
-                {!prerequisiteCheck.eligible && prerequisiteCheck.missing.length > 0 && (
-                  <div className="mt-2.5">
-                    <m3e-chip-set>
-                      {prerequisiteCheck.missing.map((req) => (
-                        <m3e-assist-chip key={req.auth_id} variant="outlined">
-                          <m3e-icon slot="icon" name="lock">lock</m3e-icon>
-                          {req.auth_name} ({req.auth_code})
-                        </m3e-assist-chip>
-                      ))}
-                    </m3e-chip-set>
-                  </div>
-                )}
+                {!prerequisiteCheck.eligible &&
+                  prerequisiteCheck.missing.length > 0 && (
+                    <div className="mt-2.5">
+                      <m3e-chip-set>
+                        {prerequisiteCheck.missing.map((req) => (
+                          <m3e-assist-chip key={req.auth_id} variant="outlined">
+                            <m3e-icon slot="icon" name="lock">
+                              lock
+                            </m3e-icon>
+                            {req.auth_name} ({req.auth_code})
+                          </m3e-assist-chip>
+                        ))}
+                      </m3e-chip-set>
+                    </div>
+                  )}
               </div>
             </div>
-          </m3e-card>
+          </div>
 
           {/* Date & Time Range Inputs using m3e Web Components (no default form date picker) */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
             <div>
               <m3e-form-field className="w-full">
-                <label slot="label" htmlFor="booking-date-field">Reservation Date</label>
+                <label slot="label" htmlFor="booking-date-field">
+                  Reservation Date
+                </label>
                 <m3e-date-input
                   id="booking-date-field"
                   ref={bookingDateInputRef}
@@ -432,7 +468,9 @@ export function BookingForm({
 
             <div>
               <m3e-form-field className="w-full">
-                <label slot="label" htmlFor="start-time-field">Start Time</label>
+                <label slot="label" htmlFor="start-time-field">
+                  Start Time
+                </label>
                 <m3e-date-input
                   id="start-time-field"
                   ref={startTimeInputRef}
@@ -454,7 +492,9 @@ export function BookingForm({
 
             <div>
               <m3e-form-field className="w-full">
-                <label slot="label" htmlFor="end-time-field">End Time</label>
+                <label slot="label" htmlFor="end-time-field">
+                  End Time
+                </label>
                 <m3e-date-input
                   id="end-time-field"
                   ref={endTimeInputRef}
@@ -477,27 +517,35 @@ export function BookingForm({
 
           {/* Duration Presets Segmented Buttons (2h, 4h, 8h) */}
           <div className="space-y-1.5 pt-1">
-            <span className="text-xs font-semibold text-on-surface-variant">Duration Presets</span>
+            <span className="text-xs font-semibold text-on-surface-variant">
+              Duration Presets
+            </span>
             <m3e-segmented-button>
               <m3e-button-segment
                 checked={durationPreset === "2h"}
                 onClick={() => applyDurationPreset("2h")}
               >
-                <m3e-icon slot="icon" name="timer">timer</m3e-icon>
+                <m3e-icon slot="icon" name="timer">
+                  timer
+                </m3e-icon>
                 2h Lecture
               </m3e-button-segment>
               <m3e-button-segment
                 checked={durationPreset === "4h"}
                 onClick={() => applyDurationPreset("4h")}
               >
-                <m3e-icon slot="icon" name="timer">timer</m3e-icon>
+                <m3e-icon slot="icon" name="timer">
+                  timer
+                </m3e-icon>
                 4h Symposium
               </m3e-button-segment>
               <m3e-button-segment
                 checked={durationPreset === "8h"}
                 onClick={() => applyDurationPreset("8h")}
               >
-                <m3e-icon slot="icon" name="timer">timer</m3e-icon>
+                <m3e-icon slot="icon" name="timer">
+                  timer
+                </m3e-icon>
                 8h Full Day
               </m3e-button-segment>
             </m3e-segmented-button>
@@ -507,7 +555,9 @@ export function BookingForm({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
               <m3e-form-field className="w-full">
-                <label slot="label" htmlFor="event-title-input">Event / Lecture Title</label>
+                <label slot="label" htmlFor="event-title-input">
+                  Event / Lecture Title
+                </label>
                 <input
                   id="event-title-input"
                   type="text"
@@ -516,7 +566,9 @@ export function BookingForm({
                   className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
                   required
                 />
-                <m3e-icon slot="suffix" name="edit">edit</m3e-icon>
+                <m3e-icon slot="suffix" name="edit">
+                  edit
+                </m3e-icon>
               </m3e-form-field>
             </div>
 
@@ -530,13 +582,27 @@ export function BookingForm({
                     if (target.value) handleTypeChange(target.value);
                   }}
                 >
-                  <m3e-option value="ACADEMIC_LECTURE">Academic Lecture / Class Merge</m3e-option>
-                  <m3e-option value="GUEST_LECTURE">Guest Lecture / Keynote</m3e-option>
-                  <m3e-option value="WORKSHOP">Workshop / Hands-on Lab</m3e-option>
-                  <m3e-option value="HACKATHON">Hackathon / Tech Competition</m3e-option>
-                  <m3e-option value="CULTURAL_EVENT">Cultural Event / Audition</m3e-option>
-                  <m3e-option value="CONFERENCE">Conference / Symposium</m3e-option>
-                  <m3e-option value="EXAMINATION">Department Examination</m3e-option>
+                  <m3e-option value="ACADEMIC_LECTURE">
+                    Academic Lecture / Class Merge
+                  </m3e-option>
+                  <m3e-option value="GUEST_LECTURE">
+                    Guest Lecture / Keynote
+                  </m3e-option>
+                  <m3e-option value="WORKSHOP">
+                    Workshop / Hands-on Lab
+                  </m3e-option>
+                  <m3e-option value="HACKATHON">
+                    Hackathon / Tech Competition
+                  </m3e-option>
+                  <m3e-option value="CULTURAL_EVENT">
+                    Cultural Event / Audition
+                  </m3e-option>
+                  <m3e-option value="CONFERENCE">
+                    Conference / Symposium
+                  </m3e-option>
+                  <m3e-option value="EXAMINATION">
+                    Department Examination
+                  </m3e-option>
                 </m3e-select>
               </m3e-form-field>
             </div>
@@ -546,7 +612,8 @@ export function BookingForm({
           <div>
             <m3e-form-field className="w-full">
               <label slot="label" htmlFor="expected-attendees-input">
-                Expected Attendees (Max capacity: {activeVenue.seating_capacity})
+                Expected Attendees (Max capacity: {activeVenue.seating_capacity}
+                )
               </label>
               <input
                 id="expected-attendees-input"
@@ -558,7 +625,9 @@ export function BookingForm({
                 className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
                 required
               />
-              <m3e-icon slot="suffix" name="groups">groups</m3e-icon>
+              <m3e-icon slot="suffix" name="groups">
+                groups
+              </m3e-icon>
             </m3e-form-field>
           </div>
 
@@ -575,7 +644,11 @@ export function BookingForm({
                 onChange={(e) => handleNotesChange(e.target.value)}
                 className="w-full text-xs bg-transparent text-on-surface focus:outline-none resize-none"
               />
-              <m3e-textarea-autosize for="purpose-notes-textarea" min-rows={2} max-rows={6} />
+              <m3e-textarea-autosize
+                for="purpose-notes-textarea"
+                min-rows={2}
+                max-rows={6}
+              />
             </m3e-form-field>
           </div>
 
@@ -587,7 +660,9 @@ export function BookingForm({
               disabled={loading || !prerequisiteCheck.eligible}
               className="w-full"
             >
-              <m3e-icon slot="icon" name="send">send</m3e-icon>
+              <m3e-icon slot="icon" name="send">
+                send
+              </m3e-icon>
               {loading ? "Submitting to Database..." : "Submit Booking Request"}
             </m3e-button>
           </div>
@@ -596,98 +671,126 @@ export function BookingForm({
 
       {/* Right Column: Venue Details Card */}
       <div className="lg:col-span-5">
-        <m3e-card variant="outlined" className="block bg-surface-container-low border border-outline-variant rounded-lg">
-          <div className="p-6 sm:p-7 space-y-5">
-            <div className="border-b border-outline-variant pb-3">
-              <h3 className="text-sm font-bold text-on-surface">Venue Specifications</h3>
-            </div>
-            <div className="space-y-3 text-xs text-on-surface">
-              <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
-                <span className="text-on-surface-variant shrink-0">Venue Name</span>
-                <span className="font-semibold text-on-surface text-right">{activeVenue.venue_name}</span>
-              </div>
-              <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
-                <span className="text-on-surface-variant shrink-0">Category</span>
-                <span className="font-medium text-on-surface text-right">{activeVenue.venue_type}</span>
-              </div>
-              <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
-                <span className="text-on-surface-variant shrink-0">Building / Floor</span>
-                <span className="font-medium text-on-surface text-right">
-                  {activeVenue.building}, Floor {activeVenue.floor_number}
-                </span>
-              </div>
-              <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
-                <span className="text-on-surface-variant shrink-0">Seating Capacity</span>
-                <span className="font-bold text-primary text-right">
-                  {activeVenue.seating_capacity} seats
-                </span>
-              </div>
-              <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
-                <span className="text-on-surface-variant shrink-0">Air Conditioned</span>
-                <span className="font-medium text-on-surface text-right">
-                  {activeVenue.has_air_conditioning ? "Yes (Central AC)" : "No"}
-                </span>
-              </div>
-              <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
-                <span className="text-on-surface-variant shrink-0">Projector Arrays</span>
-                <span className="font-medium text-on-surface text-right">
-                  {activeVenue.projector_count} Units
-                </span>
-              </div>
-              <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
-                <span className="text-on-surface-variant shrink-0">Sound System</span>
-                <span className="font-medium text-on-surface text-right">
-                  {activeVenue.has_sound_system ? "Installed & Tuned" : "Basic"}
-                </span>
-              </div>
-              <div className="flex justify-between items-center py-1.5 gap-4">
-                <span className="text-on-surface-variant shrink-0">Smart Podium</span>
-                <span className="font-medium text-on-surface text-right">
-                  {activeVenue.has_smart_podium ? "Yes (Touch display)" : "No"}
-                </span>
-              </div>
-            </div>
-
-            {/* Amenities & Facility Clearances */}
-            <div className="pt-3 border-t border-outline-variant">
-              <span className="text-[11px] font-semibold text-on-surface-variant block mb-2.5">
-                Amenities & Clearances
+        <div className="bg-surface-container-low border border-outline-variant rounded-lg p-6 sm:p-7 space-y-5">
+          <div className="border-b border-outline-variant pb-3">
+            <h3 className="text-sm font-bold text-on-surface">
+              Venue Specifications
+            </h3>
+          </div>
+          <div className="space-y-3 text-xs text-on-surface">
+            <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
+              <span className="text-on-surface-variant shrink-0">
+                Venue Name
               </span>
-              <m3e-chip-set>
-                {activeVenue.has_air_conditioning && (
-                  <m3e-assist-chip variant="outlined">
-                    <m3e-icon slot="icon" name="ac_unit">ac_unit</m3e-icon>
-                    Central AC
-                  </m3e-assist-chip>
-                )}
-                {activeVenue.projector_count > 0 && (
-                  <m3e-assist-chip variant="outlined">
-                    <m3e-icon slot="icon" name="videocam">videocam</m3e-icon>
-                    {activeVenue.projector_count} Projectors
-                  </m3e-assist-chip>
-                )}
-                {activeVenue.has_sound_system && (
-                  <m3e-assist-chip variant="outlined">
-                    <m3e-icon slot="icon" name="volume_up">volume_up</m3e-icon>
-                    Sound System
-                  </m3e-assist-chip>
-                )}
-                {activeVenue.has_smart_podium && (
-                  <m3e-assist-chip variant="outlined">
-                    <m3e-icon slot="icon" name="podium">podium</m3e-icon>
-                    Smart Podium
-                  </m3e-assist-chip>
-                )}
-                {activeVenue.required_authorizations?.map((auth) => (
-                  <m3e-assist-chip key={auth.auth_id} variant="outlined">
-                    <m3e-icon slot="icon" name="lock">lock</m3e-icon>
-                    {auth.auth_name}
-                  </m3e-assist-chip>
-                ))}
-              </m3e-chip-set>
+              <span className="font-semibold text-on-surface text-right">
+                {activeVenue.venue_name}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
+              <span className="text-on-surface-variant shrink-0">Category</span>
+              <span className="font-medium text-on-surface text-right">
+                {activeVenue.venue_type}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
+              <span className="text-on-surface-variant shrink-0">
+                Building / Floor
+              </span>
+              <span className="font-medium text-on-surface text-right">
+                {activeVenue.building}, Floor {activeVenue.floor_number}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
+              <span className="text-on-surface-variant shrink-0">
+                Seating Capacity
+              </span>
+              <span className="font-bold text-primary text-right">
+                {activeVenue.seating_capacity} seats
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
+              <span className="text-on-surface-variant shrink-0">
+                Air Conditioned
+              </span>
+              <span className="font-medium text-on-surface text-right">
+                {activeVenue.has_air_conditioning ? "Yes (Central AC)" : "No"}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
+              <span className="text-on-surface-variant shrink-0">
+                Projector Arrays
+              </span>
+              <span className="font-medium text-on-surface text-right">
+                {activeVenue.projector_count} Units
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-1.5 border-b border-outline-variant/60 gap-4">
+              <span className="text-on-surface-variant shrink-0">
+                Sound System
+              </span>
+              <span className="font-medium text-on-surface text-right">
+                {activeVenue.has_sound_system ? "Installed & Tuned" : "Basic"}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-1.5 gap-4">
+              <span className="text-on-surface-variant shrink-0">
+                Smart Podium
+              </span>
+              <span className="font-medium text-on-surface text-right">
+                {activeVenue.has_smart_podium ? "Yes (Touch display)" : "No"}
+              </span>
             </div>
           </div>
-        </m3e-card>
+
+          {/* Amenities & Facility Clearances */}
+          <div className="pt-3 border-t border-outline-variant">
+            <span className="text-[11px] font-semibold text-on-surface-variant block mb-2.5">
+              Amenities & Clearances
+            </span>
+            <m3e-chip-set>
+              {activeVenue.has_air_conditioning && (
+                <m3e-assist-chip variant="outlined">
+                  <m3e-icon slot="icon" name="ac_unit">
+                    ac_unit
+                  </m3e-icon>
+                  Central AC
+                </m3e-assist-chip>
+              )}
+              {activeVenue.projector_count > 0 && (
+                <m3e-assist-chip variant="outlined">
+                  <m3e-icon slot="icon" name="videocam">
+                    videocam
+                  </m3e-icon>
+                  {activeVenue.projector_count} Projectors
+                </m3e-assist-chip>
+              )}
+              {activeVenue.has_sound_system && (
+                <m3e-assist-chip variant="outlined">
+                  <m3e-icon slot="icon" name="volume_up">
+                    volume_up
+                  </m3e-icon>
+                  Sound System
+                </m3e-assist-chip>
+              )}
+              {activeVenue.has_smart_podium && (
+                <m3e-assist-chip variant="outlined">
+                  <m3e-icon slot="icon" name="podium">
+                    podium
+                  </m3e-icon>
+                  Smart Podium
+                </m3e-assist-chip>
+              )}
+              {activeVenue.required_authorizations?.map((auth) => (
+                <m3e-assist-chip key={auth.auth_id} variant="outlined">
+                  <m3e-icon slot="icon" name="lock">
+                    lock
+                  </m3e-icon>
+                  {auth.auth_name}
+                </m3e-assist-chip>
+              ))}
+            </m3e-chip-set>
+          </div>
+        </div>
       </div>
     </div>
   );

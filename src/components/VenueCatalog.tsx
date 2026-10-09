@@ -50,9 +50,8 @@ export function VenueCatalog({
             );
 
           return (
-            <m3e-card
+            <div
               key={venue.venue_id}
-              variant={isSelected ? "elevated" : "outlined"}
               className={`block rounded-lg border transition-colors ${
                 isSelected
                   ? "bg-surface-container border-primary"
@@ -153,7 +152,7 @@ export function VenueCatalog({
                   </m3e-button>
                 </div>
               </div>
-            </m3e-card>
+            </div>
           );
         })}
       </div>

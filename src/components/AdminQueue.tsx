@@ -118,21 +118,20 @@ export function AdminQueue({
 
       {/* Queue Booking List */}
       {pendingQueue.length === 0 ? (
-        <m3e-card variant="outlined" className="p-8 text-center bg-surface-container-low">
+        <div className="p-8 text-center rounded-lg bg-surface-container-low">
           <m3e-icon name="inbox" className="text-3xl text-on-surface-variant mb-2"></m3e-icon>
           <p className="text-sm font-medium text-on-surface">
             Queue is clear! No requests currently awaiting administrative approval.
           </p>
-        </m3e-card>
+        </div>
       ) : (
         <div className="space-y-3">
           {pendingQueue.map((b) => {
             const hasConflict = Number(b.competing_pending_count || 0) > 0;
             return (
-              <m3e-card
+              <div
                 key={b.booking_id}
-                variant="outlined"
-                className="block rounded-lg border border-outline-variant bg-surface-container-low transition-all"
+                className="rounded-lg bg-surface-container-low transition-all"
               >
                 <div className="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   {/* Left Column: Booking metadata */}
@@ -220,7 +219,7 @@ export function AdminQueue({
                     </m3e-button>
                   </div>
                 </div>
-              </m3e-card>
+              </div>
             );
           })}
         </div>
@@ -262,10 +261,9 @@ export function AdminQueue({
 
               <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
                 {clashesData.map((c) => (
-                  <m3e-card
+                  <div
                     key={c.booking_id}
-                    variant="outlined"
-                    className="p-3 bg-surface-container-lowest"
+                    className="p-3 rounded-lg bg-surface-container-lowest"
                   >
                     <div className="flex justify-between items-start gap-2">
                       <div className="space-y-1">
@@ -289,11 +287,11 @@ export function AdminQueue({
                         </m3e-badge>
                       </div>
                     </div>
-                  </m3e-card>
+                  </div>
                 ))}
               </div>
 
-              <div className="p-3 rounded-lg bg-surface-container border border-outline-variant text-[11px] text-on-surface-variant flex items-start gap-2 mt-2">
+              <div className="p-3 rounded-lg bg-surface-container text-[11px] text-on-surface-variant flex items-start gap-2 mt-2">
                 <m3e-icon name="info" className="text-primary text-sm shrink-0 mt-0.5"></m3e-icon>
                 <div>
                   <strong>Automatic Cascade Rule:</strong> Approving {inspectingBooking?.booking_ref}{" "}
