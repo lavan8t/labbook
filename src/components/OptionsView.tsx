@@ -31,7 +31,9 @@ export function OptionsView({
   const [confirmCodeInput, setConfirmCodeInput] = useState("");
   const [passcodeError, setPasscodeError] = useState("");
   const [passcodeSuccess, setPasscodeSuccess] = useState("");
-  const [showPasscodes, setShowPasscodes] = useState(false);
+  const [showCurrentCode, setShowCurrentCode] = useState(false);
+  const [showNewCode, setShowNewCode] = useState(false);
+  const [showConfirmCode, setShowConfirmCode] = useState(false);
 
   const handleUpdatePasscode = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,6 +65,9 @@ export function OptionsView({
     setCurrentCodeInput("");
     setNewCodeInput("");
     setConfirmCodeInput("");
+    setShowCurrentCode(false);
+    setShowNewCode(false);
+    setShowConfirmCode(false);
   };
 
   const handleChooseTheme = (chosen: "light" | "dark") => {
@@ -163,12 +168,28 @@ export function OptionsView({
               </label>
               <input
                 id="current-passcode-input"
-                type={showPasscodes ? "text" : "password"}
+                type={showCurrentCode ? "text" : "password"}
                 value={currentCodeInput}
                 onChange={(e) => setCurrentCodeInput(e.target.value)}
-                className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
+                className="w-full text-xs bg-transparent text-on-surface focus:outline-none pr-2"
               />
-              <m3e-icon slot="suffix" name="key"></m3e-icon>
+              <button
+                type="button"
+                slot="suffix"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowCurrentCode((v) => !v);
+                }}
+                className="flex items-center justify-center p-1 pr-3 text-on-surface-variant hover:text-on-surface transition-colors bg-transparent border-0 focus:outline-none cursor-pointer"
+                aria-label={showCurrentCode ? "Hide current passcode" : "Show current passcode"}
+                tabIndex={-1}
+              >
+                <m3e-icon
+                  name={showCurrentCode ? "visibility_off" : "visibility"}
+                  className="text-lg"
+                ></m3e-icon>
+              </button>
             </m3e-form-field>
           </div>
 
@@ -179,12 +200,28 @@ export function OptionsView({
               </label>
               <input
                 id="new-passcode-input"
-                type={showPasscodes ? "text" : "password"}
+                type={showNewCode ? "text" : "password"}
                 value={newCodeInput}
                 onChange={(e) => setNewCodeInput(e.target.value)}
-                className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
+                className="w-full text-xs bg-transparent text-on-surface focus:outline-none pr-2"
               />
-              <m3e-icon slot="suffix" name="lock"></m3e-icon>
+              <button
+                type="button"
+                slot="suffix"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowNewCode((v) => !v);
+                }}
+                className="flex items-center justify-center p-1 pr-3 text-on-surface-variant hover:text-on-surface transition-colors bg-transparent border-0 focus:outline-none cursor-pointer"
+                aria-label={showNewCode ? "Hide new passcode" : "Show new passcode"}
+                tabIndex={-1}
+              >
+                <m3e-icon
+                  name={showNewCode ? "visibility_off" : "visibility"}
+                  className="text-lg"
+                ></m3e-icon>
+              </button>
             </m3e-form-field>
           </div>
 
@@ -195,26 +232,32 @@ export function OptionsView({
               </label>
               <input
                 id="confirm-passcode-input"
-                type={showPasscodes ? "text" : "password"}
+                type={showConfirmCode ? "text" : "password"}
                 value={confirmCodeInput}
                 onChange={(e) => setConfirmCodeInput(e.target.value)}
-                className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
+                className="w-full text-xs bg-transparent text-on-surface focus:outline-none pr-2"
               />
-              <m3e-icon slot="suffix" name="lock_clock"></m3e-icon>
+              <button
+                type="button"
+                slot="suffix"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowConfirmCode((v) => !v);
+                }}
+                className="flex items-center justify-center p-1 pr-3 text-on-surface-variant hover:text-on-surface transition-colors bg-transparent border-0 focus:outline-none cursor-pointer"
+                aria-label={showConfirmCode ? "Hide confirmation passcode" : "Show confirmation passcode"}
+                tabIndex={-1}
+              >
+                <m3e-icon
+                  name={showConfirmCode ? "visibility_off" : "visibility"}
+                  className="text-lg"
+                ></m3e-icon>
+              </button>
             </m3e-form-field>
           </div>
 
-          <div className="flex items-center justify-between pt-1">
-            <label className="flex items-center gap-2 text-xs text-on-surface-variant cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={showPasscodes}
-                onChange={(e) => setShowPasscodes(e.target.checked)}
-                className="rounded border-outline-variant"
-              />
-              <span>Show passcodes</span>
-            </label>
-
+          <div className="flex justify-end pt-1">
             <m3e-button
               type="submit"
               variant="filled"
