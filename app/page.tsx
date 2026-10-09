@@ -5,6 +5,7 @@ import {
   APP_USERS,
   ADMIN_ACCESS_CODE,
   FALLBACK_VENUES,
+  FALLBACK_TIMETABLE_BOOKINGS,
   type CampusUser,
 } from "@/data/schema";
 import {
@@ -17,6 +18,7 @@ import {
   approveBooking,
   rejectBooking,
   getUtilizationReport,
+  getTimetableBookings,
   checkBackendHealth,
   type Venue,
   type Booking,
@@ -30,7 +32,9 @@ import "@m3e/web/badge";
 import "@m3e/web/icon";
 import "@m3e/web/snackbar";
 
-import AppHeader from "@/components/AppHeader";
+import AppSidebar from "@/components/AppSidebar";
+import OptionsDrawer from "@/components/OptionsDrawer";
+import GanttTimetable from "@/components/GanttTimetable";
 import { BookingForm } from "@/components/BookingForm";
 import { VenueCatalog } from "@/components/VenueCatalog";
 import MyBookings from "@/components/MyBookings";
@@ -38,16 +42,31 @@ import { AdminQueue } from "@/components/AdminQueue";
 import { AdminReports } from "@/components/AdminReports";
 import UserSwitcherModal from "@/components/UserSwitcherModal";
 
-type NormalTab = "book" | "catalog" | "my-bookings";
-type AdminTab = "admin-pending" | "admin-venues" | "admin-reports";
-type ActiveTab = NormalTab | AdminTab;
+type ActiveTab =
+  | "timetable"
+  | "book"
+  | "catalog"
+  | "my-bookings"
+  | "admin-pending"
+  | "admin-venues"
+  | "admin-reports";
 
 export default function CampusBookPage() {
   // 1. Current Active User State (Default: Aditya Sharma - Club Head)
   const [currentUser, setCurrentUser] = useState<CampusUser>(APP_USERS[0]);
-  const [activeTab, setActiveTab] = useState<ActiveTab>("book");
+  const [activeTab, setActiveTab] = useState<ActiveTab>("timetable");
 
-  // 2. Data State from Backend
+  // 2. Theme State & Mobile Nav State
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [mobileNavOpen, setMobileNavOpen] = useState<boolean>(false);
+  const [showOptionsDrawer, setShowOptionsDrawer] = useState<boolean>(false);
+  const [adminAccessCode, setAdminAccessCode] = useState<string>(ADMIN_ACCESS_CODE);
+
+  // 3. Timetable State (Home View)
+  const [timetableDate, setTimetableDate] = useState<string>("2026-10-22");
+  const [timetableBookings, setTimetableBookings] = useState<Booking[]>(FALLBACK_TIMETABLE_BOOKINGS);
+
+  // 4. Data State from Backend
   const [venues, setVenues] = useState<Venue[]>(FALLBACK_VENUES as unknown as Venue[]);
   const [myBookingsList, setMyBookingsList] = useState<Booking[]>([]);
   const [pendingQueue, setPendingQueue] = useState<Booking[]>([]);
@@ -55,13 +74,13 @@ export default function CampusBookPage() {
   const [backendOnline, setBackendOnline] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // 3. User Switching & Admin Auth Modal State
+  // 5. User Switching & Admin Auth Modal State
   const [showUserModal, setShowUserModal] = useState<boolean>(false);
   const [showAdminCodeModal, setShowAdminCodeModal] = useState<boolean>(false);
-  const [adminCodeInput, setAdminCodeInput] = useState<string>("");
+  const [adminCodeInput, setAdminCodeInput] = useState<string>("0406");
   const [adminCodeError, setAdminCodeError] = useState<string>("");
 
-  // 4. Booking Form State (Normal Users)
+  // 6. Booking Form State (Normal Users)
   const [selectedVenueId, setSelectedVenueId] = useState<number>(1);
   const [bookingDate, setBookingDate] = useState<string>("2026-10-22");
   const [startTime, setStartTime] = useState<string>("10:00");
@@ -71,7 +90,7 @@ export default function CampusBookPage() {
   const [expectedAttendees, setExpectedAttendees] = useState<number>(100);
   const [purposeNotes, setPurposeNotes] = useState<string>("");
 
-  // 5. Admin Clash & Approval Modals
+  // 7. Admin Clash & Approval Modals
   const [inspectingBooking, setInspectingBooking] = useState<Booking | null>(null);
   const [clashesData, setClashesData] = useState<CompetingClash[]>([]);
   const [clashesLoading, setClashesLoading] = useState<boolean>(false);
@@ -81,7 +100,7 @@ export default function CampusBookPage() {
   const [showApprovalModal, setShowApprovalModal] = useState<boolean>(false);
   const [showRejectionModal, setShowRejectionModal] = useState<boolean>(false);
 
-  // 6. Native M3 Snackbar State
+  // 8. Native M3 Snackbar State
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
 
@@ -102,6 +121,25 @@ export default function CampusBookPage() {
       refreshData();
     } catch {
       setBackendOnline(false);
+      fetchTimetableSchedule(timetableDate);
+    }
+  }
+
+  // Load timetable data whenever timetable date changes
+  useEffect(() => {
+    fetchTimetableSchedule(timetableDate);
+  }, [timetableDate]);
+
+  async function fetchTimetableSchedule(date: string) {
+    try {
+      const res = await getTimetableBookings(date);
+      if (res.success && res.data && res.data.length > 0) {
+        setTimetableBookings(res.data);
+      } else {
+        setTimetableBookings(FALLBACK_TIMETABLE_BOOKINGS);
+      }
+    } catch {
+      setTimetableBookings(FALLBACK_TIMETABLE_BOOKINGS);
     }
   }
 
@@ -110,6 +148,8 @@ export default function CampusBookPage() {
       setLoading(true);
       const vRes = await getVenues();
       if (vRes.success) setVenues(vRes.data);
+
+      await fetchTimetableSchedule(timetableDate);
 
       if (currentUser.user_type === "normal") {
         const bRes = await getMyBookings(currentUser.user_id);
@@ -172,6 +212,17 @@ export default function CampusBookPage() {
     };
   }, [selectedVenue, currentUser]);
 
+  // One-click free slot booking handoff from Gantt Timetable
+  function handleSelectFreeSlot(venueId: number, date: string, start: string, end: string) {
+    setSelectedVenueId(venueId);
+    setBookingDate(date);
+    setStartTime(start);
+    setEndTime(end);
+    setActiveTab("book");
+    const targetVenue = venues.find((v) => Number(v.venue_id) === Number(venueId));
+    showToast(`Selected ${targetVenue?.venue_name || "Venue"} (${start} – ${end}). Enter event details to submit.`);
+  }
+
   // Handle User Switching
   function handleSelectUser(targetUser: CampusUser) {
     if (targetUser.user_type === "admin") {
@@ -182,7 +233,7 @@ export default function CampusBookPage() {
     } else {
       setCurrentUser(targetUser);
       if (activeTab.startsWith("admin")) {
-        setActiveTab("book");
+        setActiveTab("timetable");
       }
       setShowUserModal(false);
       showToast(`Switched active profile to ${targetUser.name} (${targetUser.role_display})`);
@@ -190,10 +241,10 @@ export default function CampusBookPage() {
   }
 
   function handleVerifyAdminCode() {
-    if (adminCodeInput.trim() === ADMIN_ACCESS_CODE) {
+    if (adminCodeInput.trim() === adminAccessCode) {
       const adminUser = APP_USERS.find((u) => u.user_type === "admin")!;
       setCurrentUser(adminUser);
-      if (!activeTab.startsWith("admin")) {
+      if (!activeTab.startsWith("admin") && activeTab !== "timetable") {
         setActiveTab("admin-pending");
       }
       setShowAdminCodeModal(false);
@@ -340,150 +391,233 @@ export default function CampusBookPage() {
     }
   }
 
+  const tabTitle = useMemo(() => {
+    switch (activeTab) {
+      case "timetable":
+        return "Campus Timetable Schedule Matrix";
+      case "book":
+        return "Submit Venue Booking Request";
+      case "catalog":
+        return "Campus Venues Master Catalog";
+      case "my-bookings":
+        return `My Reservations (${currentUser.name})`;
+      case "admin-pending":
+        return "Administrator Pending Approvals Queue";
+      case "admin-venues":
+        return "Campus Facilities Management";
+      case "admin-reports":
+        return "Monthly Venue Utilization Analytics";
+      default:
+        return "CampusBook";
+    }
+  }, [activeTab, currentUser]);
+
   return (
-    <m3e-theme color="#C85A32" scheme="light" variant="tonal-spot">
-      <div className="min-h-screen bg-surface text-on-surface flex flex-col font-sans">
-        {/* Global Academic Header & Role Tabs */}
-        <AppHeader
+    <m3e-theme color="#C85A32" scheme={theme} variant="tonal-spot">
+      <div className={`min-h-screen flex ${theme === "dark" ? "dark bg-surface-container-lowest" : "bg-surface"} text-on-surface font-sans`}>
+        {/* Unified Left Vertical Sidebar (Merges both top rows) */}
+        <AppSidebar
           currentUser={currentUser}
           activeTab={activeTab}
           setActiveTab={(tab: string) => setActiveTab(tab as ActiveTab)}
-          backendOnline={backendOnline}
           onOpenUserModal={() => setShowUserModal(true)}
-          refreshData={refreshData}
-          loading={loading}
-          venuesCount={venues.length}
           myBookingsCount={myBookingsList.length}
           pendingQueueCount={pendingQueue.length}
+          mobileOpen={mobileNavOpen}
+          onCloseMobile={() => setMobileNavOpen(false)}
         />
 
         {/* Main Content Area */}
-        <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 flex-1">
-          {/* TAB 1: BOOK HALL / AUDI */}
-          {activeTab === "book" && (
-            <BookingForm
-              venues={venues}
-              currentUser={currentUser}
-              selectedVenueId={selectedVenueId}
-              setSelectedVenueId={setSelectedVenueId}
-              selectedVenue={selectedVenue}
-              bookingDate={bookingDate}
-              setBookingDate={setBookingDate}
-              startTime={startTime}
-              setStartTime={setStartTime}
-              endTime={endTime}
-              setEndTime={setEndTime}
-              eventTitle={eventTitle}
-              setEventTitle={setEventTitle}
-              eventType={eventType}
-              setEventType={setEventType}
-              expectedAttendees={expectedAttendees}
-              setExpectedAttendees={setExpectedAttendees}
-              purposeNotes={purposeNotes}
-              setPurposeNotes={setPurposeNotes}
-              loading={loading}
-              onSubmit={handleSubmitBooking}
-              prerequisiteCheck={prerequisiteCheck}
-            />
-          )}
+        <div className="flex-1 flex flex-col min-w-0">
+          {/* Top Header Bar with Mobile Menu Toggle, View Title & 3-Dot Options Trigger */}
+          <header className="h-14 border-b border-outline-variant px-4 sm:px-6 flex items-center justify-between bg-surface shrink-0 z-20">
+            <div className="flex items-center gap-3 min-w-0">
+              <button
+                type="button"
+                onClick={() => setMobileNavOpen(true)}
+                className="md:hidden p-2 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors"
+                aria-label="Open navigation menu"
+              >
+                <m3e-icon className="text-xl">menu</m3e-icon>
+              </button>
 
-          {/* TAB 2: VENUES CATALOG */}
-          {activeTab === "catalog" && (
-            <VenueCatalog
-              venues={venues}
-              currentUser={currentUser}
-              selectedVenueId={selectedVenueId}
-              onRequestVenue={(id) => {
-                setSelectedVenueId(id);
-                setActiveTab("book");
-              }}
-            />
-          )}
-
-          {/* TAB 3: MY BOOKINGS */}
-          {activeTab === "my-bookings" && (
-            <MyBookings
-              currentUser={currentUser}
-              myBookingsList={myBookingsList}
-              handleCancelBooking={handleCancelBooking}
-              refreshData={refreshData}
-              setActiveTab={(tab: string) => setActiveTab(tab as ActiveTab)}
-              loading={loading}
-            />
-          )}
-
-          {/* TAB 4: ADMIN PENDING APPROVALS QUEUE */}
-          {activeTab === "admin-pending" && currentUser.user_type === "admin" && (
-            <AdminQueue
-              pendingQueue={pendingQueue}
-              inspectingBooking={inspectingBooking}
-              clashesData={clashesData}
-              clashesLoading={clashesLoading}
-              onInspectClashes={handleInspectClashes}
-              onCloseClashes={() => setInspectingBooking(null)}
-              onOpenApprove={(b) => {
-                setActionBooking(b);
-                setShowApprovalModal(true);
-              }}
-              onOpenReject={(b) => {
-                setActionBooking(b);
-                setShowRejectionModal(true);
-              }}
-              showApprovalModal={showApprovalModal}
-              showRejectionModal={showRejectionModal}
-              actionBooking={actionBooking}
-              approvalRemarks={approvalRemarks}
-              rejectionRemarks={rejectionRemarks}
-              setApprovalRemarks={setApprovalRemarks}
-              setRejectionRemarks={setRejectionRemarks}
-              onConfirmApprove={handleConfirmApprove}
-              onConfirmReject={handleConfirmReject}
-              onCancelModal={() => {
-                setShowApprovalModal(false);
-                setShowRejectionModal(false);
-                setActionBooking(null);
-              }}
-              loading={loading}
-            />
-          )}
-
-          {/* TAB 5: ADMIN FACILITIES OVERVIEW */}
-          {activeTab === "admin-venues" && currentUser.user_type === "admin" && (
-            <div className="space-y-6">
-              <div className="bg-surface rounded-lg border border-outline-variant p-6">
-                <div className="border-b border-outline-variant pb-3 mb-4">
-                  <h2 className="text-base font-bold text-on-surface flex items-center gap-2">
-                    <m3e-icon className="text-primary text-xl">domain</m3e-icon>
-                    <span>Campus Facilities Management</span>
-                  </h2>
-                  <p className="text-xs text-on-surface-variant mt-0.5">
-                    Operational inventory and telemetry for campus auditoriums and smart lecture halls.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {venues.map((v) => (
-                    <m3e-card key={v.venue_id} variant="outlined" className="p-4 text-xs bg-surface-container-low">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="font-bold text-on-surface">{v.venue_name}</span>
-                        <m3e-badge variant="small">{v.venue_status}</m3e-badge>
-                      </div>
-                      <div className="text-on-surface-variant">{v.venue_type} • {v.seating_capacity} seats</div>
-                      <div className="text-on-surface-variant opacity-80 mt-0.5">{v.building}, Floor {v.floor_number}</div>
-                    </m3e-card>
-                  ))}
-                </div>
+              <div className="min-w-0">
+                <h1 className="text-sm font-bold text-on-surface truncate">
+                  {tabTitle}
+                </h1>
               </div>
             </div>
-          )}
 
-          {/* TAB 6: ADMIN UTILIZATION REPORTS */}
-          {activeTab === "admin-reports" && currentUser.user_type === "admin" && (
-            <AdminReports utilizationStats={utilizationStats} />
-          )}
-        </main>
+            {/* Right Controls: 3-Dot Icon for Options Panel */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setShowOptionsDrawer(true)}
+                className="p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
+                title="Options"
+                aria-label="Options"
+              >
+                <m3e-icon className="text-xl">more_vert</m3e-icon>
+              </button>
+            </div>
+          </header>
 
-        {/* User Persona Switcher & Passcode Modal (Zero code leaks) */}
+          {/* Main View Port */}
+          <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+            {/* TAB 1: GANTT TIMETABLE MATRIX (Default Home View) */}
+            {activeTab === "timetable" && (
+              <GanttTimetable
+                venues={venues}
+                bookings={timetableBookings}
+                selectedDate={timetableDate}
+                onDateChange={setTimetableDate}
+                onSelectFreeSlot={handleSelectFreeSlot}
+                loading={loading}
+              />
+            )}
+
+            {/* TAB 2: BOOK HALL / AUDI */}
+            {activeTab === "book" && (
+              <BookingForm
+                venues={venues}
+                currentUser={currentUser}
+                selectedVenueId={selectedVenueId}
+                setSelectedVenueId={setSelectedVenueId}
+                selectedVenue={selectedVenue}
+                bookingDate={bookingDate}
+                setBookingDate={setBookingDate}
+                startTime={startTime}
+                setStartTime={setStartTime}
+                endTime={endTime}
+                setEndTime={setEndTime}
+                eventTitle={eventTitle}
+                setEventTitle={setEventTitle}
+                eventType={eventType}
+                setEventType={setEventType}
+                expectedAttendees={expectedAttendees}
+                setExpectedAttendees={setExpectedAttendees}
+                purposeNotes={purposeNotes}
+                setPurposeNotes={setPurposeNotes}
+                loading={loading}
+                onSubmit={handleSubmitBooking}
+                prerequisiteCheck={prerequisiteCheck}
+              />
+            )}
+
+            {/* TAB 3: VENUES CATALOG */}
+            {activeTab === "catalog" && (
+              <VenueCatalog
+                venues={venues}
+                currentUser={currentUser}
+                selectedVenueId={selectedVenueId}
+                onRequestVenue={(id) => {
+                  setSelectedVenueId(id);
+                  setActiveTab("book");
+                }}
+              />
+            )}
+
+            {/* TAB 4: MY BOOKINGS */}
+            {activeTab === "my-bookings" && (
+              <MyBookings
+                currentUser={currentUser}
+                bookings={myBookingsList}
+                onCancelBooking={handleCancelBooking}
+                onRefresh={refreshData}
+                onNavigateToBook={() => setActiveTab("book")}
+                loading={loading}
+              />
+            )}
+
+            {/* TAB 5: ADMIN PENDING APPROVALS QUEUE */}
+            {activeTab === "admin-pending" && currentUser.user_type === "admin" && (
+              <AdminQueue
+                pendingQueue={pendingQueue}
+                inspectingBooking={inspectingBooking}
+                clashesData={clashesData}
+                clashesLoading={clashesLoading}
+                onInspectClashes={handleInspectClashes}
+                onCloseClashes={() => setInspectingBooking(null)}
+                onOpenApprove={(b) => {
+                  setActionBooking(b);
+                  setShowApprovalModal(true);
+                }}
+                onOpenReject={(b) => {
+                  setActionBooking(b);
+                  setShowRejectionModal(true);
+                }}
+                showApprovalModal={showApprovalModal}
+                showRejectionModal={showRejectionModal}
+                actionBooking={actionBooking}
+                approvalRemarks={approvalRemarks}
+                rejectionRemarks={rejectionRemarks}
+                setApprovalRemarks={setApprovalRemarks}
+                setRejectionRemarks={setRejectionRemarks}
+                onConfirmApprove={handleConfirmApprove}
+                onConfirmReject={handleConfirmReject}
+                onCancelModal={() => {
+                  setShowApprovalModal(false);
+                  setShowRejectionModal(false);
+                  setActionBooking(null);
+                }}
+                loading={loading}
+              />
+            )}
+
+            {/* TAB 6: ADMIN FACILITIES OVERVIEW */}
+            {activeTab === "admin-venues" && currentUser.user_type === "admin" && (
+              <div className="space-y-6">
+                <div className="bg-surface rounded-lg border border-outline-variant p-6">
+                  <div className="border-b border-outline-variant pb-3 mb-4">
+                    <h2 className="text-base font-bold text-on-surface flex items-center gap-2">
+                      <m3e-icon className="text-primary text-xl">domain</m3e-icon>
+                      <span>Campus Facilities Management</span>
+                    </h2>
+                    <p className="text-xs text-on-surface-variant mt-0.5">
+                      Operational inventory and telemetry for campus auditoriums and smart lecture halls.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {venues.map((v) => (
+                      <m3e-card key={v.venue_id} variant="outlined" className="p-4 text-xs bg-surface-container-low">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-bold text-on-surface">{v.venue_name}</span>
+                          <m3e-badge variant="small">{v.venue_status}</m3e-badge>
+                        </div>
+                        <div className="text-on-surface-variant">{v.venue_type} • {v.seating_capacity} seats</div>
+                        <div className="text-on-surface-variant opacity-80 mt-0.5">{v.building}, Floor {v.floor_number}</div>
+                      </m3e-card>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 7: ADMIN UTILIZATION REPORTS */}
+            {activeTab === "admin-reports" && currentUser.user_type === "admin" && (
+              <AdminReports utilizationStats={utilizationStats} />
+            )}
+          </main>
+        </div>
+
+        {/* Options Drawer Panel on the Right Side (Triggered by 3-dot icon button) */}
+        <OptionsDrawer
+          open={showOptionsDrawer}
+          onClose={() => setShowOptionsDrawer(false)}
+          theme={theme}
+          onToggleTheme={() => setTheme(theme === "light" ? "dark" : "light")}
+          onSyncDb={refreshData}
+          syncLoading={loading}
+          backendOnline={backendOnline}
+          adminPasscode={adminAccessCode}
+          onUpdateAdminPasscode={(newCode) => {
+            setAdminAccessCode(newCode);
+            showToast("Administrator passcode updated successfully.");
+          }}
+        />
+
+        {/* User Persona Switcher & Passcode Modal */}
         <UserSwitcherModal
           open={showUserModal}
           currentUser={currentUser}
@@ -507,13 +641,6 @@ export default function CampusBookPage() {
         >
           {snackbarMessage}
         </m3e-snackbar>
-
-        {/* Academic Footer */}
-        <footer className="bg-surface border-t border-outline-variant px-6 py-3 text-center text-xs text-on-surface-variant">
-          <span>BCSE302P Database Systems Lab • Assessment 6 • CampusBook</span>
-          <span className="mx-2">•</span>
-          <span>Narayanan Subramanian (24BCE2981) & Lavanbarath B (24BDS0155)</span>
-        </footer>
       </div>
     </m3e-theme>
   );

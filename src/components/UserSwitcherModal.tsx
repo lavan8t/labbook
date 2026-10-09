@@ -13,59 +13,43 @@ import "@m3e/web/badge";
 
 export interface UserSwitcherModalProps {
   // Modal 1: Persona Switcher
-  open?: boolean;
-  isOpen?: boolean;
-  showUserModal?: boolean;
-  onClose?: () => void;
-  setShowUserModal?: (show: boolean) => void;
+  open: boolean;
+  onClose: () => void;
   currentUser: CampusUser;
-  onSelectUser?: (user: CampusUser) => void;
-  handleSelectUser?: (user: CampusUser) => void;
-  setCurrentUser?: (user: CampusUser) => void;
+  onSelectUser: (user: CampusUser) => void;
   users?: CampusUser[];
 
   // Modal 2: Admin PIN Verification Dialog
   showAdminCodeModal?: boolean;
-  isAdminModalOpen?: boolean;
-  setShowAdminCodeModal?: (show: boolean) => void;
   onCloseAdminModal?: () => void;
   adminCodeInput?: string;
   setAdminCodeInput?: (code: string) => void;
   adminCodeError?: string;
   setAdminCodeError?: (error: string) => void;
   onVerifyAdminCode?: () => void;
-  handleVerifyAdminCode?: () => void;
+  adminPasscode?: string;
 }
 
 export default function UserSwitcherModal({
   open,
-  isOpen,
-  showUserModal,
   onClose,
-  setShowUserModal,
   currentUser,
   onSelectUser,
-  handleSelectUser,
-  setCurrentUser,
   users = APP_USERS,
-  showAdminCodeModal,
-  isAdminModalOpen,
-  setShowAdminCodeModal,
+  showAdminCodeModal = false,
   onCloseAdminModal,
   adminCodeInput,
   setAdminCodeInput,
   adminCodeError,
   setAdminCodeError,
   onVerifyAdminCode,
-  handleVerifyAdminCode,
+  adminPasscode,
 }: UserSwitcherModalProps) {
-  const [internalUserModalOpen, setInternalUserModalOpen] = useState(false);
-  const [internalAdminModalOpen, setInternalAdminModalOpen] = useState(false);
   const [internalCodeInput, setInternalCodeInput] = useState("");
   const [internalCodeError, setInternalCodeError] = useState("");
 
-  const isUserModalOpen = showUserModal ?? open ?? isOpen ?? internalUserModalOpen;
-  const isAdminPinOpen = showAdminCodeModal ?? isAdminModalOpen ?? internalAdminModalOpen;
+  const isUserModalOpen = open;
+  const isAdminPinOpen = showAdminCodeModal;
 
   const codeValue = adminCodeInput ?? internalCodeInput;
   const errorValue = adminCodeError ?? internalCodeError;
@@ -106,14 +90,10 @@ export default function UserSwitcherModal({
 
   const handleUserModalClose = () => {
     if (onClose) onClose();
-    if (setShowUserModal) setShowUserModal(false);
-    setInternalUserModalOpen(false);
   };
 
   const handleAdminModalClose = () => {
     if (onCloseAdminModal) onCloseAdminModal();
-    if (setShowAdminCodeModal) setShowAdminCodeModal(false);
-    setInternalAdminModalOpen(false);
     handleCodeChange("");
     handleErrorChange("");
   };
@@ -132,41 +112,20 @@ export default function UserSwitcherModal({
   };
 
   const handleUserClick = (targetUser: CampusUser) => {
-    if (handleSelectUser) {
-      handleSelectUser(targetUser);
-      return;
-    }
-    if (onSelectUser) {
-      onSelectUser(targetUser);
-      return;
-    }
-
-    if (targetUser.user_type === "admin") {
-      handleUserModalClose();
-      handleCodeChange("");
-      handleErrorChange("");
-      if (setShowAdminCodeModal) setShowAdminCodeModal(true);
-      else setInternalAdminModalOpen(true);
-    } else {
-      if (setCurrentUser) setCurrentUser(targetUser);
-      handleUserModalClose();
-    }
+    onSelectUser(targetUser);
   };
 
   const handleAuthorize = () => {
-    if (handleVerifyAdminCode) {
-      handleVerifyAdminCode();
-      return;
-    }
     if (onVerifyAdminCode) {
       onVerifyAdminCode();
       return;
     }
 
-    if (codeValue.trim() === ADMIN_ACCESS_CODE) {
+    const expectedCode = adminPasscode ?? ADMIN_ACCESS_CODE;
+    if (codeValue.trim() === expectedCode) {
       const adminUser = users.find((u) => u.user_type === "admin") || APP_USERS.find((u) => u.user_type === "admin");
-      if (adminUser && setCurrentUser) {
-        setCurrentUser(adminUser);
+      if (adminUser) {
+        onSelectUser(adminUser);
       }
       handleAdminModalClose();
     } else {

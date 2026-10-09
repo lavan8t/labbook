@@ -12,47 +12,33 @@ import "@m3e/web/icon";
 
 export interface MyBookingsProps {
   currentUser: CampusUser;
-  myBookingsList?: Booking[];
-  bookings?: Booking[];
-  handleCancelBooking?: (bookingId: number | string) => void;
-  onCancelBooking?: (bookingId: number | string) => void;
-  cancelBooking?: (bookingId: number | string) => void;
-  refreshData?: () => void;
+  bookings: Booking[];
+  onCancelBooking: (bookingId: number | string) => void;
   onRefresh?: () => void;
-  setActiveTab?: (tab: string) => void;
-  onNavigateToBook?: () => void;
+  onNavigateToBook: () => void;
   loading?: boolean;
 }
 
 export default function MyBookings({
   currentUser,
-  myBookingsList,
-  bookings,
-  handleCancelBooking,
+  bookings = [],
   onCancelBooking,
-  cancelBooking,
-  refreshData,
   onRefresh,
-  setActiveTab,
   onNavigateToBook,
   loading = false,
 }: MyBookingsProps) {
-  const activeBookings = bookings ?? myBookingsList ?? [];
+  const activeBookings = bookings;
 
   const handleCancel = (bookingId: number | string) => {
-    if (handleCancelBooking) handleCancelBooking(bookingId);
-    else if (onCancelBooking) onCancelBooking(bookingId);
-    else if (cancelBooking) cancelBooking(bookingId);
+    onCancelBooking(bookingId);
   };
 
   const handleRefresh = () => {
     if (onRefresh) onRefresh();
-    else if (refreshData) refreshData();
   };
 
   const handleNavigateToBook = () => {
-    if (onNavigateToBook) onNavigateToBook();
-    else if (setActiveTab) setActiveTab("book");
+    onNavigateToBook();
   };
 
   return (

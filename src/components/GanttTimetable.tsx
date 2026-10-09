@@ -816,3 +816,5 @@ export function GanttTimetable({
     </div>
   );
 }
+
+export default GanttTimetable;
