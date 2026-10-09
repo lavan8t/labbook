@@ -417,7 +417,7 @@ export default function CampusBookPage() {
   }
 
   return (
-    <m3e-theme color="#C85A32" scheme={theme} variant="tonal-spot">
+    <m3e-theme color="#C8261E" scheme={theme} variant="vibrant">
       <div className={`min-h-screen flex ${theme === "dark" ? "dark bg-surface-container-lowest" : "bg-surface"} text-on-surface font-sans`}>
         {/* Unified Left Vertical Sidebar */}
         <AppSidebar

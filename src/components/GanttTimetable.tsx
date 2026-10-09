@@ -176,13 +176,44 @@ export function GanttTimetable({
     <div className="space-y-4">
       {/* Top Controls Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5 flex-wrap">
-          {/* Date Text Trigger (No form input field) */}
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Today Button */}
+          <button
+            type="button"
+            onClick={handleSetToday}
+            className="h-8 px-3 inline-flex items-center justify-center rounded-lg border border-outline-variant bg-surface hover:bg-surface-container text-xs font-semibold text-on-surface transition-colors cursor-pointer select-none"
+          >
+            Today
+          </button>
+
+          {/* Prev / Next Navigation Arrows */}
+          <div className="inline-flex items-center rounded-lg border border-outline-variant bg-surface overflow-hidden">
+            <button
+              type="button"
+              onClick={() => shiftDate(-1)}
+              className="h-8 w-8 inline-flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer border-r border-outline-variant/60"
+              title="Previous Day"
+              aria-label="Previous Day"
+            >
+              <m3e-icon name="chevron_left" className="text-base"></m3e-icon>
+            </button>
+            <button
+              type="button"
+              onClick={() => shiftDate(1)}
+              className="h-8 w-8 inline-flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
+              title="Next Day"
+              aria-label="Next Day"
+            >
+              <m3e-icon name="chevron_right" className="text-base"></m3e-icon>
+            </button>
+          </div>
+
+          {/* Date Text Trigger */}
           <div className="relative inline-flex items-center">
             <button
               type="button"
               id="gantt-timetable-date-trigger"
-              className="relative inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-outline-variant bg-surface hover:bg-surface-container text-xs font-semibold text-on-surface transition-colors cursor-pointer select-none"
+              className="h-8 inline-flex items-center gap-2 px-3 rounded-lg border border-outline-variant bg-surface hover:bg-surface-container text-xs font-semibold text-on-surface transition-colors cursor-pointer select-none"
             >
               <m3e-icon name="calendar_today" className="text-sm text-primary"></m3e-icon>
               <span>{formattedDateTitle}</span>
@@ -193,35 +224,6 @@ export function GanttTimetable({
               ref={datePickerRef}
               variant="modal"
             ></m3e-datepicker>
-          </div>
-
-          {/* Prev / Today / Next Segmented Control */}
-          <div className="inline-flex items-center rounded-lg border border-outline-variant bg-surface p-0.5">
-            <button
-              type="button"
-              onClick={() => shiftDate(-1)}
-              className="h-7 px-2 inline-flex items-center justify-center rounded-md text-xs font-medium text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
-              title="Previous Day"
-              aria-label="Previous Day"
-            >
-              <m3e-icon name="chevron_left" className="text-base"></m3e-icon>
-            </button>
-            <button
-              type="button"
-              onClick={handleSetToday}
-              className="h-7 px-2.5 inline-flex items-center justify-center rounded-md text-xs font-semibold text-on-surface hover:bg-surface-container border-x border-outline-variant/50 transition-colors cursor-pointer"
-            >
-              Today
-            </button>
-            <button
-              type="button"
-              onClick={() => shiftDate(1)}
-              className="h-7 px-2 inline-flex items-center justify-center rounded-md text-xs font-medium text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
-              title="Next Day"
-              aria-label="Next Day"
-            >
-              <m3e-icon name="chevron_right" className="text-base"></m3e-icon>
-            </button>
           </div>
         </div>
       </div>

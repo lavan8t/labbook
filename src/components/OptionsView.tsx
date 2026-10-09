@@ -4,7 +4,8 @@ import React, { useState } from "react";
 
 import "@m3e/web/button";
 import "@m3e/web/icon";
-import "@m3e/web/card";
+import "@m3e/web/segmented-button";
+import "@m3e/web/form-field";
 
 export interface OptionsViewProps {
   theme: "light" | "dark";
@@ -83,32 +84,25 @@ export function OptionsView({
           </span>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 max-w-xs">
-          <button
-            type="button"
-            onClick={() => handleChooseTheme("light")}
-            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
-              theme === "light"
-                ? "bg-primary text-on-primary border-primary font-semibold"
-                : "bg-surface text-on-surface-variant border-outline-variant hover:bg-surface-container"
-            }`}
-          >
-            <m3e-icon name="light_mode" className="text-base"></m3e-icon>
-            <span>Light</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleChooseTheme("dark")}
-            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
-              theme === "dark"
-                ? "bg-primary text-on-primary border-primary font-semibold"
-                : "bg-surface text-on-surface-variant border-outline-variant hover:bg-surface-container"
-            }`}
-          >
-            <m3e-icon name="dark_mode" className="text-base"></m3e-icon>
-            <span>Dark</span>
-          </button>
+        <div className="max-w-xs">
+          <m3e-segmented-button className="w-full">
+            <m3e-button-segment
+              value="light"
+              selected={theme === "light"}
+              onClick={() => handleChooseTheme("light")}
+            >
+              <m3e-icon slot="icon" name="light_mode"></m3e-icon>
+              Light
+            </m3e-button-segment>
+            <m3e-button-segment
+              value="dark"
+              selected={theme === "dark"}
+              onClick={() => handleChooseTheme("dark")}
+            >
+              <m3e-icon slot="icon" name="dark_mode"></m3e-icon>
+              Dark
+            </m3e-button-segment>
+          </m3e-segmented-button>
         </div>
       </section>
 
@@ -147,7 +141,7 @@ export function OptionsView({
           </span>
         </div>
 
-        <form onSubmit={handleUpdatePasscode} className="space-y-3 max-w-md">
+        <form onSubmit={handleUpdatePasscode} className="space-y-3.5 max-w-md">
           {passcodeError && (
             <div className="p-2.5 rounded-lg bg-error/10 border border-error/20 text-error text-[11px] flex items-start gap-2">
               <m3e-icon name="error" className="text-sm shrink-0 mt-0.5"></m3e-icon>
@@ -162,43 +156,55 @@ export function OptionsView({
             </div>
           )}
 
-          <div className="space-y-1">
-            <label className="text-[11px] font-medium text-on-surface block">
-              Current Passcode
-            </label>
-            <input
-              type={showPasscodes ? "text" : "password"}
-              value={currentCodeInput}
-              onChange={(e) => setCurrentCodeInput(e.target.value)}
-              placeholder="Enter current passcode"
-              className="w-full px-3 py-2 rounded-lg border border-outline-variant bg-surface text-on-surface text-xs focus:outline-hidden focus:border-primary"
-            />
+          <div>
+            <m3e-form-field className="w-full">
+              <label slot="label" htmlFor="current-passcode-input">
+                Current Passcode
+              </label>
+              <input
+                id="current-passcode-input"
+                type={showPasscodes ? "text" : "password"}
+                value={currentCodeInput}
+                onChange={(e) => setCurrentCodeInput(e.target.value)}
+                placeholder="Enter current passcode"
+                className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
+              />
+              <m3e-icon slot="suffix" name="key"></m3e-icon>
+            </m3e-form-field>
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[11px] font-medium text-on-surface block">
-              New Passcode
-            </label>
-            <input
-              type={showPasscodes ? "text" : "password"}
-              value={newCodeInput}
-              onChange={(e) => setNewCodeInput(e.target.value)}
-              placeholder="Enter at least 4 digits/characters"
-              className="w-full px-3 py-2 rounded-lg border border-outline-variant bg-surface text-on-surface text-xs focus:outline-hidden focus:border-primary"
-            />
+          <div>
+            <m3e-form-field className="w-full">
+              <label slot="label" htmlFor="new-passcode-input">
+                New Passcode
+              </label>
+              <input
+                id="new-passcode-input"
+                type={showPasscodes ? "text" : "password"}
+                value={newCodeInput}
+                onChange={(e) => setNewCodeInput(e.target.value)}
+                placeholder="Enter at least 4 digits/characters"
+                className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
+              />
+              <m3e-icon slot="suffix" name="lock"></m3e-icon>
+            </m3e-form-field>
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[11px] font-medium text-on-surface block">
-              Confirm New Passcode
-            </label>
-            <input
-              type={showPasscodes ? "text" : "password"}
-              value={confirmCodeInput}
-              onChange={(e) => setConfirmCodeInput(e.target.value)}
-              placeholder="Re-enter new passcode"
-              className="w-full px-3 py-2 rounded-lg border border-outline-variant bg-surface text-on-surface text-xs focus:outline-hidden focus:border-primary"
-            />
+          <div>
+            <m3e-form-field className="w-full">
+              <label slot="label" htmlFor="confirm-passcode-input">
+                Confirm New Passcode
+              </label>
+              <input
+                id="confirm-passcode-input"
+                type={showPasscodes ? "text" : "password"}
+                value={confirmCodeInput}
+                onChange={(e) => setConfirmCodeInput(e.target.value)}
+                placeholder="Re-enter new passcode"
+                className="w-full text-xs bg-transparent text-on-surface focus:outline-none"
+              />
+              <m3e-icon slot="suffix" name="lock_clock"></m3e-icon>
+            </m3e-form-field>
           </div>
 
           <div className="flex items-center justify-between pt-1">
