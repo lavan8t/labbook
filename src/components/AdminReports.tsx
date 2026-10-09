@@ -14,7 +14,7 @@ export interface AdminReportsProps {
 
 export function AdminReports({ utilizationStats }: AdminReportsProps) {
   return (
-    <div className="bg-surface rounded-lg border border-outline-variant p-6 sm:p-8 space-y-6">
+    <div className="bg-surface rounded-lg p-6 sm:p-8 space-y-6">
       {utilizationStats.length === 0 ? (
         <div className="p-8 text-center rounded-lg bg-surface-container-low">
           <m3e-icon name="monitoring" className="text-3xl text-on-surface-variant mb-2"></m3e-icon>

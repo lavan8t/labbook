@@ -239,14 +239,14 @@ export function GanttTimetable({
 
       {/* Loading Bar */}
       {loading && (
-        <div className="p-3 bg-surface-container-low rounded-lg border border-outline-variant flex items-center justify-center gap-2 text-xs text-primary font-medium">
+        <div className="p-3 bg-surface-container-low rounded-lg flex items-center justify-center gap-2 text-xs text-primary font-medium">
           <m3e-icon name="sync" className="animate-spin text-sm"></m3e-icon>
           Updating timetable bookings for {formatDateDDMMYYYY(selectedDate)}...
         </div>
       )}
 
       {/* Gantt Timetable Matrix */}
-      <div className="border border-outline-variant rounded-xl overflow-hidden bg-surface shadow-xs">
+      <div className="rounded-xl overflow-hidden bg-surface shadow-xs">
         <div className="overflow-x-auto relative">
           <div className="min-w-[1900px]">
             {/* Header: Venue Column + 26 Time Slots */}
@@ -489,7 +489,7 @@ export function GanttTimetable({
               Math.min(window.innerWidth - 300, hoveredPreview.rect.left),
             )}px`,
           }}
-          className="fixed z-50 w-72 p-3.5 bg-surface-container-high rounded-xl shadow-xl border border-outline-variant text-on-surface cursor-pointer select-none transition-all hover:border-primary"
+          className="fixed z-50 w-72 p-3.5 bg-surface-container-high rounded-xl shadow-xl text-on-surface cursor-pointer select-none transition-all"
         >
           {/* Hidden cursor bridge zone connecting slot to card */}
           <div className="absolute -top-3.5 -left-2 -right-2 h-4 bg-transparent cursor-pointer" />
@@ -562,7 +562,7 @@ export function GanttTimetable({
         {inspectingBooking && (
           <div className="space-y-4 py-2 text-xs">
             {/* Event Title & Status */}
-            <div className="p-3 bg-surface-container-low rounded-lg border border-outline-variant">
+            <div className="p-3 bg-surface-container-low rounded-lg">
               <div className="flex items-start justify-between gap-2">
                 <div className="font-bold text-sm text-on-surface">
                   {inspectingBooking.event_title}

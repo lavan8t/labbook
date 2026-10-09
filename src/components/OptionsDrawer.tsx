@@ -114,7 +114,7 @@ export function OptionsDrawer({
               </h3>
             </div>
 
-            <div className="bg-surface-container-low border border-outline-variant/60 rounded-xl p-3 space-y-3">
+            <div className="bg-surface-container-low rounded-xl p-3 space-y-3">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-on-surface font-medium">Theme Mode</span>
                 <span className="text-on-surface-variant capitalize text-[11px] font-mono">
@@ -165,7 +165,7 @@ export function OptionsDrawer({
               </h3>
             </div>
 
-            <div className="bg-surface-container-low border border-outline-variant/60 rounded-xl p-3 space-y-3">
+            <div className="bg-surface-container-low rounded-xl p-3 space-y-3">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-on-surface font-medium">Status</span>
                 <span
@@ -210,7 +210,7 @@ export function OptionsDrawer({
 
             <form
               onSubmit={handleUpdatePasscode}
-              className="bg-surface-container-low border border-outline-variant/60 rounded-xl p-3.5 space-y-3"
+              className="bg-surface-container-low rounded-xl p-3.5 space-y-3"
             >
 
               {passcodeError && (

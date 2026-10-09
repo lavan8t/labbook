@@ -84,7 +84,7 @@ export default function AppHeader({
 
           {/* Active User Persona Badge & Switch User Action */}
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2.5 bg-surface-container-high border border-outline-variant px-3 py-1.5 rounded-lg">
+            <div className="flex items-center gap-2.5 bg-surface-container-high px-3 py-1.5 rounded-lg">
               <m3e-avatar className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs bg-primary text-on-primary shrink-0">
                 {currentUser.avatar_initials}
               </m3e-avatar>

@@ -107,7 +107,7 @@ export function AdminQueue({
   }, [showRejectionModal, actionBooking]);
 
   return (
-    <div className="bg-surface rounded-lg border border-outline-variant p-6 sm:p-8 space-y-6">
+    <div className="bg-surface rounded-lg p-6 sm:p-8 space-y-6">
       {/* Queue Toolbar */}
       <div className="flex justify-end items-center pb-2">
         <div className="flex items-center gap-2">
@@ -249,7 +249,7 @@ export function AdminQueue({
               <span>Scanning PostgreSQL GiST range overlaps...</span>
             </div>
           ) : clashesData.length === 0 ? (
-            <div className="py-6 px-4 text-center text-xs text-on-surface bg-surface-container-low rounded-lg flex items-center justify-center gap-2 border border-outline-variant">
+            <div className="py-6 px-4 text-center text-xs text-on-surface bg-surface-container-low rounded-lg flex items-center justify-center gap-2">
               <m3e-icon name="verified" className="text-success"></m3e-icon>
               <span>No overlapping bids detected for this time range.</span>
             </div>

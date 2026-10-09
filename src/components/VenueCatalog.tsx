@@ -52,10 +52,10 @@ export function VenueCatalog({
           return (
             <div
               key={venue.venue_id}
-              className={`block rounded-lg border transition-colors ${
+              className={`block rounded-lg transition-colors ${
                 isSelected
-                  ? "bg-surface-container border-primary"
-                  : "bg-surface-container-low border-outline-variant hover:border-primary"
+                  ? "bg-surface-container"
+                  : "bg-surface-container-low hover:bg-surface-container"
               }`}
             >
               <div className="p-5 sm:p-6 flex flex-col justify-between h-full space-y-4">

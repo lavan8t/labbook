@@ -43,7 +43,7 @@ export default function MyBookings({
   };
 
   return (
-    <div className="bg-surface rounded-lg border border-outline-variant p-6 sm:p-8 space-y-6">
+    <div className="bg-surface rounded-lg p-6 sm:p-8 space-y-6">
       {/* Actions toolbar */}
       <div className="flex justify-end items-center pb-2">
         <m3e-button

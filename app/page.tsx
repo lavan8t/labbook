@@ -273,6 +273,7 @@ export default function CampusBookPage() {
         setActiveTab("admin-pending");
       }
       setShowAdminCodeModal(false);
+      setShowUserModal(false);
       setAdminCodeInput("");
       setAdminCodeError("");
       showToast("Access Granted: Welcome Dr. A. Ramanathan (Estate Administrator)");

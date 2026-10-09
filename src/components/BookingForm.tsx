@@ -359,7 +359,7 @@ export function BookingForm({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
       {/* Left Column: Booking Form */}
-      <div className="lg:col-span-7 bg-surface rounded-lg border border-outline-variant p-6 sm:p-8">
+      <div className="lg:col-span-7 bg-surface rounded-lg p-6 sm:p-8">
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Target Venue / Hall Selector */}
           <div>
@@ -463,6 +463,7 @@ export function BookingForm({
                 id="booking-datepicker-popover"
                 ref={bookingDatePickerRef}
                 for="booking-date-field"
+                variant="modal"
               ></m3e-datepicker>
             </div>
 
@@ -487,6 +488,7 @@ export function BookingForm({
                 ref={startTimePickerRef}
                 for="start-time-field"
                 format="24"
+                variant="modal"
               ></m3e-timepicker>
             </div>
 
@@ -511,6 +513,7 @@ export function BookingForm({
                 ref={endTimePickerRef}
                 for="end-time-field"
                 format="24"
+                variant="modal"
               ></m3e-timepicker>
             </div>
           </div>
@@ -671,7 +674,7 @@ export function BookingForm({
 
       {/* Right Column: Venue Details Card */}
       <div className="lg:col-span-5">
-        <div className="bg-surface-container-low border border-outline-variant rounded-lg p-6 sm:p-7 space-y-5">
+        <div className="bg-surface-container-low rounded-lg p-6 sm:p-7 space-y-5">
           <div className="border-b border-outline-variant pb-3">
             <h3 className="text-sm font-bold text-on-surface">
               Venue Specifications
