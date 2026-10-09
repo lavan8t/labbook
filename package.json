@@ -10,8 +10,6 @@
   },
   "dependencies": {
     "@m3e/web": "^2.9.2",
-    "@xyflow/react": "^12.12.0",
-    "gsap": "^3.15.0",
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0"

@@ -1,15 +1,12 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
-import dotenv from "dotenv";
 
 import { testConnection } from "./config/db";
 import venueRoutes from "./routes/venueRoutes";
 import bookingRoutes from "./routes/bookingRoutes";
 import adminRoutes from "./routes/adminRoutes";
 import { errorHandler } from "./middleware/errorHandler";
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
