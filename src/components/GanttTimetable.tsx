@@ -116,26 +116,26 @@ export function GanttTimetable({
   // Synchronize m3e-date-input & m3e-datepicker with React state
   useEffect(() => {
     const inputEl = dateInputRef.current as
-      | (HTMLElement & { value?: Date | string })
+      | (HTMLElement & { value?: Date | null })
       | null;
     const pickerEl = datePickerRef.current as
-      | (HTMLElement & { date?: Date | string })
+      | (HTMLElement & { date?: Date | null })
       | null;
 
     if (inputEl) {
-      try {
-        const [y, m, d] = selectedDate.split("-").map(Number);
-        inputEl.value = new Date(y, m - 1, d);
-      } catch {
-        inputEl.value = selectedDate;
+      const parts = selectedDate ? selectedDate.split("-").map(Number) : [];
+      if (parts.length === 3 && parts[0] && parts[1] && parts[2]) {
+        inputEl.value = new Date(parts[0], parts[1] - 1, parts[2]);
+      } else {
+        inputEl.value = null;
       }
     }
     if (pickerEl) {
-      try {
-        const [y, m, d] = selectedDate.split("-").map(Number);
-        pickerEl.date = new Date(y, m - 1, d);
-      } catch {
-        pickerEl.date = selectedDate;
+      const parts = selectedDate ? selectedDate.split("-").map(Number) : [];
+      if (parts.length === 3 && parts[0] && parts[1] && parts[2]) {
+        pickerEl.date = new Date(parts[0], parts[1] - 1, parts[2]);
+      } else {
+        pickerEl.date = null;
       }
     }
 

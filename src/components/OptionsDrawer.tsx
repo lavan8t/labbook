@@ -75,14 +75,14 @@ export function OptionsDrawer({
     <div className="fixed inset-0 z-50 overflow-hidden flex justify-end">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity duration-200 animate-in fade-in"
+        className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity duration-150 animate-in fade-in"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Drawer Panel */}
       <aside
-        className="relative w-full max-w-sm sm:max-w-md bg-surface text-on-surface h-full shadow-2xl border-l border-outline-variant flex flex-col z-10 animate-in slide-in-from-right duration-200"
+        className="relative w-full max-w-sm sm:max-w-md bg-surface text-on-surface h-full shadow-2xl border-l border-outline-variant flex flex-col z-10 animate-in slide-in-from-right duration-150"
         role="dialog"
         aria-modal="true"
         aria-label="Options"

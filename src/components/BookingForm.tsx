@@ -137,29 +137,33 @@ export function BookingForm({
 
   const bookingDateInputRef = React.useRef<HTMLElement>(null);
   const bookingDatePickerRef = React.useRef<HTMLElement>(null);
+  const startTimeInputRef = React.useRef<HTMLElement>(null);
+  const startTimePickerRef = React.useRef<HTMLElement>(null);
+  const endTimeInputRef = React.useRef<HTMLElement>(null);
+  const endTimePickerRef = React.useRef<HTMLElement>(null);
 
   React.useEffect(() => {
     const inputEl = bookingDateInputRef.current as
-      | (HTMLElement & { value?: Date | string })
+      | (HTMLElement & { value?: Date | null })
       | null;
     const pickerEl = bookingDatePickerRef.current as
-      | (HTMLElement & { date?: Date | string })
+      | (HTMLElement & { date?: Date | null })
       | null;
 
     if (inputEl) {
-      try {
-        const [y, m, d] = bookingDate.split("-").map(Number);
-        inputEl.value = new Date(y, m - 1, d);
-      } catch {
-        inputEl.value = bookingDate;
+      const parts = bookingDate ? bookingDate.split("-").map(Number) : [];
+      if (parts.length === 3 && parts[0] && parts[1] && parts[2]) {
+        inputEl.value = new Date(parts[0], parts[1] - 1, parts[2]);
+      } else {
+        inputEl.value = null;
       }
     }
     if (pickerEl) {
-      try {
-        const [y, m, d] = bookingDate.split("-").map(Number);
-        pickerEl.date = new Date(y, m - 1, d);
-      } catch {
-        pickerEl.date = bookingDate;
+      const parts = bookingDate ? bookingDate.split("-").map(Number) : [];
+      if (parts.length === 3 && parts[0] && parts[1] && parts[2]) {
+        pickerEl.date = new Date(parts[0], parts[1] - 1, parts[2]);
+      } else {
+        pickerEl.date = null;
       }
     }
 
@@ -183,6 +187,65 @@ export function BookingForm({
       pickerEl?.removeEventListener("change", handleChange);
     };
   }, [bookingDate]);
+
+  React.useEffect(() => {
+    const parseTime = (timeStr: string): Date | null => {
+      if (!timeStr) return null;
+      const parts = timeStr.split(":").map(Number);
+      if (parts.length >= 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+        return new Date(2000, 0, 1, parts[0], parts[1], 0);
+      }
+      return null;
+    };
+
+    const formatTime = (d: Date): string => {
+      const h = String(d.getHours()).padStart(2, "0");
+      const m = String(d.getMinutes()).padStart(2, "0");
+      return `${h}:${m}`;
+    };
+
+    const startInput = startTimeInputRef.current as (HTMLElement & { value?: Date | null }) | null;
+    const startPicker = startTimePickerRef.current as (HTMLElement & { date?: Date | null }) | null;
+    const endInput = endTimeInputRef.current as (HTMLElement & { value?: Date | null }) | null;
+    const endPicker = endTimePickerRef.current as (HTMLElement & { date?: Date | null }) | null;
+
+    if (startInput) startInput.value = parseTime(startTime);
+    if (startPicker) startPicker.date = parseTime(startTime);
+    if (endInput) endInput.value = parseTime(endTime);
+    if (endPicker) endPicker.date = parseTime(endTime);
+
+    const handleStartChange = (e: Event) => {
+      const target = e.target as { value?: Date | string; date?: Date | string } | null;
+      const val = target?.value ?? target?.date;
+      if (val instanceof Date && !isNaN(val.getTime())) {
+        handleStartTimeChange(formatTime(val));
+      } else if (typeof val === "string" && val.includes(":")) {
+        handleStartTimeChange(val.slice(0, 5));
+      }
+    };
+
+    const handleEndChange = (e: Event) => {
+      const target = e.target as { value?: Date | string; date?: Date | string } | null;
+      const val = target?.value ?? target?.date;
+      if (val instanceof Date && !isNaN(val.getTime())) {
+        handleEndTimeChange(formatTime(val));
+      } else if (typeof val === "string" && val.includes(":")) {
+        handleEndTimeChange(val.slice(0, 5));
+      }
+    };
+
+    startInput?.addEventListener("change", handleStartChange);
+    startPicker?.addEventListener("change", handleStartChange);
+    endInput?.addEventListener("change", handleEndChange);
+    endPicker?.addEventListener("change", handleEndChange);
+
+    return () => {
+      startInput?.removeEventListener("change", handleStartChange);
+      startPicker?.removeEventListener("change", handleStartChange);
+      endInput?.removeEventListener("change", handleEndChange);
+      endPicker?.removeEventListener("change", handleEndChange);
+    };
+  }, [startTime, endTime]);
 
   // Determine current active venue
   const activeVenue = useMemo(() => {
@@ -373,7 +436,6 @@ export function BookingForm({
                 id="booking-datepicker-popover"
                 ref={bookingDatePickerRef}
                 for="booking-date-field"
-                date={bookingDate}
               ></m3e-datepicker>
             </div>
 
@@ -382,13 +444,9 @@ export function BookingForm({
                 <label slot="label" htmlFor="start-time-field">Start Time</label>
                 <m3e-date-input
                   id="start-time-field"
+                  ref={startTimeInputRef}
                   type="time"
                   time-format="24"
-                  value={startTime}
-                  onChange={(e: React.FormEvent<HTMLElement>) => {
-                    const target = e.target as HTMLElement & { value?: string };
-                    if (target.value) handleStartTimeChange(String(target.value));
-                  }}
                 ></m3e-date-input>
                 <m3e-icon-button slot="suffix" aria-label="Open Timepicker">
                   <m3e-icon name="schedule"></m3e-icon>
@@ -397,13 +455,9 @@ export function BookingForm({
               </m3e-form-field>
               <m3e-timepicker
                 id="start-time-popover"
+                ref={startTimePickerRef}
                 for="start-time-field"
                 format="24"
-                onChange={(e: React.FormEvent<HTMLElement>) => {
-                  const target = e.target as HTMLElement & { date?: string; value?: string };
-                  if (target.date) handleStartTimeChange(String(target.date));
-                  else if (target.value) handleStartTimeChange(String(target.value));
-                }}
               ></m3e-timepicker>
             </div>
 
@@ -412,13 +466,9 @@ export function BookingForm({
                 <label slot="label" htmlFor="end-time-field">End Time</label>
                 <m3e-date-input
                   id="end-time-field"
+                  ref={endTimeInputRef}
                   type="time"
                   time-format="24"
-                  value={endTime}
-                  onChange={(e: React.FormEvent<HTMLElement>) => {
-                    const target = e.target as HTMLElement & { value?: string };
-                    if (target.value) handleEndTimeChange(String(target.value));
-                  }}
                 ></m3e-date-input>
                 <m3e-icon-button slot="suffix" aria-label="Open Timepicker">
                   <m3e-icon name="schedule"></m3e-icon>
@@ -427,13 +477,9 @@ export function BookingForm({
               </m3e-form-field>
               <m3e-timepicker
                 id="end-time-popover"
+                ref={endTimePickerRef}
                 for="end-time-field"
                 format="24"
-                onChange={(e: React.FormEvent<HTMLElement>) => {
-                  const target = e.target as HTMLElement & { date?: string; value?: string };
-                  if (target.date) handleEndTimeChange(String(target.date));
-                  else if (target.value) handleEndTimeChange(String(target.value));
-                }}
               ></m3e-timepicker>
             </div>
           </div>

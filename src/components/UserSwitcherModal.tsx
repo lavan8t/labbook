@@ -142,16 +142,9 @@ export default function UserSwitcherModal({
         dismissible
         onclosed={handleUserModalClose}
       >
-        <div slot="header" className="flex justify-between items-center w-full">
-          <span className="text-base font-bold text-on-surface">Switch Active Persona</span>
-          <m3e-button
-            variant="text"
-            onClick={handleUserModalClose}
-            className="text-on-surface-variant hover:text-on-surface"
-          >
-            <m3e-icon name="close"></m3e-icon>
-          </m3e-button>
-        </div>
+        <span slot="header" className="text-base font-bold text-on-surface">
+          Switch Active Persona
+        </span>
 
         <div className="py-2 space-y-3">
           <p className="text-xs text-on-surface-variant">
@@ -182,7 +175,7 @@ export default function UserSwitcherModal({
                         <span className="font-bold text-on-surface">{user.name}</span>
                         {user.user_type === "admin" && (
                           <span className="text-[10px] px-2 py-0.5 rounded bg-error-container text-on-error-container font-semibold flex items-center gap-1 shrink-0">
-                            <m3e-icon className="text-xs">lock</m3e-icon>
+                            <m3e-icon name="lock" className="text-xs"></m3e-icon>
                             Administrator Verification Required
                           </span>
                         )}

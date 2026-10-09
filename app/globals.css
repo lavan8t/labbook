@@ -114,6 +114,60 @@
   --m3e-form-field-label-color: var(--md-sys-color-on-surface-variant);
   --m3e-form-field-focus-label-color: var(--md-sys-color-primary);
   --m3e-form-field-input-color: var(--md-sys-color-on-surface);
+
+  /* Material 3 Motion Tokens - All animations locked at 150ms max with iOS Cubic Bezier */
+  --md-sys-motion-duration-short-1: 50ms;
+  --md-sys-motion-duration-short-2: 100ms;
+  --md-sys-motion-duration-short-3: 150ms;
+  --md-sys-motion-duration-short-4: 150ms;
+  --md-sys-motion-duration-medium-1: 150ms;
+  --md-sys-motion-duration-medium-2: 150ms;
+  --md-sys-motion-duration-medium-3: 150ms;
+  --md-sys-motion-duration-medium-4: 150ms;
+  --md-sys-motion-duration-long-1: 150ms;
+  --md-sys-motion-duration-long-2: 150ms;
+  --md-sys-motion-duration-long-3: 150ms;
+  --md-sys-motion-duration-long-4: 150ms;
+  --md-sys-motion-duration-extra-long-1: 150ms;
+  --md-sys-motion-duration-extra-long-2: 150ms;
+  --md-sys-motion-duration-extra-long-3: 150ms;
+  --md-sys-motion-duration-extra-long-4: 150ms;
+
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --md-sys-motion-easing-standard: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --md-sys-motion-easing-standard-decelerate: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --md-sys-motion-easing-standard-accelerate: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  --md-sys-motion-spring-fast-spatial: 150ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --md-sys-motion-spring-default-spatial: 150ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --md-sys-motion-spring-slow-spatial: 150ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --md-sys-motion-spring-fast-effects: 150ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --md-sys-motion-spring-default-effects: 150ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --md-sys-motion-spring-slow-effects: 150ms cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  --m3e-motion-duration-short1: 50ms;
+  --m3e-motion-duration-short2: 100ms;
+  --m3e-motion-duration-short3: 150ms;
+  --m3e-motion-duration-short4: 150ms;
+  --m3e-motion-duration-medium1: 150ms;
+  --m3e-motion-duration-medium2: 150ms;
+  --m3e-motion-duration-medium3: 150ms;
+  --m3e-motion-duration-medium4: 150ms;
+  --m3e-motion-duration-long1: 150ms;
+  --m3e-motion-duration-long2: 150ms;
+  --m3e-motion-duration-long3: 150ms;
+  --m3e-motion-duration-long4: 150ms;
+
+  --m3e-motion-easing-emphasized: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --m3e-motion-easing-standard: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  /* Navigation Rail Customizations for w-36 Sidebar */
+  --m3e-nav-rail-expanded-width: 100%;
+  --m3e-nav-rail-inline-padding: 4px;
+  --m3e-nav-item-spacing: 6px;
+  --m3e-nav-item-label-text-font-size: 11px;
 }
 
 /* Base typography with Google Sans Flex and ROND 100 */
@@ -317,3 +371,25 @@ code, pre, .font-mono {
   font-family: 'Google Sans Flex', ui-monospace, SFMono-Regular, monospace;
   font-feature-settings: "tnum" 1, "zero" 1;
 }
+
+/* All animations and transitions locked at 150ms max with iOS bezier curve */
+m3e-dialog,
+m3e-nav-rail,
+m3e-date-input,
+m3e-datepicker,
+m3e-timepicker,
+.animate-in {
+  animation-duration: 150ms !important;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+  transition-duration: 150ms !important;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+}
+
+m3e-nav-rail {
+  width: 100% !important;
+}
+
+m3e-nav-rail m3e-nav-item {
+  width: 100% !important;
+}
+

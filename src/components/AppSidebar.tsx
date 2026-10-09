@@ -84,8 +84,8 @@ export function AppSidebar({
   const sidebarContent = (
     <div className="flex flex-col h-full bg-surface border-r border-outline-variant select-none">
       {/* Top Brand Header: CampusBook alone, no title icon, no subtitle */}
-      <div className="px-6 py-5 border-b border-outline-variant/60 flex items-center justify-between shrink-0">
-        <span className="text-xl font-bold tracking-tight text-on-surface">
+      <div className="px-3 py-3.5 border-b border-outline-variant/60 flex items-center justify-between shrink-0">
+        <span className="text-base font-bold tracking-tight text-on-surface truncate">
           CampusBook
         </span>
         {mobileOpen && (
@@ -100,52 +100,38 @@ export function AppSidebar({
         )}
       </div>
 
-      {/* Account Info with Grouped Button & Separated Right Dropdown Arrow */}
-      <div className="mx-4 my-4 p-3 rounded-2xl bg-surface-container-low border border-outline-variant/60 flex items-center justify-between gap-2 shrink-0">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <m3e-avatar className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs bg-primary text-on-primary shrink-0">
+      {/* Account Info with Down Arrow Button */}
+      <div className="mx-2 my-2.5 p-2 rounded-xl bg-surface-container-low border border-outline-variant/60 flex items-center justify-between gap-1 shrink-0">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <m3e-avatar className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-[11px] bg-primary text-on-primary shrink-0">
             {currentUser.avatar_initials}
           </m3e-avatar>
           <div className="min-w-0">
-            <div className="text-xs font-semibold text-on-surface truncate">
+            <div className="text-xs font-semibold text-on-surface truncate" title={currentUser.name}>
               {currentUser.name}
             </div>
-            <div className="text-[10px] text-on-surface-variant truncate">
+            <div className="text-[10px] text-on-surface-variant truncate" title={currentUser.role_display}>
               {currentUser.role_display}
             </div>
           </div>
         </div>
 
-        {/* Grouped split button with right dropdown arrow separated from m3e repo */}
-        <m3e-split-button variant="tonal" size="small" className="shrink-0">
-          <m3e-button
-            slot="leading-button"
-            onClick={() => {
-              onOpenUserModal();
-              if (onCloseMobile) onCloseMobile();
-            }}
-            className="text-xs px-2"
-            title="Switch User"
-          >
-            Switch
-          </m3e-button>
-          <m3e-icon-button
-            slot="trailing-button"
-            onClick={() => {
-              onOpenUserModal();
-              if (onCloseMobile) onCloseMobile();
-            }}
-            aria-label="Switch User"
-            title="Switch User"
-          >
-            <m3e-icon name="arrow_drop_down"></m3e-icon>
-          </m3e-icon-button>
-        </m3e-split-button>
+        <m3e-icon-button
+          onClick={() => {
+            onOpenUserModal();
+            if (onCloseMobile) onCloseMobile();
+          }}
+          aria-label="Switch User"
+          title="Switch User"
+          className="shrink-0 -mr-1"
+        >
+          <m3e-icon name="arrow_drop_down"></m3e-icon>
+        </m3e-icon-button>
       </div>
 
       {/* Navigation Rail from m3e repository */}
-      <div className="flex-1 overflow-y-auto px-2 py-2">
-        <m3e-nav-rail mode="expanded" className="w-full flex flex-col gap-1">
+      <div className="flex-1 overflow-y-auto px-1.5 py-1.5">
+        <m3e-nav-rail mode="expanded" className="w-full flex flex-col gap-0.5">
           {standardNavItems.map((item) => (
             <m3e-nav-item
               key={item.id}
@@ -154,19 +140,19 @@ export function AppSidebar({
               className="cursor-pointer"
             >
               <m3e-icon slot="icon" name={item.icon}></m3e-icon>
-              <span className="flex items-center justify-between w-full pr-2">
-                <span>{item.label}</span>
+              <span className="flex items-center justify-between w-full min-w-0 pr-1 text-xs">
+                <span className="truncate">{item.label}</span>
                 {Boolean(item.badge && item.badge > 0) && (
-                  <m3e-badge className="ml-auto">{item.badge}</m3e-badge>
+                  <m3e-badge className="ml-1 shrink-0">{item.badge}</m3e-badge>
                 )}
               </span>
             </m3e-nav-item>
           ))}
 
           {isAdmin && (
-            <div className="pt-4 mt-3 border-t border-outline-variant/60 flex flex-col gap-1">
-              <div className="px-4 pb-1 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
-                Administration
+            <div className="pt-3 mt-2 border-t border-outline-variant/60 flex flex-col gap-0.5">
+              <div className="px-2 pb-1 text-[9px] font-bold text-on-surface-variant uppercase tracking-wider truncate">
+                Admin
               </div>
               {adminNavItems.map((item) => (
                 <m3e-nav-item
@@ -176,10 +162,10 @@ export function AppSidebar({
                   className="cursor-pointer"
                 >
                   <m3e-icon slot="icon" name={item.icon}></m3e-icon>
-                  <span className="flex items-center justify-between w-full pr-2">
-                    <span>{item.label}</span>
+                  <span className="flex items-center justify-between w-full min-w-0 pr-1 text-xs">
+                    <span className="truncate">{item.label}</span>
                     {Boolean(item.badge && item.badge > 0) && (
-                      <m3e-badge className="ml-auto">{item.badge}</m3e-badge>
+                      <m3e-badge className="ml-1 shrink-0">{item.badge}</m3e-badge>
                     )}
                   </span>
                 </m3e-nav-item>
@@ -193,8 +179,8 @@ export function AppSidebar({
 
   return (
     <>
-      {/* Desktop Sidebar: spacious w-72 (less compact) */}
-      <aside className="hidden md:block w-72 shrink-0 h-screen sticky top-0 z-30">
+      {/* Desktop Sidebar: reduced width by half to w-36 (144px) */}
+      <aside className="hidden md:block w-36 shrink-0 h-screen sticky top-0 z-30">
         {sidebarContent}
       </aside>
 
@@ -202,11 +188,11 @@ export function AppSidebar({
       {mobileOpen && (
         <div className="fixed inset-0 z-50 flex md:hidden">
           <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity duration-200"
+            className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity duration-150"
             onClick={onCloseMobile}
             aria-hidden="true"
           />
-          <aside className="relative w-72 max-w-[85vw] h-full shadow-2xl z-10 animate-in slide-in-from-left duration-200">
+          <aside className="relative w-36 max-w-[85vw] h-full shadow-2xl z-10 animate-in slide-in-from-left duration-150">
             {sidebarContent}
           </aside>
         </div>
